@@ -1,0 +1,70 @@
+# Metric registry.
+#
+# source: auto   — a collector fetches it; never guesses, never fills a gap
+#         manual — requires reading a filing or exercising judgment; comes from
+#                  config/manual_state.yaml and carries its own as-of date so
+#                  staleness surfaces on its own
+#
+# The split is the honest part of this system. Segment-level figures are tagged
+# with XBRL dimensions that the SEC companyfacts API drops, so they cannot be
+# pulled automatically. Pretending otherwise would put unsourced numbers into
+# an audit trail, which is worse than a gap.
+
+metrics:
+
+  # --- automated ---
+  price:                        {source: auto, collector: price,        cadence: daily,     unit: USD,     period_type: day}
+  price_to_sales_ttm:           {source: auto, collector: derived,      cadence: daily,     unit: x,       period_type: day,
+                                 formula: "market_cap / revenue_ttm"}
+  market_cap:                   {source: auto, collector: derived,      cadence: daily,     unit: $B,      period_type: day,
+                                 formula: "price * shares_outstanding / 1000"}
+  revenue_quarterly:            {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
+                                 tags: [RevenueFromContractWithCustomerExcludingAssessedTax, Revenues]}
+  revenue_ttm:                  {source: auto, collector: derived,      cadence: quarterly, unit: $B,      period_type: quarter,
+                                 formula: "sum(revenue_quarterly, 4) / 1000"}
+  net_income_quarterly:         {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
+                                 tags: [NetIncomeLoss]}
+  capex_quarterly:              {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
+                                 tags: [PaymentsToAcquirePropertyPlantAndEquipment]}
+  operating_cash_flow_quarterly: {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
+                                 tags: [NetCashProvidedByUsedInOperatingActivities]}
+  fcf_ttm:                      {source: auto, collector: derived,      cadence: quarterly, unit: $B,      period_type: quarter,
+                                 formula: "(sum(operating_cash_flow_quarterly, 4) - sum(capex_quarterly, 4)) / 1000"}
+  cash_and_equivalents:         {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $B,      period_type: quarter,
+                                 tags: [CashAndCashEquivalentsAtCarryingValue], scale: 0.001}
+  # NOTE: this filer publishes no point-in-time common-share count. companyfacts
+  # carries no dei namespace at all for CIK 0001181412, so
+  # dei:EntityCommonStockSharesOutstanding is unavailable, and
+  # us-gaap:CommonStockSharesOutstanding is not tagged either (only *Authorized*).
+  # The weighted-average count is the nearest sourced substitute, but it is a
+  # DIFFERENT CONCEPT: an average over the quarter, not shares on the balance
+  # sheet date. For a company whose count is rising fast post-IPO (2,929M in
+  # 2025Q2 -> 5,864M in 2026Q2) it understates the current count, so market_cap
+  # and price_to_sales_ttm derived from it are biased LOW. Treat as approximate.
+  shares_outstanding:           {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: M,       period_type: quarter,
+                                 tags: [WeightedAverageNumberOfDilutedSharesOutstanding, WeightedAverageNumberOfSharesOutstandingBasic]}
+  falcon_launches_ytd:          {source: auto, collector: launches,     cadence: daily,     unit: launches,period_type: year}
+  falcon_launches_annualized:   {source: auto, collector: derived,      cadence: daily,     unit: launches,period_type: year,
+                                 formula: "falcon_launches_ytd * 365 / day_of_year"}
+  starship_flights_total:       {source: auto, collector: launches,     cadence: daily,     unit: flights, period_type: cumulative}
+  starlink_satellites_tracked:  {source: auto, collector: constellation,cadence: daily,     unit: objects, period_type: day}
+  amazon_leo_satellites:        {source: auto, collector: constellation,cadence: daily,     unit: satellites, period_type: day}
+  filings_recent:               {source: auto, collector: sec_filings,  cadence: daily,     unit: list,    period_type: day}
+
+  # --- manual: segment footnote, dimensional XBRL the API drops ---
+  connectivity_revenue:            {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  connectivity_operating_income:   {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  connectivity_revenue_growth_yoy: {source: manual, cadence: quarterly, unit: "% YoY", period_type: quarter}
+  ai_revenue:                      {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  ai_operating_income:             {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  ai_adjusted_ebitda:              {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  space_revenue:                   {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+  space_operating_income:          {source: manual, cadence: quarterly, unit: $M, period_type: quarter}
+
+  # --- manual: disclosed on calls and in press, not tagged anywhere ---
+  starlink_subscribers:         {source: manual, cadence: quarterly, unit: M,        period_type: quarter}
+  starlink_net_adds_qoq:        {source: manual, cadence: quarterly, unit: M,        period_type: quarter}
+  starlink_arpu:                {source: manual, cadence: quarterly, unit: $/mo,     period_type: quarter}
+  starship_orbital_flights:     {source: manual, cadence: event,     unit: flights,  period_type: cumulative}
+  amazon_leo_enterprise_losses: {source: manual, cadence: event,     unit: accounts, period_type: cumulative}
+  short_interest_pct_float:     {source: manual, cadence: biweekly,  unit: "% float",period_type: day}

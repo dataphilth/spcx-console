@@ -1,0 +1,32 @@
+forecasts:
+- id: f0001
+  made_on: '2026-08-20'
+  statement: Starship Flight 14 reaches orbital insertion on its first attempt.
+  criterion: L8
+  probability: 0.6
+  resolve_by: '2026-10-15'
+  basis: Flight 13 heat shield performed well enough for SpaceX to commit to an orbital
+    profile; two consecutive precision splashdowns satisfied the stated gate. Slip risk
+    is higher than failure risk.
+  outcome: null
+  resolved_on: null
+- id: f0002
+  made_on: '2026-08-20'
+  statement: Starship Flight 14 achieves a successful ship tower catch on the same flight.
+  criterion: S5
+  probability: 0.3
+  resolve_by: '2026-10-15'
+  basis: Categorically harder than a booster catch, never attempted, and contingent on
+    FAA approval that had not been granted as of Aug 20.
+  outcome: null
+  resolved_on: null
+- id: f0003
+  made_on: '2026-08-20'
+  statement: Q3 2026 capex exceeds Q3 2026 revenue, firing L13 at three consecutive quarters.
+  criterion: L13
+  probability: 0.8
+  resolve_by: '2026-12-15'
+  basis: AI capex went 7.7B to 15.8B in one step with $14.1B of contracted cloud services
+    to serve. Revenue would need to roughly double sequentially to clear it.
+  outcome: null
+  resolved_on: null

@@ -1,0 +1,295 @@
+# SPCX commit criteria
+#
+# Thresholds live here, not in code, so that every change to what counts as
+# evidence is a reviewable git diff with a date attached. If you find yourself
+# editing a threshold after seeing a number move, the diff will say so.
+#
+# rule.type:
+#   threshold  — metric compared to a fixed number
+#   compare    — metric compared to another metric
+#   streak     — metric moves in one direction for N periods
+#   manual     — categorical; state comes from config/manual_state.yaml
+#
+# rule.consecutive — how many consecutive fiscal periods must satisfy the rule
+#                    before it fires. 1 means a single reading is enough.
+#
+# case: which thesis the criterion would damage. Both halves exist so the board
+#       cannot quietly become a bull dashboard.
+
+version: 3
+updated: "2026-08-20"
+cik: "0001181412"
+ticker: SPCX
+
+criteria:
+
+  # ---------- conditions that would break the LONG case ----------
+
+  - id: L1
+    case: long
+    tier: 1
+    label: Starlink net adds go negative
+    condition: Two consecutive quarters of subscriber decline
+    rule: {type: threshold, metric: starlink_net_adds_qoq, operator: lt, threshold: 0, consecutive: 2}
+    scale: [-1.0, 2.5]
+    unit: M net adds/qtr
+    note: >-
+      12.0M subscribers, +1.7M in Q2, +100% YoY. The single most important
+      operating number in the company.
+
+  - id: L2
+    case: long
+    tier: 1
+    label: Connectivity operating income goes negative
+    condition: Two consecutive quarters below zero
+    rule: {type: threshold, metric: connectivity_operating_income, operator: lt, threshold: 0, consecutive: 2}
+    scale: [-600, 2000]
+    unit: $M
+    note: The only profitable segment. It funds the other two.
+
+  - id: L3
+    case: long
+    tier: 1
+    label: Connectivity revenue growth falls under 20% YoY
+    condition: ARPU decay has beaten subscriber growth
+    rule: {type: threshold, metric: connectivity_revenue_growth_yoy, operator: lt, threshold: 20, consecutive: 1}
+    scale: [0, 80]
+    unit: "% YoY"
+    note: >-
+      +66% on −23% ARPU. The gap between those two numbers is the entire
+      connectivity thesis.
+
+  - id: L4
+    case: long
+    tier: 1
+    label: Cash and equivalents fall below $40B
+    condition: Without a disclosed, credible funding path
+    rule: {type: threshold, metric: cash_and_equivalents, operator: lt, threshold: 40, consecutive: 1}
+    scale: [0, 110]
+    unit: $B
+    note: >-
+      Roughly two years of runway at H1 burn. Definition matters — see the
+      unresolved cash-and-equivalents vs cash-plus-securities question.
+
+  - id: L5
+    case: long
+    tier: 1
+    label: Loss of sole-provider crew status, or a major DoD cancellation
+    condition: Categorical
+    rule: {type: manual, key: crew_and_dod_status}
+    note: >-
+      Zero contracts cancelled through the 2025 White House contract review,
+      for the stated reason that alternatives do not exist.
+
+  - id: L6
+    case: long
+    tier: 1
+    label: Fatal crewed-flight accident
+    condition: Categorical
+    rule: {type: manual, key: fatal_crewed_accident}
+
+  - id: L7
+    case: long
+    tier: 1
+    label: Musk departs, is incapacitated, or is barred from federal contracting
+    condition: Categorical
+    rule: {type: manual, key: musk_status}
+    note: >-
+      ~82.4% voting power with no sunset. The concentration is both the
+      execution advantage and the largest single dependency.
+
+  - id: L8
+    case: long
+    tier: 2
+    label: Starship fails to reach orbit by mid-2027
+    condition: Zero orbital insertions
+    rule: {type: threshold, metric: starship_orbital_flights, operator: lt, threshold: 1, consecutive: 1, deadline: "2027-06-30"}
+    scale: [0, 4]
+    unit: orbital flights
+    note: Flight 14 is the first orbital attempt in the programme's history.
+
+  - id: L9
+    case: long
+    tier: 2
+    label: No orbital propellant transfer demonstrated by end-2027
+    condition: Gating capability for Artemis and Mars
+    rule: {type: manual, key: propellant_transfer, deadline: "2027-12-31"}
+    note: Nothing on the manifest would demonstrate it. Slips quietly rather than failing loudly.
+
+  - id: L10
+    case: long
+    tier: 2
+    label: Falcon cadence declines two years running
+    condition: 2026 below 2025 and 2027 below 2026
+    rule: {type: streak, metric: falcon_launches_annualized, direction: down, periods: 2, period_type: year}
+    scale: [100, 200]
+    unit: launches/yr
+    note: >-
+      134 (2024) → 165 (2025) → tracking ~153. Year one of two. A 100/yr
+      Vandenberg cap binds in 2027 at the current run rate.
+
+  - id: L11
+    case: long
+    tier: 2
+    label: Amazon Leo takes 3+ more major enterprise accounts
+    condition: Head-to-head displacement, not press releases
+    rule: {type: threshold, metric: amazon_leo_enterprise_losses, operator: gte, threshold: 5, consecutive: 1}
+    scale: [0, 6]
+    unit: accounts
+    note: Delta and JetBlue, both won on promise — Leo has no commercial service.
+
+  - id: L12
+    case: long
+    tier: 2
+    label: AI segment adjusted EBITDA turns negative again
+    condition: Two consecutive quarters
+    rule: {type: threshold, metric: ai_adjusted_ebitda, operator: lt, threshold: 0, consecutive: 2}
+    scale: [-1500, 1500]
+    unit: $M
+    note: One quarter of positive data. A single print is not a sign.
+
+  - id: L13
+    case: long
+    tier: 2
+    label: Quarterly capex exceeds quarterly revenue three quarters running
+    condition: Two of three currently satisfied
+    rule: {type: compare, metric: capex_quarterly, operator: gt, against: revenue_quarterly, consecutive: 3}
+    unit: quarters
+    note: >-
+      Q2 capex was 2.35x revenue. One more print fires this. The nearest
+      condition to firing on the board.
+
+  - id: L14
+    case: long
+    tier: 2
+    label: SpaceX loses the Artemis III/IV landing
+    condition: Award to a competitor
+    rule: {type: manual, key: artemis_hls}
+    note: NASA reopened the competition in October 2025 citing SpaceX delays.
+
+  - id: L15
+    case: long
+    tier: 2
+    label: Secondary equity offering
+    condition: Equity dilution rather than debt
+    rule: {type: manual, key: secondary_offering}
+    note: $25B of notes at 5.855% so far. A pivot to equity signals the debt window closed.
+
+  # ---------- conditions that would break the SHORT case ----------
+
+  - id: S1
+    case: short
+    tier: 1
+    label: Trailing-twelve-month free cash flow turns positive
+    condition: Kills the unsustainable-burn argument
+    rule: {type: threshold, metric: fcf_ttm, operator: gte, threshold: 0, consecutive: 1}
+    scale: [-40, 10]
+    unit: $B
+    note: H1 2026 alone was −$25.0B. The bear case's load-bearing wall.
+
+  - id: S2
+    case: short
+    tier: 1
+    label: GAAP net income positive two consecutive quarters
+    condition: Also the S&P 500 profitability gate
+    rule: {type: threshold, metric: net_income_quarterly, operator: gt, threshold: 0, consecutive: 2}
+    scale: [-1500, 500]
+    unit: $M
+    note: >-
+      Loss narrowed to $541M from $1.0B a year earlier. Seasoning clears
+      June 2027; profitability almost certainly will not.
+
+  - id: S3
+    case: short
+    tier: 1
+    label: AI segment operating income turns positive
+    condition: Operating, after depreciation — not EBITDA
+    rule: {type: threshold, metric: ai_operating_income, operator: gt, threshold: 0, consecutive: 1}
+    scale: [-2000, 500]
+    unit: $M
+    note: >-
+      The gap between +$1,146M EBITDA and −$1,257M operating income is
+      depreciation on $15.8B of quarterly capex. That gap is the argument.
+
+  - id: S4
+    case: short
+    tier: 2
+    label: Capex declines two quarters running while revenue grows
+    condition: The buildout phase ends
+    rule: {type: streak, metric: capex_quarterly, direction: down, periods: 2, period_type: quarter}
+    unit: quarters
+    note: Went the other way — AI capex $7.7B → $15.8B in one step.
+
+  - id: S5
+    case: short
+    tier: 2
+    label: Starship reaches orbit and the ship catch succeeds
+    condition: Both, on the same flight
+    rule: {type: manual, key: starship_orbit_and_catch}
+    note: >-
+      Reprices a 12%-of-revenue segment from science project to asset.
+      Symmetric with L8 — same event, opposite reading.
+
+  - id: S6
+    case: short
+    tier: 2
+    label: Orbital propellant transfer demonstrated
+    condition: Clears the Artemis and Mars gate
+    rule: {type: manual, key: propellant_transfer}
+    note: Mirror of L9.
+
+  - id: S7
+    case: short
+    tier: 2
+    label: November 28% tranche absorbed without a sustained drawdown
+    condition: No decline beyond 20% held for a month afterward
+    rule: {type: manual, key: november_tranche}
+    note: >-
+      The market sold into two prior supply events and rallied ~35% off the
+      low afterward. Two observations are not a pattern; this is the test.
+
+  - id: S8
+    case: short
+    tier: 2
+    label: Price-to-sales compresses below 30x through revenue growth
+    condition: Growth outruns the multiple, rather than price collapsing into it
+    rule: {type: threshold, metric: price_to_sales_ttm, operator: lt, threshold: 30, consecutive: 1}
+    scale: [90, 20]
+    unit: x
+    note: >-
+      Revenue +122% TTM. At that rate the multiple decays quickly if price
+      holds — the bull answer to the valuation objection, and it is testable.
+
+  - id: S9
+    case: short
+    tier: 2
+    label: Starlink ARPU flat or rising two consecutive quarters
+    condition: Ends the structural-decay leg
+    rule: {type: streak, metric: starlink_arpu, direction: up_or_flat, periods: 2, period_type: quarter}
+    scale: [55, 105]
+    unit: $/mo
+    note: $99 (2023) → $86 (Q1'25) → $66 (2026). Management guides it lower.
+
+  - id: S10
+    case: short
+    tier: 2
+    label: Amazon Leo still under 500 satellites at mid-2027
+    condition: The competition leg fails to arrive
+    rule: {type: threshold, metric: amazon_leo_satellites, operator: lt, threshold: 500, consecutive: 1, deadline: "2027-06-30"}
+    scale: [0, 1618]
+    unit: satellites
+    note: >-
+      Missed its FCC milestone of 1,618 by July 2026 with ~302 up. Its binding
+      constraint is launch capacity it largely has to buy from SpaceX.
+
+# Explicitly excluded. Nothing here enters a brief, regardless of how loud the
+# news cycle gets. Written down in advance so that salience cannot promote
+# itself into signal.
+not_criteria:
+  - Any single-day or single-week price move, in either direction
+  - A Starship test flight failing during a test campaign
+  - Musk posting anything that does not touch regulatory posture, contract awards, subsidy policy, or licensing pace
+  - Analyst rating changes and price-target revisions
+  - A lockup tranche passing, absent a sustained move
+  - Short-interest headlines
+  - Any named bear or bull being loud

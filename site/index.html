@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPCX Range Console</title>
+<meta name="description" content="Pre-registered conditions on Space Exploration Technologies Corp, evaluated mechanically against filed data.">
+<style>
+  :root{
+    --paper:#EDF0F3; --panel:#fff; --plate:#16202B; --ink:#0F1720; --muted:#5C6B79;
+    --rule:#C8D1DA; --soft:#E1E7EC;
+    --conn:#1D7A5F; --ai:#3F6DA8; --space:#C4761E;
+    --clear:#516274; --nearing:#C4761E; --fired:#B3352D; --unknown:#8A97A4;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  .mast{background:var(--plate);color:#DCE4EC}
+  .in{max-width:1000px;margin:0 auto;padding:0 20px}
+  .mast .in{padding-top:24px;padding-bottom:22px}
+  .eyebrow{font:10.5px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:#7E93A6}
+  h1{font:600 26px/1.2 var(--mono);letter-spacing:-.01em;margin:7px 0 5px;color:#F2F6F9}
+  .lede{margin:0;font-size:13.5px;color:#9FB1C1;max-width:64ch}
+  .meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;font:11px/1.4 var(--mono);
+    letter-spacing:.06em;color:#8FA3B5}
+  .meta b{color:#DCE4EC}
+  main{padding-bottom:64px}
+  .sec{margin:34px 0 12px}
+  .sec h2{font:600 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;margin:0 0 4px}
+  .sec p{margin:0;font-size:13px;color:var(--muted);max-width:72ch}
+  .crit{background:var(--panel);border:1px solid var(--soft);border-left:3px solid var(--clear);
+    margin-bottom:7px;padding:11px 14px}
+  .crit.nearing{border-left-color:var(--nearing)}
+  .crit.fired{border-left-color:var(--fired)}
+  .crit.unknown{border-left-color:var(--unknown);opacity:.85}
+  .top{display:flex;align-items:baseline;gap:11px}
+  .cid{font:11px var(--mono);color:var(--muted);min-width:28px}
+  .clabel{flex:1;font-weight:500;font-size:14.5px}
+  .chip{font:9.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    padding:2px 7px;border-radius:2px;color:#fff;background:var(--clear);white-space:nowrap}
+  .chip.nearing{background:var(--nearing)}.chip.fired{background:var(--fired)}
+  .chip.unknown{background:var(--unknown)}
+  .detail{font:11.5px var(--mono);color:var(--muted);margin:6px 0 0 39px}
+  .note{font-size:13px;color:#33414E;margin:8px 0 0 39px;max-width:74ch}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font:11px var(--mono);color:var(--muted);
+    margin-top:10px;align-items:center}
+  .dot{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px}
+  .nots{background:var(--panel);border:1px dashed var(--rule);padding:14px 18px}
+  .nots li{font-size:13.5px;color:#33414E;margin-bottom:5px}
+  .cal{background:var(--panel);border:1px solid var(--soft);padding:12px 14px;
+    font:12px var(--mono);color:var(--muted)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);
+    font-size:12px;color:var(--muted);max-width:80ch}
+  .err{background:#FBEFEE;border:1px solid #E4C3BF;padding:11px 14px;font:12px var(--mono);
+    color:#7A2721;margin-bottom:8px}
+  a{color:var(--ai)}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="in">
+    <div class="eyebrow">Space Exploration Technologies Corp · Nasdaq SPCX</div>
+    <h1>Range Console</h1>
+    <p class="lede">
+      Conditions registered in advance, evaluated mechanically against filed data.
+      Colour marks distance to a threshold, not good news or bad — a fired condition
+      on either side of the trade is red for the same reason: it changed, go read it.
+    </p>
+    <div class="meta" id="meta"></div>
+  </div>
+</header>
+
+<main class="in">
+  <div id="errors"></div>
+
+  <div class="sec">
+    <h2>Conditions that would break the long case</h2>
+    <p>Tier 1 is structural — one is enough. Tier 2 is damaging; two at once is a downgrade.</p>
+  </div>
+  <div id="long"></div>
+
+  <div class="sec">
+    <h2>Conditions that would break the short case</h2>
+    <p>The symmetric half, and the reason this is not a bull dashboard. The overvaluation
+       argument rests on burn, dilution, and an unproven launch asset. Each is falsifiable too.</p>
+  </div>
+  <div id="short"></div>
+
+  <div class="sec">
+    <h2>Calibration</h2>
+    <p>Forecasts recorded before resolution, then scored. A Brier score above the base-rate
+       score means the forecasts are worse than knowing nothing, which is a finding.</p>
+  </div>
+  <div class="cal" id="calibration"></div>
+
+  <div class="sec">
+    <h2>Not criteria</h2>
+    <p>Written down in advance so that a loud news cycle cannot promote itself into signal.</p>
+  </div>
+  <div class="nots"><ul id="nots"></ul></div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+const S = ["fired","nearing","unknown","clear"];
+
+function card(e){
+  const el = document.createElement("div");
+  el.className = "crit " + e.status;
+  el.innerHTML = `
+    <div class="top">
+      <span class="cid">${e.criterion_id}</span>
+      <span class="clabel"></span>
+      <span class="chip ${e.status}">${e.status}</span>
+    </div>
+    <div class="detail"></div>`;
+  el.querySelector(".clabel").textContent = e.label;
+  el.querySelector(".detail").textContent =
+    `tier ${e.tier} · ${e.detail || "—"}` + (e.stale_days != null ? ` · ${e.stale_days}d old` : "");
+  return el;
+}
+
+function render(d){
+  const order = e => [S.indexOf(e.status), e.tier, e.criterion_id];
+  const sort = a => a.sort((x,y)=> String(order(x)) < String(order(y)) ? -1 : 1);
+
+  for (const side of ["long","short"]){
+    const host = document.getElementById(side);
+    sort(d.evaluations.filter(e => e.case === side)).forEach(e => host.appendChild(card(e)));
+  }
+
+  const s = d.summary;
+  document.getElementById("meta").innerHTML = [
+    `Run <b>${d.run_date}</b>`,
+    `Criteria v<b>${d.criteria_version}</b>`,
+    `Fired <b>${s.fired.length ? s.fired.join(", ") : "none"}</b>`,
+    `Nearing <b>${s.nearing.length ? s.nearing.join(", ") : "none"}</b>`,
+    `Unknown <b>${s.unknown.length}</b>`,
+  ].map(x=>`<span>${x}</span>`).join("");
+
+  if (d.errors && d.errors.length){
+    document.getElementById("errors").innerHTML =
+      `<div class="err">${d.errors.length} collection gap(s) this run: ` +
+      d.errors.map(e=>`${e.metric} (${e.collector})`).join(", ") +
+      `. A gap is recorded as a gap; no value was substituted.</div>`;
+  }
+
+  const c = d.calibration || {};
+  document.getElementById("calibration").textContent = c.n
+    ? `${c.n} resolved · Brier ${c.brier} vs base-rate ${c.base_rate_brier} · ` +
+      `${c.beats_base_rate ? "beating" : "NOT beating"} the base rate · ${c.bias_reading}`
+    : "No forecasts resolved yet. The score becomes meaningful after roughly a dozen.";
+
+  document.getElementById("nots").innerHTML =
+    (d.not_criteria||[]).map(n=>`<li></li>`).join("");
+  document.querySelectorAll("#nots li").forEach((li,i)=> li.textContent = d.not_criteria[i]);
+
+  document.getElementById("foot").textContent =
+    `Generated ${d.generated_at} from an append-only snapshot record. Every reading carries a ` +
+    `source and an as-of date; several inputs are explicitly manual and age visibly when stale. ` +
+    `A research instrument for organising evidence, not investment advice.`;
+}
+
+fetch("data/latest.json")
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(render)
+  .catch(err => {
+    document.getElementById("errors").innerHTML =
+      `<div class="err">Could not load data/latest.json (${err}). ` +
+      `Run <code>python -m spcx.cli run</code> and copy data/latest.json into site/data/.</div>`;
+  });
+</script>
+</body>
+</html>

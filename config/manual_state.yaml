@@ -1,0 +1,100 @@
+# Everything that cannot be fetched without judgment.
+#
+# Each entry carries its own as_of date and source. `spcx check` fails the build
+# if a quarterly entry is older than its cadence allows, so a stale manual read
+# announces itself instead of quietly aging into the audit trail.
+#
+# Update this after every earnings call, then commit. The diff is the record of
+# what you believed and when.
+
+metrics:
+  connectivity_revenue:            {value: 4291,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  connectivity_operating_income:   {value: 1656,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  connectivity_revenue_growth_yoy: {value: 66,    period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
+  ai_revenue:                      {value: 2561,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  ai_operating_income:             {value: -1257, period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  ai_adjusted_ebitda:              {value: 1146,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  space_revenue:                   {value: 962,   period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  space_operating_income:          {value: -542,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release, segment table", confidence: high}
+  starlink_subscribers:            {value: 12.0,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
+  starlink_net_adds_qoq:           {value: 1.7,   period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
+  starlink_arpu:                   {value: 66,    period: 2026Q2, as_of: "2026-08-04", source: "Press reporting of disclosed figures", confidence: medium}
+  starship_orbital_flights:        {value: 0,     period: cumulative, as_of: "2026-07-24", source: "Flight 13, suborbital, July 24 2026", confidence: high}
+  amazon_leo_enterprise_losses:    {value: 2,     period: cumulative, as_of: "2026-08-14", source: "Delta (Apr 6 2026), JetBlue", confidence: high}
+  short_interest_pct_float:        {value: 28,    period: 2026-08-14, as_of: "2026-08-14", source: "Fintel — range reported 25-32%, midpoint taken", confidence: low}
+
+states:
+  crew_and_dod_status:
+    state: clear
+    detail: "No cancellations. >$7B in confirmed 2026 Pentagon awards; sole certified US crew provider."
+    as_of: "2026-08-14"
+    source: "Contract award reporting through Aug 2026"
+  fatal_crewed_accident:
+    state: clear
+    detail: "None."
+    as_of: "2026-08-20"
+    source: ""
+  musk_status:
+    state: clear
+    detail: "Active. ~82.4% voting power per 424B4, no sunset provision."
+    as_of: "2026-08-20"
+    source: "424B4"
+  propellant_transfer:
+    state: clear
+    detail: "Not demonstrated. Nothing on the published manifest would demonstrate it."
+    as_of: "2026-08-20"
+    source: "Flight manifest as disclosed on the Aug 4 earnings call"
+  artemis_hls:
+    state: nearing
+    detail: "NASA reopened the Artemis III lander competition in Oct 2025 citing SpaceX delays. Undecided."
+    as_of: "2026-08-14"
+    source: "NASASpaceflight, Oct 2025"
+  secondary_offering:
+    state: clear
+    detail: "None. $25B of notes at 5.855% issued June 2026 instead."
+    as_of: "2026-08-14"
+    source: "Debt issuance reporting"
+  starship_orbit_and_catch:
+    state: nearing
+    detail: "Flight 14 (Ship 41 / Booster 21) attempts both. NET Aug 28 2026, catch pending FAA approval. Booster splashes down rather than being caught."
+    as_of: "2026-08-20"
+    source: "Aug 4 2026 earnings call; FCC filing"
+  november_tranche:
+    state: clear
+    detail: "Pending. ~1.28B shares, ~28%, around Nov 5 2026."
+    as_of: "2026-08-20"
+    source: "FWP lockup structure, June 4 2026"
+
+# Questions that could not be resolved. Each pass should attempt one and record
+# the result, including failure to resolve.
+unresolved:
+  - id: q_shares
+    text: "Share count does not bridge. Earnings release uses 5,864M weighted-average shares for $(0.09) EPS; 10-Q cover shows 13.18B outstanding. Pull the share-class table before any per-share work."
+    opened: "2026-08-14"
+  - id: q_cash_definition
+    text: "$93.5B cash and equivalents per earnings coverage vs ~$100B cash plus marketable securities. L4 keys off this. Pick one definition permanently and record which."
+    opened: "2026-08-20"
+  - id: q_lockup_text
+    text: "424B4 truncates before 'Shares Eligible for Future Sale'. Tranche dates are reconstructed from the FWP summary plus press."
+    opened: "2026-08-14"
+  - id: q_failed_trigger
+    text: "455.8M shares whose price trigger failed (required >=$175.50 on 5 of 10 days pre-earnings) — do they roll into December or re-trigger later?"
+    opened: "2026-08-14"
+  - id: q_2027_bucket
+    text: "The 2027 insider bucket. FWP implies ~1.58B shares by residual math; secondary coverage says day 366 unlocks everything. Least verified, most consequential item on the board."
+    opened: "2026-08-14"
+  - id: q_nvidia_stake
+    text: "Nvidia disclosed a $21B stake as of quarter-end (Aug 14). Confirm against the 13F and establish whether it is the converted xAI position from the January $20B round."
+    opened: "2026-08-20"
+  - id: q_china_reusable
+    text: "China landed a reusable rocket (~Aug 19). Establish vehicle, class, and whether orbital. First credible non-US reusability datapoint; belongs in the competitive set if it holds up."
+    opened: "2026-08-20"
+  - id: q_govt_revenue
+    text: "Government revenue is never broken out — only a combined enterprise-and-government line. Any '% from government' figure in circulation is someone's estimate."
+    opened: "2026-08-14"
+
+resolved:
+  - id: q_tranche3_date
+    text: "Tranche 3 date dispute (Aug 12 vs Aug 21)."
+    resolution: "Aug 20 2026, ~319M shares. Multiple outlets converge."
+    closed: "2026-08-20"
