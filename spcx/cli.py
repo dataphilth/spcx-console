@@ -42,7 +42,7 @@ def cmd_run(args) -> int:
     snap = Snapshot(run_date=args.date or date.today().isoformat())
     collectors.run_all(config, snap, only=args.only)
 
-    evals = evaluate_all(config["criteria"], hist + [snap], config["manual"])
+    evals = evaluate_all(config["criteria"], hist + [snap], config["manual"], config["metrics"])
     summary = summarise(evals)
 
     path = store.write(snap, force=args.force)
@@ -51,7 +51,7 @@ def cmd_run(args) -> int:
     # Alert only on a change of status, never on a change of value.
     prev_evals = []
     if hist:
-        prev_evals = evaluate_all(config["criteria"], hist, config["manual"])
+        prev_evals = evaluate_all(config["criteria"], hist, config["manual"], config["metrics"])
         prev_evals = [e.to_dict() for e in prev_evals]
     changed = diff.changes(prev_evals, evals)
     if changed:
@@ -73,7 +73,7 @@ def cmd_evaluate(args) -> int:
     if not hist:
         print("no snapshots on record; run `spcx run` first", file=sys.stderr)
         return 2
-    evals = evaluate_all(config["criteria"], hist, config["manual"])
+    evals = evaluate_all(config["criteria"], hist, config["manual"], config["metrics"])
     for e in sorted(evals, key=lambda x: (x.case, x.tier, x.criterion_id)):
         mark = {"fired": "!!", "nearing": " ~", "unknown": " ?", "clear": "  "}[e.status]
         print(f"{mark} {e.criterion_id:<4} {e.status:<8} {e.label[:52]:<54} {e.detail}")

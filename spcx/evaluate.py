@@ -187,7 +187,8 @@ def _eval_manual(c: dict, manual: dict) -> tuple[str, Any, float | None, int, st
     return state, state, None, 0, entry.get("detail", "")
 
 
-def evaluate_one(c: dict, history: list[Snapshot], manual: dict) -> Evaluation:
+def evaluate_one(c: dict, history: list[Snapshot], manual: dict,
+                 metrics: dict | None = None) -> Evaluation:
     kind = c["rule"]["type"]
     if kind == "threshold":
         status, value, prox, streak, detail = _eval_threshold(c, history)
@@ -207,6 +208,23 @@ def evaluate_one(c: dict, history: list[Snapshot], manual: dict) -> Evaluation:
     else:
         raise ValueError(f"{c['id']}: unknown rule type {kind!r}")
 
+    # An `unknown` that cannot resolve must not read like one that is merely
+    # waiting. "Needs at least two periods on record" is true of a metric that
+    # arrives next quarter and false of one the collectors cannot obtain at all,
+    # and conflating them is how a monitor ends up describing a permanent blind
+    # spot as a pending one -- reassuring, and wrong for years. The reason lives
+    # in config/metrics.yaml so that declaring a metric unobtainable, or
+    # retracting that claim once it is fixed, is a reviewable dated diff.
+    if status == "unknown" and metrics:
+        registry = metrics.get("metrics") or {}
+        for key in ("metric", "against"):
+            name = c["rule"].get(key)
+            spec = registry.get(name) if name else None
+            reason = spec.get("unavailable") if isinstance(spec, dict) else None
+            if reason:
+                detail = f"{name} — {reason}"
+                break
+
     stale = None
     metric = c["rule"].get("metric") or c["rule"].get("key")
     for snap in reversed(history):
@@ -222,9 +240,10 @@ def evaluate_one(c: dict, history: list[Snapshot], manual: dict) -> Evaluation:
     )
 
 
-def evaluate_all(criteria: dict, history: Iterable[Snapshot], manual: dict) -> list[Evaluation]:
+def evaluate_all(criteria: dict, history: Iterable[Snapshot], manual: dict,
+                 metrics: dict | None = None) -> list[Evaluation]:
     hist = list(history)
-    return [evaluate_one(c, hist, manual) for c in criteria["criteria"]]
+    return [evaluate_one(c, hist, manual, metrics) for c in criteria["criteria"]]
 
 
 def summarise(evals: list[Evaluation]) -> dict[str, Any]:

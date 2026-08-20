@@ -13,11 +13,14 @@
 metrics:
 
   # --- automated ---
-  price:                        {source: auto, collector: price,        cadence: daily,     unit: USD,     period_type: day}
+  price:                        {source: auto, collector: price,        cadence: daily,     unit: USD,     period_type: day,
+                                 unavailable: "Not collected. stooq now gates its CSV endpoint behind a JavaScript proof-of-work check, for every symbol rather than just this one. No replacement source has been chosen."}
   price_to_sales_ttm:           {source: auto, collector: derived,      cadence: daily,     unit: x,       period_type: day,
-                                 formula: "market_cap / revenue_ttm"}
+                                 formula: "market_cap / revenue_ttm",
+                                 unavailable: "Not collected. Derived from market_cap, which is unavailable."}
   market_cap:                   {source: auto, collector: derived,      cadence: daily,     unit: $B,      period_type: day,
-                                 formula: "price * shares_outstanding / 1000"}
+                                 formula: "price * shares_outstanding / 1000",
+                                 unavailable: "Not collected. Derived from price, which is unavailable."}
   revenue_quarterly:            {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
                                  tags: [RevenueFromContractWithCustomerExcludingAssessedTax, Revenues]}
   revenue_ttm:                  {source: auto, collector: derived,      cadence: quarterly, unit: $B,      period_type: quarter,
@@ -25,11 +28,14 @@ metrics:
   net_income_quarterly:         {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
                                  tags: [NetIncomeLoss]}
   capex_quarterly:              {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
-                                 tags: [PaymentsToAcquirePropertyPlantAndEquipment]}
+                                 tags: [PaymentsToAcquirePropertyPlantAndEquipment],
+                                 unavailable: "Not collected. SEC filers report cash-flow items only as year to date, so of the four filings a year only Q1's span clears the collector's quarterly filter. Recovering Q2-Q4 requires differencing consecutive YTD facts, which is not implemented. Waiting for more periods will not resolve this."}
   operating_cash_flow_quarterly: {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $M,      period_type: quarter,
-                                 tags: [NetCashProvidedByUsedInOperatingActivities]}
+                                 tags: [NetCashProvidedByUsedInOperatingActivities],
+                                 unavailable: "Not collected. Same year-to-date reporting convention as capex_quarterly: only Q1 clears the quarterly-span filter. Waiting for more periods will not resolve this."}
   fcf_ttm:                      {source: auto, collector: derived,      cadence: quarterly, unit: $B,      period_type: quarter,
-                                 formula: "(sum(operating_cash_flow_quarterly, 4) - sum(capex_quarterly, 4)) / 1000"}
+                                 formula: "(sum(operating_cash_flow_quarterly, 4) - sum(capex_quarterly, 4)) / 1000",
+                                 unavailable: "Not collected. Derived from operating_cash_flow_quarterly and capex_quarterly, both unavailable. Could instead use the TTM identity (prior FY + current YTD - prior-year YTD), which needs no discrete quarters, once a 10-K exists."}
   cash_and_equivalents:         {source: auto, collector: sec_xbrl,     cadence: quarterly, unit: $B,      period_type: quarter,
                                  tags: [CashAndCashEquivalentsAtCarryingValue], scale: 0.001}
   # NOTE: this filer publishes no point-in-time common-share count. companyfacts

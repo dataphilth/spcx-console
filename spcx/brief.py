@@ -17,7 +17,7 @@ from .models import Snapshot
 
 
 def render(config: dict, history: list[Snapshot]) -> str:
-    evals = evaluate_all(config["criteria"], history, config["manual"])
+    evals = evaluate_all(config["criteria"], history, config["manual"], config["metrics"])
     snap = history[-1] if history else Snapshot(run_date="none")
 
     manual_specs = {m: s for m, s in config["metrics"]["metrics"].items()

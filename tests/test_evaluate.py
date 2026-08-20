@@ -179,3 +179,51 @@ def test_deadline_criterion_clears_if_the_condition_resolved_in_time():
     past = dict(DEADLINE, rule={**DEADLINE["rule"], "deadline": "2020-01-01"})
     hist = [snap("2026-08-01", "orbital", 3, period="cumulative")]
     assert evaluate_one(past, hist, {}).status == "clear"
+
+
+# ---------------------------------------------------------------------------
+# A gap that cannot close must not be reported like one that is merely waiting.
+
+REGISTRY = {"metrics": {
+    "m": {"source": "auto", "collector": "sec_xbrl",
+          "unavailable": "Not collected. Filed only as year to date."},
+    "obtainable": {"source": "auto", "collector": "sec_xbrl"},
+}}
+
+
+def test_unobtainable_metric_says_so_instead_of_promising_more_periods():
+    """`unknown` for a metric no collector can reach must not read as pending.
+
+    The generic wording ("needs at least two periods on record") is true of a
+    metric that arrives next quarter and false of one that never arrives. Left
+    conflated, the board describes a permanent blind spot as a temporary one and
+    goes on doing it for years.
+    """
+    e = evaluate_one(THRESH, [], {}, REGISTRY)
+    assert e.status == "unknown"
+    assert "Not collected" in e.detail
+    assert "periods on record" not in e.detail
+
+
+def test_obtainable_metric_keeps_the_ordinary_waiting_message():
+    """The override must not swallow the genuine not-enough-history case."""
+    rule = dict(THRESH, rule=dict(THRESH["rule"], metric="obtainable"))
+    e = evaluate_one(rule, [], {}, REGISTRY)
+    assert e.status == "unknown"
+    assert "Not collected" not in e.detail
+
+
+def test_unavailability_never_overrides_a_real_reading():
+    """A declared gap is about absence. If a value exists, it wins."""
+    hist = [snap("2026-05-01", "m", -900, period="2026Q1"),
+            snap("2026-08-01", "m", -900, period="2026Q2")]
+    e = evaluate_one(THRESH, hist, {}, REGISTRY)
+    assert e.status == "fired"
+    assert "Not collected" not in e.detail
+
+
+def test_registry_omitted_is_backward_compatible():
+    """Callers that pass no registry keep the previous behaviour."""
+    e = evaluate_one(THRESH, [], {})
+    assert e.status == "unknown"
+    assert "Not collected" not in e.detail
