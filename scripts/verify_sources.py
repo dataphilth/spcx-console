@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from spcx import store  # noqa: E402
+from spcx.collectors import launches  # noqa: E402
 from spcx.http import HttpStatusError, get  # noqa: E402
 
 OK, WARN, BAD = "PASS", "WARN", "FAIL"
@@ -154,7 +155,18 @@ def check_price(config: dict) -> None:
 
 
 def check_launches() -> None:
-    base = os.environ.get("SPCX_LL2_BASE", "https://lldev.thespacedevs.com/2.3.0/launches/")
+    # Probe exactly what the collector will call. These were previously separate
+    # defaults -- the verifier checked lldev while collect() read production --
+    # so a green verification said nothing about the run that followed it.
+    base = launches.BASE
+    which = ("production" if base == launches.PROD
+             else "lldev development mirror" if base == launches.DEV
+             else "custom")
+    report("LL2 base", OK if base == launches.PROD else WARN,
+           f"{which} - {base}"
+           + ("" if base == launches.PROD
+              else " (data may lag; unset SPCX_LL2_BASE for a production check)"))
+
     year = date.today().year
     probes = {
         "falcon YTD": (f"{base}?lsp__id=121&net__gte={year}-01-01T00:00:00Z"
@@ -163,6 +175,12 @@ def check_launches() -> None:
                                            f"&limit=1&status__ids=3,4&include_suborbital=true"),
         "starship (default filter)": (f"{base}?lsp__id=121&search=Starship&mode=list"
                                       f"&limit=1&status__ids=3,4"),
+        # Control probe. Without it, "included == default" is ambiguous: it can
+        # mean the default already covers suborbital, or that LL2 is ignoring
+        # the parameter altogether. Those call for opposite responses, so the
+        # difference has to be measured rather than assumed.
+        "starship (suborbital excluded)": (f"{base}?lsp__id=121&search=Starship&mode=list"
+                                           f"&limit=1&status__ids=3,4&include_suborbital=false"),
     }
     counts = {}
     for label, url in probes.items():
@@ -176,15 +194,27 @@ def check_launches() -> None:
 
     a = counts.get("starship (suborbital included)")
     b = counts.get("starship (default filter)")
-    if a is not None and b is not None and a == b:
+    c = counts.get("starship (suborbital excluded)")
+    if a is None or b is None or c is None:
+        return
+
+    if a == c:
         report("  suborbital check", WARN,
-               "both filters return the same count — either LL2 classifies Starship "
-               "tests as orbital, or the search is matching nothing. Verify by hand "
-               "before trusting L8.")
-    elif a and b == 0:
-        report("  suborbital check", OK,
-               f"confirmed: default filter hides all {a} flights. include_suborbital "
-               f"is load-bearing.")
+               f"include_suborbital looks inert: =true and =false both return {a}. "
+               f"L8 would count whatever the default happens to mean. Verify by hand.")
+    elif a > 0 and c == 0:
+        if b == a:
+            report("  suborbital check", OK,
+                   f"parameter is live (=false yields 0) and all {a} flights are "
+                   f"suborbital. This LL2 version already includes them by default, so "
+                   f"include_suborbital=true is belt-and-braces, not load-bearing.")
+        else:
+            report("  suborbital check", OK,
+                   f"confirmed: the default filter hides {a - b} of {a} flights. "
+                   f"include_suborbital is load-bearing.")
+    else:
+        report("  suborbital check", WARN,
+               f"unexpected combination: true={a} default={b} false={c}. Verify L8 by hand.")
 
 
 def check_constellation() -> None:
