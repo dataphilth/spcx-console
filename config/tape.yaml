@@ -27,6 +27,18 @@ position:
   ladder_shape: even          # when funded: roughly equal shares per band Current..Dip 3, smaller reserve for Dip 4-5
 
 # ---------------------------------------------------------------------------
+# Share structure. Yahoo's "short % of float" divides by TOTAL shares outstanding
+# (13.18B), which understates it ~8x for a name whose public float is 11.8%.
+# The tape recomputes against the public float below. Update after each 10-Q
+# and each lockup tranche; the number is only as fresh as as_of.
+# ---------------------------------------------------------------------------
+share_structure:
+  shares_outstanding_b: 13.18
+  public_float_b: 1.55
+  as_of: 2026-08-14
+  source: "10-Q cover (8/4/26) + FWP lockup schedule; float per thesis v0.2"
+
+# ---------------------------------------------------------------------------
 # Accumulation ladder. Evaluated on the daily close. shares: 0 = defined but
 # unfunded. The ladder PAUSES itself when any long-case Tier-1 criterion has
 # fired, or when two or more long-case Tier-2 criteria have fired.

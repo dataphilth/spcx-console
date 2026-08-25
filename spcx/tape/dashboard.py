@@ -169,7 +169,7 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
             ("IV30 Δ1d", f'{_n(v.get("iv30_chg_1d"), 1, "—")} pts', f'IV30 {_n(v.get("iv30"), 0)} · IV90 {_n(v.get("iv90"), 0)} · slope {_n(v.get("term_slope"), 0, "—")}'),
             ("Put / call OI", _n(v.get("put_call_oi"), 2, "—"), f'{int(v.get("total_put_oi") or 0):,} / {int(v.get("total_call_oi") or 0):,} contracts'),
             ("Gamma proxy", f'{_n(v.get("gex_musd_per_1pct"), 0, "—")} $M/1%', "dealers long calls / short puts convention · sign and size only"),
-            ("Short interest", f'{_n(v.get("short_pct_float"), 1, "—")}% float', f'{_n(v.get("short_shares_m"), 0, "—")}M sh · {_n(v.get("short_days_to_cover"), 1, "—")}d to cover · as of {_e(v.get("short_as_of") or "—")}'),
+            ("Short interest", f'{_n(v.get("short_pct_public_float"), 0, "—")}% of float', f'{_n(v.get("short_shares_m"), 0, "—")}M sh · {_n(v.get("short_pct_outstanding"), 1, "—")}% of outstanding · {_n(v.get("short_days_to_cover"), 1, "—")}d to cover · as of {_e(v.get("short_as_of") or "—")}'),
         ]
         B.append('<div class="tiles">' + "".join(f'<div class="tile"><div class="k">{_e(k)}</div><div class="v">{_e(val)}</div><div class="d">{_e(d)}</div></div>' for k, val, d in stiles) + "</div>")
         if term or walls:

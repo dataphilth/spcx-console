@@ -109,6 +109,14 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         vol["oi_walls"] = snap.get("oi_walls") or {}
         vol["snapshot_date"] = snap.get("date")
         vol["carried"] = bool(snap.get("carried"))
+    # Short interest against the PUBLIC float, not Yahoo's shares-outstanding denominator.
+    ss = cfg.get("share_structure") or {}
+    if vol.get("short_shares_m") is not None and ss.get("public_float_b"):
+        vol["short_pct_public_float"] = round(100 * float(vol["short_shares_m"]) / (float(ss["public_float_b"]) * 1000), 1)
+        vol["short_pct_outstanding"] = vol.get("short_pct_float")
+        vol["float_as_of"] = str(ss.get("as_of"))
+    else:
+        vol["short_pct_public_float"] = None
     vol["iv30_chg_1d"] = options.iv_change(hist_iv, today.isoformat(), "iv30") if hist_iv else None
     vol["skew_chg_1d"] = options.iv_change(hist_iv, today.isoformat(), "skew25_30d") if hist_iv else None
     if vol["iv30"] is not None and vol["hv30"] is not None:
@@ -179,7 +187,8 @@ def brief(tape: dict) -> str:
         pw = ", ".join(str(w["strike"]) for w in (walls.get("puts") or [])[:3]) or "—"
         L.append(f"  structure: 25Δ skew {v.get('skew25_30d')} pts (front {v.get('skew25_front')}) · IV30 Δ1d {v.get('iv30_chg_1d')} · "
                  f"P/C OI {v.get('put_call_oi')} · call walls {cw} · put walls {pw} · gamma proxy {v.get('gex_musd_per_1pct')} $M/1% · "
-                 f"short {v.get('short_pct_float')}% float, {v.get('short_days_to_cover')}d to cover (as of {v.get('short_as_of')})")
+                 f"short {v.get('short_shares_m')}M sh = {v.get('short_pct_public_float')}% of public float "
+                 f"({v.get('short_pct_outstanding')}% of outstanding), {v.get('short_days_to_cover')}d to cover (as of {v.get('short_as_of')})")
         term = v.get("term") or []
         if term:
             L.append("  term: " + " · ".join(f"{t_['expiry'][5:]} {t_['atm_iv']}" for t_ in term))
