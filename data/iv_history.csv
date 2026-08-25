@@ -1,2 +1,2 @@
 date,spot,iv_front,iv30,iv90,front_expiry,front_dte,expected_move_usd,expected_move_pct,put_call_oi,n_expiries,skew25_front,skew25_30d,gex_musd_per_1pct,total_call_oi,total_put_oi,short_pct_float,short_shares_m,short_days_to_cover,short_as_of
-2026-08-25,138.47,53.3,54.3,59.8,2026-08-28,3,6.17,4.5,1.11,8,-2.6,-2.0,31.0,1096768,1219740,3.3,207.8,2.9,2026-07-30
+2026-08-25,137.95,54.7,54.6,60.1,2026-08-28,3,6.3,4.6,1.11,8,-3.0,-1.0,24.0,1096768,1219740,3.3,207.8,2.9,2026-07-31

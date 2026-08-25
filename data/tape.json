@@ -456,11 +456,11 @@
       "v": 60188400
     },
     {
-      "c": 138.47,
+      "c": 137.95,
       "d": "2026-08-25",
       "h": 139.74,
       "l": 136.11,
-      "v": 46228925
+      "v": 52760922
     }
   ],
   "gate": {
@@ -476,21 +476,21 @@
   "history_tail": [
     {
       "active_band": "Current",
-      "atr_pct": 6.94,
-      "chg_1d_pct": 2.57,
-      "close": 138.47,
+      "atr_pct": 6.96,
+      "chg_1d_pct": 2.19,
+      "close": 137.95,
       "date": "2026-08-25",
-      "from_ath_pct": -38.63,
-      "hv30": 89.6,
-      "iv30": 54.3,
-      "iv_hv_spread": -35.3,
+      "from_ath_pct": -38.86,
+      "hv30": 89.5,
+      "iv30": 54.6,
+      "iv_hv_spread": -34.9,
       "ladder_paused": false,
       "n_bearish": 0,
       "n_bullish": 0,
       "n_neutral": 3,
       "price_source": "yfinance",
       "regime": "transition",
-      "rsi": 52.7,
+      "rsi": 52.4,
       "setups": "REGIME|PREMIUM_CHEAP|CATALYST_WINDOW"
     }
   ],
@@ -579,7 +579,7 @@
     ],
     "budget_dollars": 0.0,
     "budget_set": false,
-    "close": 138.47,
+    "close": 137.95,
     "message": "In band 'Current' \u2014 defined but UNFUNDED (shares: 0 in config/tape.yaml). No plan to execute.",
     "pause_reason": null,
     "paused": false,
@@ -602,7 +602,7 @@
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-08-25T13:48:46",
+    "run_at": "2026-08-25T21:53:03",
     "ticker": "SPCX",
     "today": "2026-08-25",
     "warnings": []
@@ -619,8 +619,8 @@
   "position": {
     "core_target_shares": 100,
     "cost_basis": 137.85,
-    "market_value": 1800.11,
-    "pnl_pct": 0.45,
+    "market_value": 1793.35,
+    "pnl_pct": 0.07,
     "shares": 13,
     "shares_to_target": 87,
     "sleeves": {
@@ -634,43 +634,43 @@
     "atl": 104.83,
     "atl_date": "2026-08-03",
     "atr": 9.61,
-    "atr_pct": 6.94,
+    "atr_pct": 6.96,
     "bars": 51,
-    "chg_1d_pct": 2.57,
-    "chg_20d_pct": 18.95,
-    "chg_5d_pct": -3.4,
-    "close": 138.47,
-    "close_loc": 0.65,
+    "chg_1d_pct": 2.19,
+    "chg_20d_pct": 18.5,
+    "chg_5d_pct": -3.76,
+    "close": 137.95,
+    "close_loc": 0.51,
     "date": "2026-08-25",
-    "dist_sma20_atr": 0.87,
-    "dist_sma20_pct": 6.42,
-    "dist_sma50_atr": -0.27,
-    "dist_sma50_pct": -1.83,
-    "from_ath_pct": -38.63,
-    "from_atl_pct": 32.09,
-    "from_basis_pct": 0.45,
-    "from_ipo_pct": 2.57,
+    "dist_sma20_atr": 0.82,
+    "dist_sma20_pct": 6.04,
+    "dist_sma50_atr": -0.32,
+    "dist_sma50_pct": -2.19,
+    "from_ath_pct": -38.86,
+    "from_atl_pct": 31.59,
+    "from_basis_pct": 0.07,
+    "from_ipo_pct": 2.19,
     "gap_pct": 1.44,
-    "hv10": 66.0,
-    "hv30": 89.6,
+    "hv10": 65.7,
+    "hv30": 89.5,
     "prior_range_high": 149.8,
     "prior_range_low": 104.83,
     "range_compression": 0.69,
     "range_high": 149.8,
     "range_low": 104.83,
-    "range_pos": 0.75,
-    "rsi": 52.7,
-    "sma20": 130.12,
-    "sma50": 141.05,
+    "range_pos": 0.74,
+    "rsi": 52.4,
+    "sma20": 130.09,
+    "sma50": 141.04,
     "streak": 1,
-    "volume": 46228925,
-    "volume_vs_avg": 0.39,
-    "volume_z": -1.21
+    "volume": 52760922,
+    "volume_vs_avg": 0.45,
+    "volume_z": -1.1
   },
   "setups": [
     {
       "direction": "neutral",
-      "evidence": "Close 138.47; SMA20 130.12; SMA50 141.05.",
+      "evidence": "Close 137.95; SMA20 130.09; SMA50 141.04.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: transition",
@@ -680,7 +680,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "IV30 54.3 vs HV30 89.6 \u2192 spread -35 pts.",
+      "evidence": "IV30 54.6 vs HV30 89.5 \u2192 spread -35 pts.",
       "id": "PREMIUM_CHEAP",
       "long_read": "Do NOT write covered calls here \u2014 you'd be selling movement below what the stock actually does. Long-vol structures (calls, call spreads) are the cheap expression of a long view.",
       "name": "Options premium cheap vs realized",
@@ -690,7 +690,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "2026-08-28 (medium date confidence). Front-expiry expected move \u00b14.5%.",
+      "evidence": "2026-08-28 (medium date confidence). Front-expiry expected move \u00b14.6%.",
       "id": "CATALYST_WINDOW",
       "long_read": "Binary event ahead. New directional entries are a bet on the event, not on the setup. Price moves into these are on the noise list; the ladder is what acts on them.",
       "name": "Catalyst within 3d: STARSHIP FLIGHT 14 \u2014 first orbital attempt; ship catch pending FAA",
@@ -701,20 +701,20 @@
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 4.5,
-    "expected_move_usd": 6.17,
+    "expected_move_pct": 4.6,
+    "expected_move_usd": 6.3,
     "float_as_of": "2026-08-14",
     "front_dte": 3.0,
     "front_expiry": "2026-08-28",
-    "gex_musd_per_1pct": 31.0,
-    "hv10": 66.0,
-    "hv30": 89.6,
-    "iv30": 54.3,
+    "gex_musd_per_1pct": 24.0,
+    "hv10": 65.7,
+    "hv30": 89.5,
+    "iv30": 54.6,
     "iv30_chg_1d": null,
-    "iv90": 59.8,
-    "iv_front": 53.3,
+    "iv90": 60.1,
+    "iv_front": 54.7,
     "iv_history_days": 1,
-    "iv_hv_spread": -35.3,
+    "iv_hv_spread": -34.9,
     "iv_percentile": 0.0,
     "iv_rank": null,
     "iv_rank_meaningful": false,
@@ -750,19 +750,19 @@
       "window_dte": 60
     },
     "put_call_oi": 1.11,
-    "short_as_of": "2026-07-30",
+    "short_as_of": "2026-07-31",
     "short_days_to_cover": 2.9,
     "short_pct_float": 3.3,
     "short_pct_outstanding": 3.3,
     "short_pct_public_float": 13.4,
     "short_shares_m": 207.8,
-    "skew25_30d": -2.0,
-    "skew25_front": -2.6,
+    "skew25_30d": -1.0,
+    "skew25_front": -3.0,
     "skew_chg_1d": null,
     "snapshot_date": "2026-08-25",
     "term": [
       {
-        "atm_iv": 53.3,
+        "atm_iv": 54.7,
         "dte": 3,
         "expiry": "2026-08-28"
       },
@@ -772,32 +772,32 @@
         "expiry": "2026-09-04"
       },
       {
-        "atm_iv": 51.9,
+        "atm_iv": 52.5,
         "dte": 17,
         "expiry": "2026-09-11"
       },
       {
-        "atm_iv": 53.4,
+        "atm_iv": 53.8,
         "dte": 24,
         "expiry": "2026-09-18"
       },
       {
-        "atm_iv": 54.5,
+        "atm_iv": 54.7,
         "dte": 31,
         "expiry": "2026-09-25"
       },
       {
-        "atm_iv": 54.6,
+        "atm_iv": 55.4,
         "dte": 38,
         "expiry": "2026-10-02"
       },
       {
-        "atm_iv": 55.8,
+        "atm_iv": 55.9,
         "dte": 52,
         "expiry": "2026-10-16"
       },
       {
-        "atm_iv": 59.8,
+        "atm_iv": 60.1,
         "dte": 87,
         "expiry": "2026-11-20"
       }
