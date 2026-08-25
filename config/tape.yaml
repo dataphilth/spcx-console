@@ -87,6 +87,9 @@ signals:
   volume_climax_z: 2.5
   iv_hv_rich_spread: 15
   iv_hv_cheap_spread: -15
+  skew_put_rich_pts: 12       # 30d 25Δ put IV − call IV; single-stock normal is ~+3..+8
+  skew_call_rich_pts: -3      # calls bid above puts — unusual
+  iv_jump_pts: 10             # day-over-day IV30 move that gets flagged
   min_history_for_ivrank: 60
   catalyst_lookahead_days: 10
   history_bars_for_chart: 90

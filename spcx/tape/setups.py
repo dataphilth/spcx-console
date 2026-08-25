@@ -130,6 +130,48 @@ def detect(tech: dict, vol: dict, params: dict, catalysts_soon: list[dict]) -> l
                           "Long-vol structures (calls, call spreads) are the cheap expression of a long view.",
                           "Long puts / put spreads are the cheap expression of a short view. Cheap is relative: 67-vol is not cheap in absolute terms.", tag="vol"))
 
+    # ---- Options structure (context; all labelled neutral so the bias audit is unaffected) ----
+    sk = vol.get("skew25_30d")
+    if sk is not None:
+        if sk >= params.get("skew_put_rich_pts", 12):
+            out.append(_s("SKEW_PUT_RICH", "25Δ puts rich vs calls", "neutral", 2,
+                          f"30-day 25Δ skew {sk:+.0f} pts (put IV minus call IV). Δ1d {vol.get('skew_chg_1d')}.",
+                          "Downside protection is expensive — the crowd is paying up for puts. A long who wants a hedge pays "
+                          "through the nose; the cheap long expression is call spreads, or selling puts against the ladder "
+                          "bands you'd buy at anyway (assignment IS the plan there).",
+                          "Fear is priced. Shorts who buy puts here are buying what everyone else already bought; put spreads "
+                          "or short call spreads are the cheaper expression. Rich put skew has historically preceded squeezes "
+                          "as often as breaks.", tag="vol"))
+        elif sk <= params.get("skew_call_rich_pts", -3):
+            out.append(_s("SKEW_CALL_RICH", "25Δ calls rich vs puts", "neutral", 2,
+                          f"30-day 25Δ skew {sk:+.0f} pts — calls bid above puts, unusual for a single stock. Δ1d {vol.get('skew_chg_1d')}.",
+                          "Upside is what's being chased. Buying calls here pays a premium; the cheap long expression is stock "
+                          "or call spreads that sell the rich wing.",
+                          "Puts are relatively cheap while the crowd chases upside — the classic setup for a cheap hedge or a "
+                          "cheap short expression. Inverted skew also shows up in squeezes; it says crowded, not wrong.", tag="vol"))
+    ivc = vol.get("iv30_chg_1d")
+    if ivc is not None and abs(ivc) >= params.get("iv_jump_pts", 10):
+        out.append(_s("IV_JUMP", f"IV30 moved {ivc:+.0f} pts in a day", "neutral", 2,
+                      f"IV30 {vol.get('iv30')} vs prior session; HV30 {vol.get('hv30')}.",
+                      "IV up: the market just re-priced the event risk — long-vol positions gained, new ones cost more. IV down: "
+                      "the event passed or the crowd relaxed; long-vol entries got cheaper.",
+                      "Same read, mirrored. A vol crush after a catalyst is the moment short-premium structures earn; a spike "
+                      "into one is the moment they lose."))
+    walls = vol.get("oi_walls") or {}
+    if close is not None and tech.get("atr"):
+        near = []
+        for side in ("calls", "puts"):
+            for w in (walls.get(side) or [])[:1]:
+                if abs(w["strike"] - close) <= tech["atr"]:
+                    near.append(f"{side[:-1]} wall {w['strike']} (OI {w['oi']:,})")
+        if near:
+            out.append(_s("OI_WALL_NEAR", "Price within 1 ATR of a large OI strike", "neutral", 1,
+                          "; ".join(near) + f". Close {close}, ATR {tech['atr']}. Dealer gamma proxy {vol.get('gex_musd_per_1pct')} $M per 1%.",
+                          "Big OI strikes act as magnets into expiry and as pins on expiry day; a long wants to see price hold "
+                          "above a put wall, not sit under a call wall.",
+                          "Mirror image: a call wall overhead is resistance until it isn't; a break through it forces dealer "
+                          "hedging that accelerates the move.", tag="vol"))
+
     # ---- Catalyst window ------------------------------------------------------------
     for c in catalysts_soon:
         if c["kind"] in ("starship", "earnings") or "28%" in c["event"]:

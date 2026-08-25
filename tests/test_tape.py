@@ -122,16 +122,70 @@ def test_tape_config_is_ordered_and_unfunded_by_default():
     assert cfg["position"]["total_budget_dollars"] == 0  # until Phil funds it
 
 
-def test_options_atm_survives_nan_cells():
-    """Yahoo chains carry NaN open interest / bids on illiquid strikes. Live bug, 2026-08-25."""
+def _chain(spot, dte, iv_atm=0.9, put_skew=0.08, oi_at=None, nan_at=None):
+    """Synthetic call/put lists in the shape _contracts() produces, via the real reducer inputs."""
+    from spcx.tape.options import _contracts
     pytest.importorskip("pandas")
     import pandas as pd
-    from spcx.tape import options
     nan = float("nan")
-    chain = pd.DataFrame([
-        {"strike": 130.0, "impliedVolatility": 0.71, "bid": 9.0, "ask": 9.4, "lastPrice": 9.2, "openInterest": nan},
-        {"strike": 140.0, "impliedVolatility": 0.68, "bid": nan, "ask": nan, "lastPrice": 5.1, "openInterest": 120},
-        {"strike": nan, "impliedVolatility": nan, "bid": nan, "ask": nan, "lastPrice": nan, "openInterest": nan},
-    ])
-    iv, mid, oi = options._atm(chain, 138.0)
-    assert iv == pytest.approx(0.68) and mid == pytest.approx(5.1) and oi == 120
+    rows_c, rows_p = [], []
+    for k in range(85, 195, 5):
+        m = (k - spot) / spot
+        iv_c = iv_atm - 0.10 * m           # calls cheapen going up
+        iv_p = iv_atm + put_skew + 0.30 * (-m) if m < 0 else iv_atm + put_skew * 0.5  # puts bid going down
+        oi = (oi_at or {}).get(k, 100)
+        if nan_at and k in nan_at:
+            rows_c.append({"strike": k, "impliedVolatility": nan, "bid": nan, "ask": nan, "lastPrice": nan, "openInterest": nan})
+        else:
+            rows_c.append({"strike": k, "impliedVolatility": iv_c, "bid": 5.0, "ask": 5.4, "lastPrice": 5.2, "openInterest": oi})
+        rows_p.append({"strike": k, "impliedVolatility": iv_p, "bid": 5.0, "ask": 5.4, "lastPrice": 5.2, "openInterest": oi})
+    return _contracts(pd.DataFrame(rows_c), spot, dte, True), _contracts(pd.DataFrame(rows_p), spot, dte, False)
+
+
+def test_black_scholes_delta_gamma_sanity():
+    from spcx.tape.options import bs_delta_gamma
+    d_atm, g_atm = bs_delta_gamma(100, 100, 30, 0.9, True)
+    assert 0.5 < d_atm < 0.6                      # ATM call delta ~0.55 at high vol
+    dp, _ = bs_delta_gamma(100, 100, 30, 0.9, False)
+    assert dp == pytest.approx(d_atm - 1.0)      # put-call delta parity with r=0
+    _, g_otm = bs_delta_gamma(100, 140, 30, 0.9, True)
+    assert g_atm > g_otm > 0                      # gamma peaks near the money
+
+
+def test_reduce_chain_structure_fields():
+    from spcx.tape.options import reduce_chain
+    spot = 138.0
+    exps = []
+    for exp, dte in (("2026-08-28", 3), ("2026-09-18", 24), ("2026-10-16", 52), ("2026-12-18", 115)):
+        c, p = _chain(spot, dte, oi_at={140: 5000, 120: 4000}, nan_at={145})
+        exps.append((exp, dte, c, p))
+    snap = reduce_chain(exps, spot, date(2026, 8, 25))
+    assert snap["n_expiries"] == 4 and len(snap["term"]) == 4
+    assert 80 < snap["iv30"] < 100 and 80 < snap["iv90"] < 100
+    assert snap["skew25_30d"] is not None and snap["skew25_30d"] > 5   # puts were built rich
+    assert snap["oi_walls"]["calls"][0]["strike"] == 140 and snap["oi_walls"]["puts"][0]["strike"] == 140
+    assert snap["put_call_oi"] == pytest.approx(1.0, abs=0.05)
+    assert isinstance(snap["gex_musd_per_1pct"], float)
+    assert snap["expected_move_pct"] and snap["front_expiry"] == "2026-08-28"
+
+
+def test_reduce_chain_survives_nan_and_empty_sides():
+    from spcx.tape.options import reduce_chain
+    c, p = _chain(138.0, 24, nan_at={135, 140})
+    snap = reduce_chain([("2026-09-18", 24, c, p), ("2026-09-04", 10, [], [])], 138.0, date(2026, 8, 25))
+    assert snap["iv30"] is not None and snap["n_expiries"] == 1
+    with pytest.raises(RuntimeError):
+        reduce_chain([("2026-09-18", 24, [], [])], 138.0, date(2026, 8, 25))
+
+
+def test_iv_history_is_backward_compatible(tmp_path):
+    """Older rows have fewer columns; new rows have more. Both must read and rank."""
+    from spcx.tape import options
+    p = tmp_path / "iv.csv"
+    p.write_text("date,spot,iv_front,iv30,iv90,front_expiry,front_dte,expected_move_usd,expected_move_pct,put_call_oi,n_expiries\n"
+                 "2026-08-25,138.11,50.0,54.9,60.0,2026-08-28,3,6.2,4.5,1.11,8\n")
+    options.append_history({"date": "2026-08-26", "spot": 140.0, "iv30": 65.0, "skew25_30d": 9.5, "term": [{"x": 1}]}, p)
+    hist = options.load_history(p)
+    assert len(hist) == 2 and hist[1]["skew25_30d"] == "9.5" and hist[0].get("skew25_30d") in (None, "")
+    assert options.iv_change(hist, "2026-08-26") == pytest.approx(10.1)
+    assert options.rank(hist, 65.0, 60)["iv_percentile"] == 50.0

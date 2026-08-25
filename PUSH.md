@@ -13,7 +13,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 
 export SPCX_CONTACT="you@example.com"   # the SEC blocks anonymous callers
-pytest -q                               # expect 41 passed
+pytest -q                               # expect 45 passed
 ```
 
 ---

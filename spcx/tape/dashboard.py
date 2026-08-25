@@ -159,6 +159,26 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
              + "".join(f'<div class="tile"><div class="k">{_e(k)}</div><div class="v">{_e(val)}</div><div class="d">{_e(d)}</div></div>' for k, val, d in tiles) + "</div>")
     B.append('<div class="sec"><h2>Daily close · ladder bands shaded · dashed = cost basis</h2></div><div class="panel chartbox"><div id="chart"></div></div>')
 
+    # options structure
+    walls = v.get("oi_walls") or {}
+    term = v.get("term") or []
+    if v.get("iv30") is not None:
+        B.append('<div class="sec"><h2>Options structure</h2><p>From the listed chain, Black-Scholes r=0 on Yahoo\'s per-contract IV. ±5 vol points on a name this young. Context only.</p></div>')
+        stiles = [
+            ("25Δ skew (30d)", f'{_n(v.get("skew25_30d"), 0, "—")} pts', f'front {_n(v.get("skew25_front"), 0, "—")} · Δ1d {_n(v.get("skew_chg_1d"), 1, "—")} · put IV − call IV'),
+            ("IV30 Δ1d", f'{_n(v.get("iv30_chg_1d"), 1, "—")} pts', f'IV30 {_n(v.get("iv30"), 0)} · IV90 {_n(v.get("iv90"), 0)} · slope {_n(v.get("term_slope"), 0, "—")}'),
+            ("Put / call OI", _n(v.get("put_call_oi"), 2, "—"), f'{int(v.get("total_put_oi") or 0):,} / {int(v.get("total_call_oi") or 0):,} contracts'),
+            ("Gamma proxy", f'{_n(v.get("gex_musd_per_1pct"), 0, "—")} $M/1%', "dealers long calls / short puts convention · sign and size only"),
+            ("Short interest", f'{_n(v.get("short_pct_float"), 1, "—")}% float', f'{_n(v.get("short_shares_m"), 0, "—")}M sh · {_n(v.get("short_days_to_cover"), 1, "—")}d to cover · as of {_e(v.get("short_as_of") or "—")}'),
+        ]
+        B.append('<div class="tiles">' + "".join(f'<div class="tile"><div class="k">{_e(k)}</div><div class="v">{_e(val)}</div><div class="d">{_e(d)}</div></div>' for k, val, d in stiles) + "</div>")
+        if term or walls:
+            B.append('<div class="panel"><div class="tw"><table><thead><tr><th>Term structure</th>' + "".join(f'<th>{_e(t_["expiry"][5:])} ({t_["dte"]}d)</th>' for t_ in term) + '</tr></thead><tbody><tr><td class="m">ATM IV</td>'
+                     + "".join(f'<td class="m">{_n(t_["atm_iv"], 0)}</td>' for t_ in term) + "</tr></tbody></table></div>")
+            cw = " · ".join(f'{w["strike"]:g} ({w["oi"]:,})' for w in (walls.get("calls") or [])) or "—"
+            pw = " · ".join(f'{w["strike"]:g} ({w["oi"]:,})' for w in (walls.get("puts") or [])) or "—"
+            B.append(f'<div class="small" style="margin-top:8px">OI walls, expiries ≤ {walls.get("window_dte", 60)}d — calls: {_e(cw)} · puts: {_e(pw)}</div></div>')
+
     # catalysts
     B.append('<div class="sec"><h2>Catalysts</h2><p>Date confidence is about the date, not the event.</p></div><div class="cal">')
     if cats["upcoming"]:

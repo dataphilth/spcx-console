@@ -97,14 +97,20 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     vol = {"iv30": None, "iv90": None, "iv_front": None, "expected_move_pct": None, "expected_move_usd": None,
            "put_call_oi": None, "hv30": tech.get("hv30"), "hv10": tech.get("hv10"), "snapshot_date": None, "carried": False}
     if snap:
-        for k in ("iv30", "iv90", "iv_front", "expected_move_pct", "expected_move_usd", "put_call_oi", "front_expiry", "front_dte"):
+        for k in ("iv30", "iv90", "iv_front", "expected_move_pct", "expected_move_usd", "put_call_oi", "front_expiry", "front_dte",
+                  "skew25_front", "skew25_30d", "gex_musd_per_1pct", "total_call_oi", "total_put_oi",
+                  "short_pct_float", "short_shares_m", "short_days_to_cover", "short_as_of"):
             v = snap.get(k)
             try:
-                vol[k] = float(v) if v not in (None, "") and k not in ("front_expiry",) else v
+                vol[k] = float(v) if v not in (None, "") and k not in ("front_expiry", "short_as_of") else (v if v != "" else None)
             except (TypeError, ValueError):
                 vol[k] = v
+        vol["term"] = snap.get("term") or []          # only present on a live snapshot, not a carried one
+        vol["oi_walls"] = snap.get("oi_walls") or {}
         vol["snapshot_date"] = snap.get("date")
         vol["carried"] = bool(snap.get("carried"))
+    vol["iv30_chg_1d"] = options.iv_change(hist_iv, today.isoformat(), "iv30") if hist_iv else None
+    vol["skew_chg_1d"] = options.iv_change(hist_iv, today.isoformat(), "skew25_30d") if hist_iv else None
     if vol["iv30"] is not None and vol["hv30"] is not None:
         vol["iv_hv_spread"] = round(float(vol["iv30"]) - float(vol["hv30"]), 1)
         vol["term_slope"] = round(float(vol["iv90"]) - float(vol["iv30"]), 1) if vol.get("iv90") is not None else None
@@ -167,6 +173,16 @@ def brief(tape: dict) -> str:
     L.append(f"  ATR20 {t.get('atr_pct')}%/d · HV10 {t.get('hv10')} · HV30 {t.get('hv30')} · IV30 {v.get('iv30')} "
              f"(spread {v.get('iv_hv_spread')}) · RSI {t.get('rsi')} · from ATH {t.get('from_ath_pct')}% · regime "
              f"{next((s['name'].split(': ', 1)[1] for s in tape['setups'] if s['id'] == 'REGIME'), 'n/a')}")
+    if v.get("skew25_30d") is not None or v.get("gex_musd_per_1pct") is not None or v.get("short_pct_float") is not None:
+        walls = v.get("oi_walls") or {}
+        cw = ", ".join(str(w["strike"]) for w in (walls.get("calls") or [])[:3]) or "—"
+        pw = ", ".join(str(w["strike"]) for w in (walls.get("puts") or [])[:3]) or "—"
+        L.append(f"  structure: 25Δ skew {v.get('skew25_30d')} pts (front {v.get('skew25_front')}) · IV30 Δ1d {v.get('iv30_chg_1d')} · "
+                 f"P/C OI {v.get('put_call_oi')} · call walls {cw} · put walls {pw} · gamma proxy {v.get('gex_musd_per_1pct')} $M/1% · "
+                 f"short {v.get('short_pct_float')}% float, {v.get('short_days_to_cover')}d to cover (as of {v.get('short_as_of')})")
+        term = v.get("term") or []
+        if term:
+            L.append("  term: " + " · ".join(f"{t_['expiry'][5:]} {t_['atm_iv']}" for t_ in term))
     for c in tape["catalysts"]["upcoming"]:
         L.append(f"  T-{c['days']}d {c['date']} {c['event']} ({c['confidence']})")
     for s in tape["setups"]:
