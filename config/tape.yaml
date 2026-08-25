@@ -1,0 +1,90 @@
+# ============================================================================
+# The TAPE layer — price, volatility, options, setups, ladder, catalysts.
+#
+# Everything in this file is CONTEXT. Nothing here is a criterion and nothing
+# here can move a criterion's status. That separation is the point: criteria.yaml
+# says what would change the thesis; this file says what the tape is doing while
+# we wait. `spcx tape` reads it; `spcx dashboard` renders it beside the board.
+#
+# Every setup the tape layer surfaces carries BOTH a long read and a short read.
+# It never says buy or sell.
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Position of record. Two ledgers, tagged at purchase, never reclassified.
+# ---------------------------------------------------------------------------
+position:
+  lots:
+    - date: 2026-08-13
+      shares: 13
+      price: 137.85
+      sleeve: core            # core | satellite   (TODO Phil: confirm)
+      # band: Current         # add when a lot fills a ladder band
+  core_target_shares: 100
+  satellite_max_dollars: 0    # TODO Phil: 0 = satellite sleeve not yet funded
+  total_budget_dollars: 0     # TODO Phil: 0 = ladder is aspirational until funded
+
+# ---------------------------------------------------------------------------
+# Accumulation ladder. Evaluated on the daily close. shares: 0 = defined but
+# unfunded. The ladder PAUSES itself when any long-case Tier-1 criterion has
+# fired, or when two or more long-case Tier-2 criteria have fired.
+# ---------------------------------------------------------------------------
+ladder:
+  rules:
+    - "No band is bought twice without a new low inside that band."
+    - "Every purchase below $105 requires a written Tier-1 criteria check first."
+    - "Dry powder reserved for deeper bands is not spendable on shallower ones."
+    - "Time-based tranches may supplement price-based ones."
+  bands:
+    - {name: Current, low: 135, high: 145, shares: 0}
+    - {name: Dip 1,   low: 120, high: 135, shares: 0}
+    - {name: Dip 2,   low: 105, high: 120, shares: 0, note: "Retests the Aug 3 low of $104.83"}
+    - {name: Dip 3,   low: 85,  high: 105, shares: 0, requires_criteria_check: true, note: "Below all-time low"}
+    - {name: Dip 4,   low: 60,  high: 85,  shares: 0, requires_criteria_check: true}
+    - {name: Dip 5,   low: 25,  high: 60,  shares: 0, requires_criteria_check: true, note: "Only if zero long Tier-1 criteria fired"}
+
+# ---------------------------------------------------------------------------
+# Catalyst calendar. `confidence` is about the DATE, not the event.
+# ---------------------------------------------------------------------------
+catalysts:
+  - {date: 2026-08-28, event: "STARSHIP FLIGHT 14 — first orbital attempt; ship catch pending FAA", kind: starship, confidence: medium, tests: [L8, S5], note: "NET Aug 28 per Aug 4 call / FCC filing"}
+  - {date: 2026-09-10, event: "Lockup tranche 4 (~7%)", kind: lockup, confidence: medium}
+  - {date: 2026-09-25, event: "Lockup tranche 5 (~7%)", kind: lockup, confidence: medium}
+  - {date: 2026-10-12, event: "Lockup tranche 6 (~7%)", kind: lockup, confidence: low}
+  - {date: 2026-10-26, event: "Lockup tranche 7 (~7%)", kind: lockup, confidence: low}
+  - {date: 2026-11-03, event: "Q3 2026 earnings", kind: earnings, confidence: low, tests: [L1, L2, L3, L4, L12, L13, S1, S2, S3, S4, S9], note: "Wall Street Horizon estimate; not company-confirmed"}
+  - {date: 2026-11-05, event: "Lockup tranche 8 — 28% / ~1.28B sh (4x anything prior)", kind: lockup, confidence: medium, tests: [S7]}
+  - {date: 2026-12-09, event: "Day 180 — bucket (iii) remainder unlocks", kind: lockup, confidence: medium}
+  - {date: 2027-02-15, event: "Q4/FY26 earnings — insider bucket (ii) begins", kind: earnings, confidence: low}
+  - {date: 2027-06-12, event: "12-month seasoning clears (S&P 500 profitability test still fails)", kind: index, confidence: high}
+  - {date: 2027-06-13, event: "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)", kind: lockup, confidence: medium}
+
+# ---------------------------------------------------------------------------
+# Explicit NOISE. Printed every run. Never escalated on.
+# ---------------------------------------------------------------------------
+noise:
+  - Any single-day or single-week price move, in either direction
+  - A Starship test-flight failure during the test campaign
+  - Musk posting anything (personal, feuds, controversy)
+  - Analyst rating changes and price-target revisions
+  - A lockup tranche passing
+  - Short-interest headlines
+  - Any named bear or bull being loud
+
+# ---------------------------------------------------------------------------
+# Signal parameters.
+# ---------------------------------------------------------------------------
+signals:
+  atr_window: 20
+  hv_windows: [10, 30]
+  sma_windows: [20, 50]
+  rsi_window: 14
+  range_window: 20
+  volume_z_window: 20
+  extreme_atr_multiple: 2.0
+  volume_climax_z: 2.5
+  iv_hv_rich_spread: 15
+  iv_hv_cheap_spread: -15
+  min_history_for_ivrank: 60
+  catalyst_lookahead_days: 10
+  history_bars_for_chart: 90

@@ -41,6 +41,16 @@ jobs:
         run: python -m spcx.cli run --force
         continue-on-error: true
 
+      - name: Tape (price, vol, setups, ladder — context, never criteria)
+        # yfinance for bars + the options chain; falls back to stooq, then the
+        # committed cache. A failure here never blocks the criteria run above.
+        run: python -m spcx.cli tape
+        continue-on-error: true
+
+      - name: Render site/tape.html
+        run: python -m spcx.cli dashboard
+        continue-on-error: true
+
       - name: Check for stale manual inputs
         id: staleness
         run: python -m spcx.cli check
@@ -50,7 +60,7 @@ jobs:
         run: |
           git config user.name  "spcx-console"
           git config user.email "actions@github.com"
-          git add data/
+          git add data/ site/tape.html
           if git diff --cached --quiet; then
             echo "nothing changed"
           else

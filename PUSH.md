@@ -13,7 +13,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 
 export SPCX_CONTACT="you@example.com"   # the SEC blocks anonymous callers
-pytest -q                               # expect 31 passed
+pytest -q                               # expect 41 passed
 ```
 
 ---
@@ -67,6 +67,19 @@ correct behaviour, not a bug to paper over.
 
 Sanity-check three numbers by hand against the Q2 filing before you trust the
 rest: revenue, capex, and cash. If those three match, the tag mapping is right.
+
+---
+
+## 3b. First tape run
+
+```bash
+python -m spcx.cli tape         # yfinance → stooq → cache; prints the tape brief
+python -m spcx.cli dashboard    # site/tape.html
+```
+
+The line to check is the IV one: `IV30 <number>`. If it says `None`, the warnings
+above it will say why (no yfinance installed, or the chain call failed). The tape
+still runs — IV is simply reported as unavailable, never guessed.
 
 ---
 

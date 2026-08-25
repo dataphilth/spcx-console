@@ -3,7 +3,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ["site/**", "data/latest.json"]
+    paths: ["site/**", "data/latest.json", "data/tape.json"]
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,7 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir -p site/data && cp data/latest.json site/data/
+      - run: mkdir -p site/data && cp data/latest.json site/data/ && cp data/tape.json site/data/ 2>/dev/null || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

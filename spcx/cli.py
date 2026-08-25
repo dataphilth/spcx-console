@@ -5,6 +5,8 @@
     spcx check        fail if anything on the manual side has gone stale
     spcx brief        emit the research prompt for a judgment pass
     spcx forecast     add, resolve, and score forecasts
+    spcx tape         price, vol, options, setups, ladder → data/tape.json (context, never criteria)
+    spcx dashboard    render site/tape.html from data/latest.json + data/tape.json
 """
 
 from __future__ import annotations
@@ -142,6 +144,34 @@ def cmd_forecast(args) -> int:
     return 0
 
 
+def cmd_tape(args) -> int:
+    from datetime import date as _date
+    from .tape import run as tape_run
+    config = store.load_config()
+    today = _date.fromisoformat(args.date) if args.date else None
+    tape = tape_run.run(config["criteria"]["ticker"], config["criteria"].get("ipo_price"),
+                        offline=args.offline, today=today)
+    print(tape_run.brief(tape))
+    return 0
+
+
+def cmd_dashboard(args) -> int:
+    from .tape import dashboard
+    data = store.ROOT / "data"
+    site = store.ROOT / "site"
+    board = json.loads((data / "latest.json").read_text(encoding="utf-8")) if (data / "latest.json").exists() else {}
+    tape_path = data / "tape.json"
+    if not tape_path.exists():
+        print("no data/tape.json; run `spcx tape` first", file=sys.stderr)
+        return 2
+    tape = json.loads(tape_path.read_text(encoding="utf-8"))
+    site.mkdir(exist_ok=True)
+    (site / "tape.html").write_text(dashboard.render(board, tape, full_document=True), encoding="utf-8")
+    (data / "tape_body.html").write_text(dashboard.render(board, tape, full_document=False), encoding="utf-8")
+    print("wrote site/tape.html and data/tape_body.html")
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="spcx", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -176,6 +206,14 @@ def main(argv=None) -> int:
     fr.add_argument("--note")
     fs.add_parser("score")
     f.set_defaults(fn=cmd_forecast)
+
+    t = sub.add_parser("tape", help="price / vol / setups / ladder context (never criteria)")
+    t.add_argument("--date", help="override run date (ISO)")
+    t.add_argument("--offline", action="store_true", help="use the cached bars only")
+    t.set_defaults(fn=cmd_tape)
+
+    d = sub.add_parser("dashboard", help="render site/tape.html")
+    d.set_defaults(fn=cmd_dashboard)
 
     args = p.parse_args(argv)
     return args.fn(args)

@@ -1,1 +1,3 @@
 PyYAML>=6.0
+# Optional, used only by `spcx tape` for bars + the options chain. Falls back to stooq without it.
+yfinance>=0.2.40
