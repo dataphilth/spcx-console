@@ -18,11 +18,13 @@ position:
     - date: 2026-08-13
       shares: 13
       price: 137.85
-      sleeve: core            # core | satellite   (TODO Phil: confirm)
+      sleeve: core            # confirmed 2026-08-25: all 13 are core
       # band: Current         # add when a lot fills a ladder band
-  core_target_shares: 100
-  satellite_max_dollars: 0    # TODO Phil: 0 = satellite sleeve not yet funded
-  total_budget_dollars: 0     # TODO Phil: 0 = ladder is aspirational until funded
+  core_target_shares: 100     # first 100-lot is CORE (decided 2026-08-25): never sold, never written against
+  first_lot_sleeve: core      # => covered calls need a SECOND, satellite 100-lot. Real target is 200.
+  satellite_max_dollars: 0    # 0 = satellite sleeve not yet funded
+  total_budget_dollars: 0     # 0 = ladder is aspirational until funded (Phil, 2026-08-25: "not yet")
+  ladder_shape: even          # when funded: roughly equal shares per band Current..Dip 3, smaller reserve for Dip 4-5
 
 # ---------------------------------------------------------------------------
 # Accumulation ladder. Evaluated on the daily close. shares: 0 = defined but
