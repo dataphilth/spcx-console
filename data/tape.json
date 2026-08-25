@@ -456,11 +456,11 @@
       "v": 60038800
     },
     {
-      "c": 138.06,
+      "c": 138.11,
       "d": "2026-08-25",
       "h": 139.74,
       "l": 136.11,
-      "v": 42828598
+      "v": 43105378
     }
   ],
   "gate": {
@@ -477,13 +477,13 @@
     {
       "active_band": "Current",
       "atr_pct": 6.96,
-      "chg_1d_pct": 2.27,
-      "close": 138.06,
+      "chg_1d_pct": 2.3,
+      "close": 138.11,
       "date": "2026-08-25",
-      "from_ath_pct": -38.81,
+      "from_ath_pct": -38.79,
       "hv30": 89.5,
-      "iv30": 54.5,
-      "iv_hv_spread": -35.0,
+      "iv30": 54.9,
+      "iv_hv_spread": -34.6,
       "ladder_paused": false,
       "n_bearish": 0,
       "n_bullish": 0,
@@ -579,7 +579,7 @@
     ],
     "budget_dollars": 0.0,
     "budget_set": false,
-    "close": 138.06,
+    "close": 138.11,
     "message": "In band 'Current' \u2014 defined but UNFUNDED (shares: 0 in config/tape.yaml). No plan to execute.",
     "pause_reason": null,
     "paused": false,
@@ -592,7 +592,7 @@
     ]
   },
   "meta": {
-    "board_run_date": "2026-08-20",
+    "board_run_date": "2026-08-25",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
       "bar_age_days": 0,
@@ -602,7 +602,7 @@
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-08-25T13:12:12",
+    "run_at": "2026-08-25T19:18:24",
     "ticker": "SPCX",
     "today": "2026-08-25",
     "warnings": []
@@ -619,8 +619,8 @@
   "position": {
     "core_target_shares": 100,
     "cost_basis": 137.85,
-    "market_value": 1794.78,
-    "pnl_pct": 0.15,
+    "market_value": 1795.43,
+    "pnl_pct": 0.19,
     "shares": 13,
     "shares_to_target": 87,
     "sleeves": {
@@ -636,20 +636,20 @@
     "atr": 9.61,
     "atr_pct": 6.96,
     "bars": 51,
-    "chg_1d_pct": 2.27,
-    "chg_20d_pct": 18.6,
-    "chg_5d_pct": -3.68,
-    "close": 138.06,
-    "close_loc": 0.54,
+    "chg_1d_pct": 2.3,
+    "chg_20d_pct": 18.64,
+    "chg_5d_pct": -3.65,
+    "close": 138.11,
+    "close_loc": 0.55,
     "date": "2026-08-25",
     "dist_sma20_atr": 0.83,
-    "dist_sma20_pct": 6.12,
-    "dist_sma50_atr": -0.31,
-    "dist_sma50_pct": -2.11,
-    "from_ath_pct": -38.81,
-    "from_atl_pct": 31.7,
-    "from_basis_pct": 0.15,
-    "from_ipo_pct": 2.27,
+    "dist_sma20_pct": 6.15,
+    "dist_sma50_atr": -0.3,
+    "dist_sma50_pct": -2.08,
+    "from_ath_pct": -38.79,
+    "from_atl_pct": 31.75,
+    "from_basis_pct": 0.19,
+    "from_ipo_pct": 2.3,
     "gap_pct": 1.44,
     "hv10": 65.8,
     "hv30": 89.5,
@@ -663,14 +663,14 @@
     "sma20": 130.1,
     "sma50": 141.04,
     "streak": 1,
-    "volume": 42828598,
+    "volume": 43105378,
     "volume_vs_avg": 0.36,
-    "volume_z": -1.27
+    "volume_z": -1.26
   },
   "setups": [
     {
       "direction": "neutral",
-      "evidence": "Close 138.06; SMA20 130.1; SMA50 141.04.",
+      "evidence": "Close 138.11; SMA20 130.1; SMA50 141.04.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: transition",
@@ -680,7 +680,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "IV30 54.5 vs HV30 89.5 \u2192 spread -35 pts.",
+      "evidence": "IV30 54.9 vs HV30 89.5 \u2192 spread -35 pts.",
       "id": "PREMIUM_CHEAP",
       "long_read": "Do NOT write covered calls here \u2014 you'd be selling movement below what the stock actually does. Long-vol structures (calls, call spreads) are the cheap expression of a long view.",
       "name": "Options premium cheap vs realized",
@@ -702,21 +702,21 @@
   "vol": {
     "carried": false,
     "expected_move_pct": 4.5,
-    "expected_move_usd": 6.24,
+    "expected_move_usd": 6.22,
     "front_dte": 3.0,
     "front_expiry": "2026-08-28",
     "hv10": 65.8,
     "hv30": 89.5,
-    "iv30": 54.5,
-    "iv90": 60.0,
-    "iv_front": 54.1,
+    "iv30": 54.9,
+    "iv90": 60.3,
+    "iv_front": 54.0,
     "iv_history_days": 1,
-    "iv_hv_spread": -35.0,
+    "iv_hv_spread": -34.6,
     "iv_percentile": 0.0,
     "iv_rank": null,
     "iv_rank_meaningful": false,
     "put_call_oi": 1.11,
     "snapshot_date": "2026-08-25",
-    "term_slope": 5.5
+    "term_slope": 5.4
   }
 }

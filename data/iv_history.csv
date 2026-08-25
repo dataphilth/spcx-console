@@ -1,2 +1,2 @@
 date,spot,iv_front,iv30,iv90,front_expiry,front_dte,expected_move_usd,expected_move_pct,put_call_oi,n_expiries
-2026-08-25,138.06,54.1,54.5,60.0,2026-08-28,3,6.24,4.5,1.11,8
+2026-08-25,138.11,54.0,54.9,60.3,2026-08-28,3,6.22,4.5,1.11,8

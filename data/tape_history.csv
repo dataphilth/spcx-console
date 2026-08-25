@@ -1,2 +1,2 @@
 date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_bullish,n_bearish,n_neutral,setups,active_band,ladder_paused,price_source
-2026-08-25,138.06,2.27,6.96,89.5,54.5,-35.0,52.5,-38.81,transition,0,0,3,REGIME|PREMIUM_CHEAP|CATALYST_WINDOW,Current,False,yfinance
+2026-08-25,138.11,2.3,6.96,89.5,54.9,-34.6,52.5,-38.79,transition,0,0,3,REGIME|PREMIUM_CHEAP|CATALYST_WINDOW,Current,False,yfinance
