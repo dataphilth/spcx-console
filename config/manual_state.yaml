@@ -56,9 +56,9 @@ states:
     source: "Debt issuance reporting"
   starship_orbit_and_catch:
     state: nearing
-    detail: "Flight 14 (Ship 41 / Booster 21) attempts both. NET Aug 28 2026, catch pending FAA approval. Booster splashes down rather than being caught."
-    as_of: "2026-08-20"
-    source: "Aug 4 2026 earnings call; FCC filing"
+    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only. Ship catch dropped Aug 20 (Musk: 'probably catch the ship with the tower in a few months'); ship and booster splash down. NET early-mid Sep 2026. FAA license not announced. S5 cannot fire on this flight."
+    as_of: "2026-08-26"
+    source: "Musk X post Aug 20 2026 via Space.com (Aug 20, 21) and Starlust (Aug 21); SpaceNews: SpaceX scales back plans for next Starship launch"
   november_tranche:
     state: clear
     detail: "Pending. ~1.28B shares, ~28%, around Nov 5 2026."
