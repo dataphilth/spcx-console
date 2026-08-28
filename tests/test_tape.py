@@ -101,7 +101,7 @@ def test_full_offline_tape_run_and_dashboard(tmp_path):
     tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
     assert tape["price"]["close"] == 138.46 and tape["ladder"]["active_band"] == "Current"
     assert tape["gate"]["paused"] is False
-    assert any(c["kind"] == "starship" for c in tape["catalysts"]["upcoming"])
+    assert any(c["kind"] == "starship" for c in tape["catalysts"]["horizon"])
     assert (tmp_path / "tape.json").exists() and (tmp_path / "tape_history.csv").exists()
     assert "PRICE BARS STALE" not in " ".join(tape["meta"]["warnings"])
     html = dashboard.render(board, tape, full_document=True)
