@@ -3,3 +3,4 @@ date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_b
 2026-08-28,141.5,0.45,6.54,87.3,50.0,-37.3,54.7,-37.29,transition,0,0,4,REGIME|PREMIUM_CHEAP|OI_WALL_NEAR|CATALYST_WINDOW,Current,False,yfinance
 2026-08-31,143.69,1.55,6.24,86.6,50.3,-36.3,56.3,-36.32,transition,0,0,4,REGIME|PREMIUM_CHEAP|OI_WALL_NEAR|CATALYST_WINDOW,Current,False,yfinance
 2026-09-01,142.23,-1.02,6.02,86.4,49.6,-36.8,54.9,-36.97,uptrend,0,0,4,REGIME|PREMIUM_CHEAP|OI_WALL_NEAR|CATALYST_WINDOW,Current,False,yfinance
+2026-09-02,140.71,-1.07,5.6,83.7,48.0,-35.7,53.5,-37.64,uptrend,0,0,3,REGIME|PREMIUM_CHEAP|CATALYST_WINDOW,Current,False,yfinance
