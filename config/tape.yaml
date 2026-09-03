@@ -61,7 +61,7 @@ ladder:
 # Catalyst calendar. `confidence` is about the DATE, not the event.
 # ---------------------------------------------------------------------------
 catalysts:
-  - {date: 2026-09-08, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: low, tests: [L8], note: "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; B21 static fire pending; placeholder date"}
+  - {date: 2026-09-15, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: low, tests: [L8], note: "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; B21 static fire pending; placeholder date"}
   - {date: 2026-09-10, event: "Lockup tranche 4 (~7%)", kind: lockup, confidence: medium}
   - {date: 2026-09-25, event: "Lockup tranche 5 (~7%)", kind: lockup, confidence: medium}
   - {date: 2026-10-12, event: "Lockup tranche 6 (~7%)", kind: lockup, confidence: low}

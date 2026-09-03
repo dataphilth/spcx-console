@@ -26,14 +26,14 @@ def _combine(snap: Snapshot, inputs: list[str]) -> tuple[str, str]:
     return conf, as_of
 
 
-def _emit(snap: Snapshot, metric: str, value, unit: str, inputs: list[str], note: str) -> None:
+def _emit(snap: Snapshot, metric: str, value, unit: str, inputs: list[str], note: str, period=None) -> None:
     try:
         conf, as_of = _combine(snap, inputs)
     except KeyError as exc:
         snap.fail(metric, "derived", str(exc))
         return
     snap.add(Reading(
-        metric=metric, value=value, unit=unit, as_of=as_of,
+        metric=metric, value=value, unit=unit, as_of=as_of, period=period,
         source=f"derived from {', '.join(inputs)}",
         source_url="spcx/collectors/derived.py", collector="derived",
         confidence=conf, note=note,
@@ -86,7 +86,7 @@ def collect(config: dict, snap: Snapshot) -> None:
         _emit(snap, "falcon_launches_annualized", round(ytd * 365 / doy), "launches/yr",
               ["falcon_launches_ytd"],
               "Straight-line annualisation. Launch cadence is not uniform across a "
-              "year, so this is directional until Q4.")
+              "year, so this is directional until Q4.", period=str(today.year))
 
     price = snap.value("price")
     shares = snap.value("shares_outstanding")
