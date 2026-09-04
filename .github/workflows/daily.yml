@@ -41,7 +41,7 @@ jobs:
         run: python -m spcx.cli run --force
         continue-on-error: true
 
-      - name: Tape (price, vol, setups, ladder — context, never criteria)
+      - name: Tape (price, vol, setups — context, never criteria)
         # yfinance for bars + the options chain; falls back to stooq, then the
         # committed cache. A failure here never blocks the criteria run above.
         run: python -m spcx.cli tape

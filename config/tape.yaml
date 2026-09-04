@@ -1,5 +1,5 @@
 # ============================================================================
-# The TAPE layer — price, volatility, options, setups, ladder, catalysts.
+# The TAPE layer — price, volatility, options, setups, catalysts.
 #
 # Everything in this file is CONTEXT. Nothing here is a criterion and nothing
 # here can move a criterion's status. That separation is the point: criteria.yaml
@@ -9,22 +9,6 @@
 # Every setup the tape layer surfaces carries BOTH a long read and a short read.
 # It never says buy or sell.
 # ============================================================================
-
-# ---------------------------------------------------------------------------
-# Position of record. Two ledgers, tagged at purchase, never reclassified.
-# ---------------------------------------------------------------------------
-position:
-  lots:
-    - date: 2026-08-13
-      shares: 13
-      price: 137.85
-      sleeve: core            # confirmed 2026-08-25: all 13 are core
-      # band: Current         # add when a lot fills a ladder band
-  core_target_shares: 100     # first 100-lot is CORE (decided 2026-08-25): never sold, never written against
-  first_lot_sleeve: core      # => covered calls need a SECOND, satellite 100-lot. Real target is 200.
-  satellite_max_dollars: 0    # 0 = satellite sleeve not yet funded
-  total_budget_dollars: 0     # 0 = ladder is aspirational until funded (Phil, 2026-08-25: "not yet")
-  ladder_shape: even          # when funded: roughly equal shares per band Current..Dip 3, smaller reserve for Dip 4-5
 
 # ---------------------------------------------------------------------------
 # Share structure. Yahoo's "short % of float" divides by TOTAL shares outstanding
@@ -39,29 +23,10 @@ share_structure:
   source: "10-Q cover (8/4/26) + FWP lockup schedule; float per thesis v0.2"
 
 # ---------------------------------------------------------------------------
-# Accumulation ladder. Evaluated on the daily close. shares: 0 = defined but
-# unfunded. The ladder PAUSES itself when any long-case Tier-1 criterion has
-# fired, or when two or more long-case Tier-2 criteria have fired.
-# ---------------------------------------------------------------------------
-ladder:
-  rules:
-    - "No band is bought twice without a new low inside that band."
-    - "Every purchase below $105 requires a written Tier-1 criteria check first."
-    - "Dry powder reserved for deeper bands is not spendable on shallower ones."
-    - "Time-based tranches may supplement price-based ones."
-  bands:
-    - {name: Current, low: 135, high: 145, shares: 0}
-    - {name: Dip 1,   low: 120, high: 135, shares: 0}
-    - {name: Dip 2,   low: 105, high: 120, shares: 0, note: "Retests the Aug 3 low of $104.83"}
-    - {name: Dip 3,   low: 85,  high: 105, shares: 0, requires_criteria_check: true, note: "Below all-time low"}
-    - {name: Dip 4,   low: 60,  high: 85,  shares: 0, requires_criteria_check: true}
-    - {name: Dip 5,   low: 25,  high: 60,  shares: 0, requires_criteria_check: true, note: "Only if zero long Tier-1 criteria fired"}
-
-# ---------------------------------------------------------------------------
 # Catalyst calendar. `confidence` is about the DATE, not the event.
 # ---------------------------------------------------------------------------
 catalysts:
-  - {date: 2026-09-15, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: low, tests: [L8], note: "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; B21 static fire pending; placeholder date"}
+  - {date: 2026-09-15, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: low, tests: [L8], note: "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; Sep 15 per reported FCC filing, corroborated 9/2; B21 static fire done 8/28; FAA license outstanding"}
   - {date: 2026-09-10, event: "Lockup tranche 4 (~7%)", kind: lockup, confidence: medium}
   - {date: 2026-09-25, event: "Lockup tranche 5 (~7%)", kind: lockup, confidence: medium}
   - {date: 2026-10-12, event: "Lockup tranche 6 (~7%)", kind: lockup, confidence: low}

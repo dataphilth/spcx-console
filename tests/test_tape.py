@@ -1,4 +1,4 @@
-"""The tape layer: pure-Python measurements, symmetric setups, ladder gating.
+"""The tape layer: pure-Python measurements, symmetric setups.
 
 No network, no pandas. Bars are synthetic and shaped like SPCX's real path
 (IPO 135 → 225.64 → 104.83 → ~138) so ATH/ATL assertions are meaningful.
@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from spcx.tape import ladder, setups, technical
+from spcx.tape import setups, technical
 from spcx.tape import run as tape_run
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -49,11 +49,11 @@ PARAMS = {"atr_window": 20, "hv_windows": [10, 30], "sma_windows": [20, 50], "rs
 
 
 def test_technical_measures_the_real_extremes():
-    t = technical.compute(synthetic_bars(), PARAMS, 137.85, 135.0)
+    t = technical.compute(synthetic_bars(), PARAMS, 135.0)
     assert t["ath"] == 225.64 and t["atl"] == 104.83
     assert t["close"] == 138.46 and t["bars"] > 45
     assert t["atr"] and t["hv30"] and t["rsi"] is not None and t["sma20"]
-    assert t["from_basis_pct"] == pytest.approx(0.44, abs=0.05)
+    assert t["from_ipo_pct"] == pytest.approx(2.56, abs=0.05)
 
 
 def test_every_setup_carries_both_reads():
@@ -76,31 +76,16 @@ def test_vol_setups_need_a_real_spread():
     assert any(s["id"] == "PREMIUM_CHEAP" for s in cheap)
 
 
-def test_ladder_pauses_on_long_tier1_fired_only():
-    bands = [{"name": "A", "low": 130, "high": 145, "shares": 10}, {"name": "B", "low": 100, "high": 130, "shares": 20, "requires_criteria_check": True}]
-    ev = lambda cid, case, tier, status: {"criterion_id": cid, "case": case, "tier": tier, "status": status}  # noqa: E731
-    open_gate = ladder.gate_from_evaluations([ev("L1", "long", 1, "clear"), ev("S5", "short", 1, "fired")])
-    assert not open_gate["paused"], "a fired SHORT-case criterion must not pause the accumulation ladder"
-    r = ladder.evaluate(120.0, bands, [], open_gate, [], 5000)
-    assert r["active_band"] == "B" and r["requires_criteria_check"] and "20 shares" in r["message"]
-    t1 = ladder.gate_from_evaluations([ev("L4", "long", 1, "fired")])
-    assert ladder.evaluate(120.0, bands, [], t1, [], 5000)["paused"]
-    t2 = ladder.gate_from_evaluations([ev("L8", "long", 2, "fired"), ev("L13", "long", 2, "fired")])
-    assert ladder.evaluate(120.0, bands, [], t2, [], 5000)["paused"]
-    one_t2 = ladder.gate_from_evaluations([ev("L13", "long", 2, "fired")])
-    assert not ladder.evaluate(120.0, bands, [], one_t2, [], 5000)["paused"]
-    twice = ladder.evaluate(120.0, bands, [{"band": "B", "price": 115.0}], open_gate, [], 5000)
-    assert "repeat rule" in twice["message"]
-
-
 def test_full_offline_tape_run_and_dashboard(tmp_path):
     from spcx.tape import dashboard, prices
     prices.save_cache(synthetic_bars(), tmp_path / "prices.csv")
     board = json.loads((ROOT / "data" / "latest.json").read_text(encoding="utf-8"))
     cfg = tape_run.load_tape_config()
     tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
-    assert tape["price"]["close"] == 138.46 and tape["ladder"]["active_band"] == "Current"
-    assert tape["gate"]["paused"] is False
+    assert tape["price"]["close"] == 138.46
+    for dead in ("ladder", "gate", "position"):
+        assert dead not in tape, f"{dead} is a retired key — the tape holds no position"
+    assert "position" not in json.dumps(tape).lower().replace("positioning", "")
     assert any(c["kind"] == "starship" for c in tape["catalysts"]["horizon"])
     assert (tmp_path / "tape.json").exists() and (tmp_path / "tape_history.csv").exists()
     assert "PRICE BARS STALE" not in " ".join(tape["meta"]["warnings"])
@@ -109,17 +94,16 @@ def test_full_offline_tape_run_and_dashboard(tmp_path):
     body = dashboard.render(board, tape, full_document=False)
     assert body.startswith("<title>") and "<html" not in body
     txt = tape_run.brief(tape)
-    assert "ladder:" in txt and "bias audit" in txt
+    assert "ladder" not in txt and "bias audit" in txt
     # a second run on the same bar date dedupes history
     tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 26), cfg=cfg, data_dir=tmp_path, board=board)
     assert len((tmp_path / "tape_history.csv").read_text().strip().splitlines()) == 2
 
 
-def test_tape_config_is_ordered_and_unfunded_by_default():
+def test_tape_config_carries_no_position():
     cfg = tape_run.load_tape_config()
-    bands = cfg["ladder"]["bands"]
-    assert all(a["low"] >= b["high"] for a, b in zip(bands, bands[1:]))
-    assert cfg["position"]["total_budget_dollars"] == 0  # until Phil funds it
+    assert "position" not in cfg and "ladder" not in cfg
+    assert cfg["share_structure"]["public_float_b"] > 0 and cfg["catalysts"]
 
 
 def _chain(spot, dte, iv_atm=0.9, put_skew=0.08, oi_at=None, nan_at=None):

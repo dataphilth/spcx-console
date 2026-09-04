@@ -68,17 +68,11 @@ JS = """
   const W=1000,H=300,m={t:14,r:54,b:26,l:8};
   const xs=i=>m.l+(W-m.l-m.r)*i/(data.length-1);
   let lo=Math.min(...data.map(d=>d.l)),hi=Math.max(...data.map(d=>d.h));
-  const basis=S.position&&S.position.cost_basis; if(basis){lo=Math.min(lo,basis);hi=Math.max(hi,basis);}
   const pad=(hi-lo)*.06; lo-=pad; hi+=pad; const ys=v=>m.t+(H-m.t-m.b)*(1-(v-lo)/(hi-lo));
   let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily close, last ${data.length} sessions">`;
-  (S.ladder.bands||[]).forEach(b=>{ if(b.high<lo||b.low>hi) return; const y1=ys(Math.min(b.high,hi)),y2=ys(Math.max(b.low,lo));
-    svg+=`<rect x="${m.l}" y="${y1}" width="${W-m.l-m.r}" height="${y2-y1}" fill="#3F6DA8" opacity="${b.active?.10:.035}"/>`;
-    svg+=`<text x="${m.l+4}" y="${y1+10}" font-size="10" fill="#5C6B79" font-family="monospace">${b.name} ${b.low}–${b.high}</text>`;});
   for(let i=0;i<=5;i++){const v=lo+(hi-lo)*i/5,y=ys(v);
     svg+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="#E1E7EC"/>`;
     svg+=`<text x="${W-m.r+4}" y="${y+4}" font-size="11" fill="#5C6B79" font-family="monospace">${v.toFixed(0)}</text>`;}
-  if(basis){const y=ys(basis);svg+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="#5C6B79" stroke-dasharray="4 4"/>`;
-    svg+=`<text x="${m.l+130}" y="${y-4}" font-size="11" fill="#33414E" font-family="monospace">basis ${basis}</text>`;}
   const path=data.map((d,i)=>`${i?'L':'M'}${xs(i).toFixed(1)},${ys(d.c).toFixed(1)}`).join(' ');
   svg+=`<path d="${path}" fill="none" stroke="#3F6DA8" stroke-width="2" stroke-linejoin="round"/>`;
   const last=data[data.length-1]; svg+=`<circle cx="${xs(data.length-1)}" cy="${ys(last.c)}" r="4" fill="#3F6DA8" stroke="#fff" stroke-width="2"/>`;
@@ -125,8 +119,7 @@ def _crit(e: dict) -> str:
 
 
 def render(board: dict, tape: dict, full_document: bool = True) -> str:
-    t, v, lad, pos, cats, a = (tape["price"], tape["vol"], tape["ladder"], tape["position"], tape["catalysts"],
-                               tape["bias_audit"])
+    t, v, cats, a = tape["price"], tape["vol"], tape["catalysts"], tape["bias_audit"]
     evals = board.get("evaluations", [])
     summ = board.get("summary", {})
     order = {"fired": 0, "nearing": 1, "unknown": 2, "clear": 3}
@@ -139,7 +132,7 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
              'Every setup below carries a long read and a short read; nothing here is a criterion and nothing here says buy or sell.</p>'
              f'<div class="meta"><span>Board run <b>{_e(board.get("run_date", "—"))}</b></span><span>Tape <b>{_e(t["date"])}</b> via <b>{_e(tape["meta"]["price_source"]["source"])}</b></span>'
              f'<span>Fired <b>{_e(", ".join(summ.get("fired", [])) or "none")}</b></span><span>Nearing <b>{_e(", ".join(summ.get("nearing", [])) or "none")}</b></span>'
-             f'<span>Ladder <b>{"PAUSED" if lad["paused"] else "open"}</b></span></div></div></header>')
+             '</div></div></header>')
     B.append('<main class="in">')
     if tape["meta"]["warnings"]:
         B.append('<div class="warn">' + "<br>".join(_e(w) for w in tape["meta"]["warnings"]) + "</div>")
@@ -153,11 +146,10 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
          f'spread {_n(v.get("iv_hv_spread"), 0)} · IV rank {_n(v.get("iv_rank"), 0)} ({v.get("iv_history_days")}d{"" if v.get("iv_rank_meaningful") else ", thin"}) · exp move ±{_n(v.get("expected_move_pct"), 1)}%'
          + (" · carried" if v.get("carried") else "")),
         ("Regime", _e(regime), f'RSI {_n(t.get("rsi"), 0)} · SMA20 {_n(t.get("sma20"))} ({_n(t.get("dist_sma20_atr"), 1)} ATR) · SMA50 {_n(t.get("sma50"))}'),
-        ("Position", f'{pos["shares"]} sh', f'basis {pos["cost_basis"]} · {_p(pos.get("pnl_pct"))} · {pos["shares_to_target"]} to 100'),
     ]
     B.append('<div class="sec"><h2>Tape</h2><p>Context only. Volatility is explicitly not a criterion.</p></div><div class="tiles">'
              + "".join(f'<div class="tile"><div class="k">{_e(k)}</div><div class="v">{_e(val)}</div><div class="d">{_e(d)}</div></div>' for k, val, d in tiles) + "</div>")
-    B.append('<div class="sec"><h2>Daily close · ladder bands shaded · dashed = cost basis</h2></div><div class="panel chartbox"><div id="chart"></div></div>')
+    B.append('<div class="sec"><h2>Daily close</h2></div><div class="panel chartbox"><div id="chart"></div></div>')
 
     # options structure
     walls = v.get("oi_walls") or {}
@@ -200,22 +192,10 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
     B.append(f'<div class="small">Bias audit, trailing {a["window_days"]}d: {a["bullish"]} bullish-labelled vs {a["bearish"]} bearish-labelled setups · skew {a["skew"]:+.2f} (0 = balanced).</div>')
 
     # board
-    B.append('<div class="sec"><h2>Conditions that would break the long case</h2><p>Tier 1 is structural — one is enough. Tier 2 is damaging; two at once pauses the ladder.</p></div>')
+    B.append('<div class="sec"><h2>Conditions that would break the long case</h2><p>Tier 1 is structural — one is enough. Tier 2 is damaging on its own; two at once is structural.</p></div>')
     B.extend(_crit(e) for e in evals if e.get("case") == "long")
     B.append('<div class="sec"><h2>Conditions that would break the short case</h2><p>The symmetric half. Each is falsifiable too.</p></div>')
     B.extend(_crit(e) for e in evals if e.get("case") == "short")
-
-    # ladder
-    B.append(f'<div class="sec"><h2>Accumulation ladder</h2><p>{_e(lad["message"])}</p></div><div class="panel">')
-    if lad["paused"]:
-        B.append(f'<div class="warn" style="margin:0 0 10px">{_e(lad["pause_reason"])}</div>')
-    if not lad["budget_set"]:
-        B.append('<div class="small">No total budget set in config/tape.yaml — bands are aspirational until funded.</div>')
-    B.append('<div class="tw"><table><thead><tr><th>Band</th><th>Range</th><th>Planned</th><th>Fills</th><th>Gate</th><th>Note</th></tr></thead><tbody>')
-    for b in lad["bands"]:
-        B.append(f'<tr class="{"active" if b["active"] else ""}"><td class="m">{_e(b["name"])}{" ◀" if b["active"] else ""}</td><td class="m">{b["low"]}–{b["high"]}</td>'
-                 f'<td class="m">{b["planned_shares"] or "unfunded"}</td><td class="m">{b["fills"]}</td><td class="m">{"criteria check" if b["gated"] else "—"}</td><td class="small">{_e(b.get("note") or "")}</td></tr>')
-    B.append("</tbody></table></div><ul class='small'>" + "".join(f"<li>{_e(r)}</li>" for r in lad["rules"]) + "</ul></div>")
 
     # noise + unresolved
     B.append('<div class="sec"><h2>Not signal</h2><p>Written down in advance so a loud news cycle cannot promote itself.</p></div><div class="nots"><ul>'
@@ -227,7 +207,7 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
     B.append(f'<footer>{_e(tape["meta"]["disclaimer"])} · tape run {_e(tape["meta"]["run_at"])} · criteria v{_e(board.get("criteria_version", "—"))}. '
              'Manual states are only as fresh as their as-of dates; <code>spcx check</code> says when they have aged out.</footer></main>')
 
-    payload = json.dumps({"chart": tape["chart"], "ladder": {"bands": lad["bands"]}, "position": pos}, default=str)
+    payload = json.dumps({"chart": tape["chart"]}, default=str)
     body = f"<style>{CSS}</style>\n" + "\n".join(B) + f"\n<script>window.__TAPE__={payload};</script>\n<script>{JS}</script>\n"
     if not full_document:
         return "<title>SPCX Range Console</title>\n" + body

@@ -5,7 +5,7 @@
     spcx check        fail if anything on the manual side has gone stale
     spcx brief        emit the research prompt for a judgment pass
     spcx forecast     add, resolve, and score forecasts
-    spcx tape         price, vol, options, setups, ladder → data/tape.json (context, never criteria)
+    spcx tape         price, vol, options, setups → data/tape.json (context, never criteria)
     spcx dashboard    render site/tape.html from data/latest.json + data/tape.json
 """
 
@@ -207,7 +207,7 @@ def main(argv=None) -> int:
     fs.add_parser("score")
     f.set_defaults(fn=cmd_forecast)
 
-    t = sub.add_parser("tape", help="price / vol / setups / ladder context (never criteria)")
+    t = sub.add_parser("tape", help="price / vol / setups context (never criteria)")
     t.add_argument("--date", help="override run date (ISO)")
     t.add_argument("--offline", action="store_true", help="use the cached bars only")
     t.set_defaults(fn=cmd_tape)

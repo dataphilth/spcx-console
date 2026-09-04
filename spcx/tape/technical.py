@@ -70,7 +70,7 @@ def rsi(closes: list[float], window: int) -> float | None:
     return 100 - 100 / (1 + ag / al)
 
 
-def compute(bars: list[dict], params: dict, cost_basis: float | None, ipo_price: float | None) -> dict:
+def compute(bars: list[dict], params: dict, ipo_price: float | None) -> dict:
     bars = sorted(bars, key=lambda b: b["date"])
     n = len(bars)
     closes = [b["close"] for b in bars]
@@ -128,8 +128,6 @@ def compute(bars: list[dict], params: dict, cost_basis: float | None, ipo_price:
     out.update(ath=_r(hi_bar["high"]), ath_date=hi_bar["date"], atl=_r(lo_bar["low"]), atl_date=lo_bar["date"])
     out["from_ath_pct"] = _r(100 * (close / hi_bar["high"] - 1))
     out["from_atl_pct"] = _r(100 * (close / lo_bar["low"] - 1))
-    if cost_basis:
-        out["from_basis_pct"] = _r(100 * (close / cost_basis - 1))
     if ipo_price:
         out["from_ipo_pct"] = _r(100 * (close / ipo_price - 1))
 

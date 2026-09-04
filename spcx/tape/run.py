@@ -1,6 +1,6 @@
-"""One tape run: bars → measurements → setups → ladder → data/tape.json.
+"""One tape run: bars → measurements → setups → data/tape.json.
 
-Reads data/latest.json (the criteria board) only to gate the ladder. Never writes
+Reads data/latest.json (the criteria board) only to stamp its run date. Never writes
 to it. Appends one row per bar-date to data/tape_history.csv — the tape layer's
 own memory, and what the bias audit reads.
 """
@@ -17,13 +17,13 @@ import yaml
 
 from ..store import ROOT
 from . import catalysts as cat
-from . import ladder, options, prices, setups, technical
+from . import options, prices, setups, technical
 
 log = logging.getLogger(__name__)
 TAPE_CONFIG = ROOT / "config" / "tape.yaml"
 DATA = ROOT / "data"
 HISTORY_COLS = ["date", "close", "chg_1d_pct", "atr_pct", "hv30", "iv30", "iv_hv_spread", "rsi", "from_ath_pct",
-                "regime", "n_bullish", "n_bearish", "n_neutral", "setups", "active_band", "ladder_paused", "price_source"]
+                "regime", "n_bullish", "n_bearish", "n_neutral", "setups", "price_source"]
 
 
 def load_tape_config(path: Path = TAPE_CONFIG) -> dict:
@@ -34,10 +34,6 @@ def load_tape_config(path: Path = TAPE_CONFIG) -> dict:
         c["date"] = c["date"] if isinstance(c["date"], date) else date.fromisoformat(str(c["date"]))
         cats.append(c)
     cfg["catalysts"] = sorted(cats, key=lambda c: c["date"])
-    bands = cfg["ladder"]["bands"]
-    for a, b in zip(bands, bands[1:]):
-        if b["high"] > a["low"]:
-            raise ValueError("ladder bands must be listed from highest to lowest and not overlap")
     return cfg
 
 
@@ -53,17 +49,10 @@ def _append_history(row: dict, path: Path) -> list[dict]:
     rows.append({k: ("" if row.get(k) is None else row.get(k)) for k in HISTORY_COLS})
     rows.sort(key=lambda r: r["date"])
     with open(path, "w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=HISTORY_COLS)
+        w = csv.DictWriter(fh, fieldnames=HISTORY_COLS, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
     return rows
-
-
-def _basis(lots: list[dict]) -> tuple[float | None, int]:
-    sh = sum(int(lot["shares"]) for lot in lots)
-    if not sh:
-        return None, 0
-    return round(sum(lot["shares"] * lot["price"] for lot in lots) / sh, 2), sh
 
 
 def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date | None = None,
@@ -77,8 +66,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     bars, px_meta = prices.get_bars(ticker, data_dir / "prices.csv", offline=offline, today=today)
     if px_meta["stale"]:
         warnings.append(f"PRICE BARS STALE — last bar {px_meta['last_bar']} via {px_meta['source']}; errors: {px_meta['errors']}")
-    basis, shares = _basis(cfg["position"]["lots"])
-    tech = technical.compute(bars, p, basis, ipo_price)
+    tech = technical.compute(bars, p, ipo_price)
     chart = technical.chart_series(bars, p.get("history_bars_for_chart", 90))
 
     # ---- options ---------------------------------------------------------
@@ -137,36 +125,26 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     n_bear = sum(1 for s in st if s["direction"] == "bearish")
     n_neut = sum(1 for s in st if s["direction"] == "neutral")
 
-    # ---- ladder, gated by the criteria board ----------------------------------
+    # ---- board, read only for its run date ------------------------------------
     if board is None:
         lp = data_dir / "latest.json"
         board = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {}
-    gate = ladder.gate_from_evaluations(board.get("evaluations", []))
-    fills = [lot for lot in cfg["position"]["lots"] if lot.get("band")]
-    lad = ladder.evaluate(tech["close"], cfg["ladder"]["bands"], fills, gate, cfg["ladder"]["rules"],
-                          float(cfg["position"].get("total_budget_dollars") or 0))
 
     # ---- history + bias audit ----------------------------------------------------
     regime = next((s["name"].split(": ", 1)[1] for s in st if s["id"] == "REGIME"), None)
     row = {"date": tech["date"], "close": tech["close"], "chg_1d_pct": tech.get("chg_1d_pct"), "atr_pct": tech.get("atr_pct"),
            "hv30": tech.get("hv30"), "iv30": vol.get("iv30"), "iv_hv_spread": vol.get("iv_hv_spread"), "rsi": tech.get("rsi"),
            "from_ath_pct": tech.get("from_ath_pct"), "regime": regime, "n_bullish": n_bull, "n_bearish": n_bear,
-           "n_neutral": n_neut, "setups": "|".join(s["id"] for s in st), "active_band": lad["active_band"],
-           "ladder_paused": lad["paused"], "price_source": px_meta["source"]}
+           "n_neutral": n_neut, "setups": "|".join(s["id"] for s in st), "price_source": px_meta["source"]}
     history = _append_history(row, data_dir / "tape_history.csv")
     audit = setups.bias_audit(history, 30, today)
-
-    pos = {"shares": shares, "cost_basis": basis, "market_value": round(shares * tech["close"], 2) if shares else 0,
-           "pnl_pct": tech.get("from_basis_pct"), "core_target_shares": cfg["position"]["core_target_shares"],
-           "shares_to_target": max(cfg["position"]["core_target_shares"] - shares, 0),
-           "sleeves": {s: sum(lot["shares"] for lot in cfg["position"]["lots"] if lot.get("sleeve") == s) for s in ("core", "satellite")}}
 
     tape = {
         "meta": {"run_at": datetime.now().isoformat(timespec="seconds"), "today": today.isoformat(), "ticker": ticker,
                  "price_source": px_meta, "warnings": warnings, "board_run_date": board.get("run_date"),
                  "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades."},
         "price": tech, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
-        "ladder": lad, "gate": gate, "position": pos, "noise": cfg.get("noise", []), "history_tail": history[-30:],
+        "noise": cfg.get("noise", []), "history_tail": history[-30:],
     }
     (data_dir / "tape.json").write_text(json.dumps(tape, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")
     return tape
@@ -174,7 +152,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
 
 def brief(tape: dict) -> str:
     """Plain-text summary for the CLI. Setups carry both reads by construction."""
-    t, v, lad, a = tape["price"], tape["vol"], tape["ladder"], tape["bias_audit"]
+    t, v, a = tape["price"], tape["vol"], tape["bias_audit"]
     L = [f"tape {t['date']} · close {t['close']} ({t.get('chg_1d_pct', 0):+.1f}%) · src {tape['meta']['price_source']['source']}"]
     for w in tape["meta"]["warnings"]:
         L.append(f"  ! {w}")
@@ -200,6 +178,5 @@ def brief(tape: dict) -> str:
         L.append(f"  [{s['id']}] {s['name']}")
         L.append(f"      long:  {s['long_read']}")
         L.append(f"      short: {s['short_read']}")
-    L.append(f"  ladder: {lad['message']}")
     L.append(f"  bias audit {a['window_days']}d: {a['bullish']} bull-labelled / {a['bearish']} bear-labelled · skew {a['skew']:+.2f}")
     return "\n".join(L)

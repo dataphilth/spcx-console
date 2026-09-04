@@ -1,4 +1,4 @@
-"""The tape layer: price, volatility, options, setups, ladder, catalysts.
+"""The tape layer: price, volatility, options, setups, catalysts.
 
 Everything here is context. Nothing here is a criterion, nothing here can move a
 criterion's status, and nothing here says buy or sell. Every setup carries a long

@@ -137,8 +137,8 @@ def detect(tech: dict, vol: dict, params: dict, catalysts_soon: list[dict]) -> l
             out.append(_s("SKEW_PUT_RICH", "25Δ puts rich vs calls", "neutral", 2,
                           f"30-day 25Δ skew {sk:+.0f} pts (put IV minus call IV). Δ1d {vol.get('skew_chg_1d')}.",
                           "Downside protection is expensive — the crowd is paying up for puts. A long who wants a hedge pays "
-                          "through the nose; the cheap long expression is call spreads, or selling puts against the ladder "
-                          "bands you'd buy at anyway (assignment IS the plan there).",
+                          "through the nose; the cheap long expression is call spreads, or selling puts at levels a long "
+                          "view would own anyway.",
                           "Fear is priced. Shorts who buy puts here are buying what everyone else already bought; put spreads "
                           "or short call spreads are the cheaper expression. Rich put skew has historically preceded squeezes "
                           "as often as breaks.", tag="vol"))
@@ -179,7 +179,7 @@ def detect(tech: dict, vol: dict, params: dict, catalysts_soon: list[dict]) -> l
                           f"{c['date']} ({c['confidence']} date confidence). Front-expiry expected move "
                           + (f"±{vol['expected_move_pct']}%." if vol.get("expected_move_pct") is not None else "unavailable (no options snapshot)."),
                           "Binary event ahead. New directional entries are a bet on the event, not on the setup. "
-                          "Price moves into these are on the noise list; the ladder is what acts on them.",
+                          "Price moves into these are on the noise list.",
                           "Same. Note the pattern so far: the market sold into both the Aug 4 print and the Aug 6 unlock, "
                           "then rallied once supply arrived.", tag="catalyst"))
             break
