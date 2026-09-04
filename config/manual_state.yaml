@@ -46,9 +46,9 @@ states:
     source: "Flight manifest as disclosed on the Aug 4 earnings call"
   artemis_hls:
     state: nearing
-    detail: "NASA reopened the Artemis III lander competition in Oct 2025 citing SpaceX delays. Undecided."
-    as_of: "2026-08-14"
-    source: "NASASpaceflight, Oct 2025"
+    detail: "NASA reopened the Artemis III lander competition in Oct 2025 citing SpaceX delays. Undecided. Both landers are slated to be met by the Artemis III crew in a 2027 Earth-orbit test; SpaceX must demonstrate uncrewed propellant transfer before crew approval (ties L14 to L9/S6)."
+    as_of: "2026-08-30"
+    source: "NASASpaceflight, Oct 2025; Payload, Jun 9 2026 (Earth-orbit test plan, propellant-transfer gate)"
   secondary_offering:
     state: clear
     detail: "None. $25B of notes at 5.855% issued June 2026 instead."
@@ -56,9 +56,9 @@ states:
     source: "Debt issuance reporting"
   starship_orbit_and_catch:
     state: nearing
-    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only. Ship catch dropped Aug 20 (Musk: 'probably catch the ship with the tower in a few months'); ship and booster splash down. NET early-mid Sep 2026. FAA license not announced. S5 cannot fire on this flight."
-    as_of: "2026-08-26"
-    source: "Musk X post Aug 20 2026 via Space.com (Aug 20, 21) and Starlust (Aug 21); SpaceNews: SpaceX scales back plans for next Starship launch"
+    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only; ship catch dropped Aug 20, so S5 cannot fire on this flight. Both stages static-fired (B21 33-engine, Aug 28). NET Sep 15 2026 per reported FCC filing, corroborated by a second secondary Sep 2. FAA environmental approval for the return-to-Starbase trajectory issued (FONSI/ROD Sep 2, Federal Register Sep 4) - clears the environmental blocker for a future catch attempt; launch-license modification still outstanding."
+    as_of: "2026-09-04"
+    source: "Musk via Space.com Aug 20 (catch dropped); Basenor/NSF Aug 28-29 (static fire); Tesla Oracle Sep 2 + spacelaunchschedule (Sep 15 NET); Federal Register Sep 4 (FAA FONSI/ROD)"
   november_tranche:
     state: clear
     detail: "Pending. ~1.28B shares, ~28%, around Nov 5 2026."
@@ -71,9 +71,6 @@ unresolved:
   - id: q_shares
     text: "Share count does not bridge. Earnings release uses 5,864M weighted-average shares for $(0.09) EPS; 10-Q cover shows 13.18B outstanding. Pull the share-class table before any per-share work."
     opened: "2026-08-14"
-  - id: q_cash_definition
-    text: "$93.5B cash and equivalents per earnings coverage vs ~$100B cash plus marketable securities. L4 keys off this. Pick one definition permanently and record which."
-    opened: "2026-08-20"
   - id: q_lockup_text
     text: "424B4 truncates before 'Shares Eligible for Future Sale'. Tranche dates are reconstructed from the FWP summary plus press."
     opened: "2026-08-14"
@@ -83,17 +80,23 @@ unresolved:
   - id: q_2027_bucket
     text: "The 2027 insider bucket. FWP implies ~1.58B shares by residual math; secondary coverage says day 366 unlocks everything. Least verified, most consequential item on the board."
     opened: "2026-08-14"
-  - id: q_nvidia_stake
-    text: "Nvidia disclosed a $21B stake as of quarter-end (Aug 14). Confirm against the 13F and establish whether it is the converted xAI position from the January $20B round."
-    opened: "2026-08-20"
-  - id: q_china_reusable
-    text: "China landed a reusable rocket (~Aug 19). Establish vehicle, class, and whether orbital. First credible non-US reusability datapoint; belongs in the competitive set if it holds up."
-    opened: "2026-08-20"
   - id: q_govt_revenue
     text: "Government revenue is never broken out — only a combined enterprise-and-government line. Any '% from government' figure in circulation is someone's estimate."
     opened: "2026-08-14"
 
 resolved:
+  - id: q_cash_definition
+    text: "$93.5B cash and equivalents vs ~$100B cash plus marketable securities."
+    resolution: "Q2 release balance sheet: cash & equivalents $93,522M plus marketable securities $6,487M = the ~$100B. L4 keys off cash & equivalents only (the XBRL tag already collected). Source: Q2 2026 release PDF via StockTitan, Aug 4."
+    closed: "2026-08-30"
+  - id: q_nvidia_stake
+    text: "Nvidia $21B stake - converted xAI position?"
+    resolution: "Yes per two independent secondary sources (Yahoo Finance Aug 17; 247wallst Aug 15): Nvidia's $10B in xAI's Jan 2026 round converted to ~122.8M SPCX Class A in the merger, ~$21B at 6/30. Press-based; 13F not independently read - confidence medium."
+    closed: "2026-08-30"
+  - id: q_china_reusable
+    text: "China reusable rocket landing ~Aug 19."
+    resolution: "Zhuque-3, LandSpace (private), medium-lift ~18.3t LEO, orbital mission (its 2nd), first-stage leg landing Aug 18/19. First non-US orbital-class booster recovery. Sources: Space.com Aug 19; CGTN Aug 19. In the competitive set."
+    closed: "2026-08-30"
   - id: q_tranche3_date
     text: "Tranche 3 date dispute (Aug 12 vs Aug 21)."
     resolution: "Aug 20 2026, ~319M shares. Multiple outlets converge."
