@@ -2,7 +2,7 @@
   "bias_audit": {
     "bearish": 0,
     "bullish": 0,
-    "neutral": 21,
+    "neutral": 24,
     "skew": 0.0,
     "window_days": 30
   },
@@ -11,17 +11,17 @@
       {
         "confidence": "medium",
         "date": "2026-09-10",
-        "days": 7,
+        "days": 6,
         "event": "Lockup tranche 4 (~7%)",
         "kind": "lockup"
       },
       {
         "confidence": "low",
         "date": "2026-09-15",
-        "days": 12,
+        "days": 11,
         "event": "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
         "kind": "starship",
-        "note": "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; B21 static fire pending; placeholder date",
+        "note": "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; Sep 15 per reported FCC filing, corroborated 9/2; B21 static fire done 8/28; FAA license outstanding",
         "tests": [
           "L8"
         ]
@@ -29,28 +29,28 @@
       {
         "confidence": "medium",
         "date": "2026-09-25",
-        "days": 22,
+        "days": 21,
         "event": "Lockup tranche 5 (~7%)",
         "kind": "lockup"
       },
       {
         "confidence": "low",
         "date": "2026-10-12",
-        "days": 39,
+        "days": 38,
         "event": "Lockup tranche 6 (~7%)",
         "kind": "lockup"
       },
       {
         "confidence": "low",
         "date": "2026-10-26",
-        "days": 53,
+        "days": 52,
         "event": "Lockup tranche 7 (~7%)",
         "kind": "lockup"
       },
       {
         "confidence": "low",
         "date": "2026-11-03",
-        "days": 61,
+        "days": 60,
         "event": "Q3 2026 earnings",
         "kind": "earnings",
         "note": "Wall Street Horizon estimate; not company-confirmed",
@@ -71,7 +71,7 @@
       {
         "confidence": "medium",
         "date": "2026-11-05",
-        "days": 63,
+        "days": 62,
         "event": "Lockup tranche 8 \u2014 28% / ~1.28B sh (4x anything prior)",
         "kind": "lockup",
         "tests": [
@@ -81,7 +81,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-09",
-        "days": 97,
+        "days": 96,
         "event": "Day 180 \u2014 bucket (iii) remainder unlocks",
         "kind": "lockup"
       }
@@ -92,7 +92,7 @@
       {
         "confidence": "medium",
         "date": "2026-09-10",
-        "days": 7,
+        "days": 6,
         "event": "Lockup tranche 4 (~7%)",
         "kind": "lockup"
       }
@@ -503,20 +503,16 @@
       "d": "2026-09-03",
       "h": 152.3,
       "l": 141.05,
-      "v": 120960430
+      "v": 121333600
+    },
+    {
+      "c": 147.95,
+      "d": "2026-09-04",
+      "h": 150.85,
+      "l": 147.32,
+      "v": 48786202
     }
   ],
-  "gate": {
-    "long_nearing": [
-      "L8",
-      "L10",
-      "L14"
-    ],
-    "pause_reason": null,
-    "paused": false,
-    "tier1_fired": [],
-    "tier2_fired": []
-  },
   "history_tail": [
     {
       "active_band": "Current",
@@ -615,135 +611,55 @@
     },
     {
       "active_band": "",
-      "atr_pct": 5.29,
-      "chg_1d_pct": 6.42,
-      "close": 149.74,
+      "atr_pct": "5.29",
+      "chg_1d_pct": "6.42",
+      "close": "149.74",
       "date": "2026-09-03",
-      "from_ath_pct": -33.64,
-      "hv30": 85.0,
-      "iv30": 49.5,
-      "iv_hv_spread": -35.5,
-      "ladder_paused": false,
+      "from_ath_pct": "-33.64",
+      "hv30": "85.0",
+      "iv30": "49.5",
+      "iv_hv_spread": "-35.5",
+      "ladder_paused": "False",
+      "n_bearish": "0",
+      "n_bullish": "0",
+      "n_neutral": "3",
+      "price_source": "yfinance",
+      "regime": "uptrend",
+      "rsi": "60.2",
+      "setups": "REGIME|PREMIUM_CHEAP|OI_WALL_NEAR"
+    },
+    {
+      "atr_pct": 4.83,
+      "chg_1d_pct": -1.2,
+      "close": 147.95,
+      "date": "2026-09-04",
+      "from_ath_pct": -34.43,
+      "hv30": 84.6,
+      "iv30": 48.9,
+      "iv_hv_spread": -35.7,
       "n_bearish": 0,
       "n_bullish": 0,
       "n_neutral": 3,
       "price_source": "yfinance",
       "regime": "uptrend",
-      "rsi": 60.2,
+      "rsi": 58.4,
       "setups": "REGIME|PREMIUM_CHEAP|OI_WALL_NEAR"
     }
   ],
-  "ladder": {
-    "active_band": null,
-    "active_band_funded": false,
-    "bands": [
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": false,
-        "high": 145,
-        "low": 135,
-        "lowest_fill": null,
-        "name": "Current",
-        "note": null,
-        "planned_shares": 0
-      },
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": false,
-        "high": 135,
-        "low": 120,
-        "lowest_fill": null,
-        "name": "Dip 1",
-        "note": null,
-        "planned_shares": 0
-      },
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": false,
-        "high": 120,
-        "low": 105,
-        "lowest_fill": null,
-        "name": "Dip 2",
-        "note": "Retests the Aug 3 low of $104.83",
-        "planned_shares": 0
-      },
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": true,
-        "high": 105,
-        "low": 85,
-        "lowest_fill": null,
-        "name": "Dip 3",
-        "note": "Below all-time low",
-        "planned_shares": 0
-      },
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": true,
-        "high": 85,
-        "low": 60,
-        "lowest_fill": null,
-        "name": "Dip 4",
-        "note": null,
-        "planned_shares": 0
-      },
-      {
-        "active": false,
-        "blocked_by_repeat_rule": false,
-        "fills": 0,
-        "funded": false,
-        "gated": true,
-        "high": 60,
-        "low": 25,
-        "lowest_fill": null,
-        "name": "Dip 5",
-        "note": "Only if zero long Tier-1 criteria fired",
-        "planned_shares": 0
-      }
-    ],
-    "budget_dollars": 0.0,
-    "budget_set": false,
-    "close": 149.74,
-    "message": "Close 149.74 is outside every defined band (above 145 or below 25).",
-    "pause_reason": null,
-    "paused": false,
-    "requires_criteria_check": false,
-    "rules": [
-      "No band is bought twice without a new low inside that band.",
-      "Every purchase below $105 requires a written Tier-1 criteria check first.",
-      "Dry powder reserved for deeper bands is not spendable on shallower ones.",
-      "Time-based tranches may supplement price-based ones."
-    ]
-  },
   "meta": {
-    "board_run_date": "2026-09-03",
+    "board_run_date": "2026-09-04",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
       "bar_age_days": 0,
       "errors": [],
-      "last_bar": "2026-09-03",
-      "rows": 58,
+      "last_bar": "2026-09-04",
+      "rows": 59,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-09-03T23:21:44",
+    "run_at": "2026-09-04T23:06:06",
     "ticker": "SPCX",
-    "today": "2026-09-03",
+    "today": "2026-09-04",
     "warnings": []
   },
   "noise": [
@@ -755,61 +671,48 @@
     "Short-interest headlines",
     "Any named bear or bull being loud"
   ],
-  "position": {
-    "core_target_shares": 100,
-    "cost_basis": 137.85,
-    "market_value": 1946.62,
-    "pnl_pct": 8.63,
-    "shares": 13,
-    "shares_to_target": 87,
-    "sleeves": {
-      "core": 13,
-      "satellite": 0
-    }
-  },
   "price": {
     "ath": 225.64,
     "ath_date": "2026-06-16",
     "atl": 104.83,
     "atl_date": "2026-08-03",
-    "atr": 7.92,
-    "atr_pct": 5.29,
-    "bars": 58,
-    "chg_1d_pct": 6.42,
-    "chg_20d_pct": 30.3,
-    "chg_5d_pct": 6.3,
-    "close": 149.74,
-    "close_loc": 0.77,
-    "date": "2026-09-03",
-    "dist_sma20_atr": 1.2,
-    "dist_sma20_pct": 6.8,
-    "dist_sma50_atr": 1.72,
-    "dist_sma50_pct": 10.04,
-    "from_ath_pct": -33.64,
-    "from_atl_pct": 42.84,
-    "from_basis_pct": 8.63,
-    "from_ipo_pct": 10.92,
-    "gap_pct": 0.46,
-    "hv10": 35.5,
-    "hv30": 85.0,
-    "prior_range_high": 149.8,
-    "prior_range_low": 105.11,
-    "range_compression": 0.83,
+    "atr": 7.15,
+    "atr_pct": 4.83,
+    "bars": 59,
+    "chg_1d_pct": -1.2,
+    "chg_20d_pct": 11.15,
+    "chg_5d_pct": 4.56,
+    "close": 147.95,
+    "close_loc": 0.18,
+    "date": "2026-09-04",
+    "dist_sma20_atr": 0.98,
+    "dist_sma20_pct": 4.97,
+    "dist_sma50_atr": 1.67,
+    "dist_sma50_pct": 8.8,
+    "from_ath_pct": -34.43,
+    "from_atl_pct": 41.13,
+    "from_ipo_pct": 9.59,
+    "gap_pct": -0.79,
+    "hv10": 36.6,
+    "hv30": 84.6,
+    "prior_range_high": 152.3,
+    "prior_range_low": 114.53,
+    "range_compression": 0.55,
     "range_high": 152.3,
-    "range_low": 114.53,
-    "range_pos": 0.93,
-    "rsi": 60.2,
-    "sma20": 140.2,
-    "sma50": 136.08,
-    "streak": 1,
-    "volume": 120960430,
-    "volume_vs_avg": 1.16,
-    "volume_z": 0.28
+    "range_low": 130.17,
+    "range_pos": 0.8,
+    "rsi": 58.4,
+    "sma20": 140.95,
+    "sma50": 135.98,
+    "streak": -1,
+    "volume": 48786202,
+    "volume_vs_avg": 0.5,
+    "volume_z": -1.0
   },
   "setups": [
     {
       "direction": "neutral",
-      "evidence": "Close 149.74; SMA20 140.2; SMA50 136.08.",
+      "evidence": "Close 147.95; SMA20 140.95; SMA50 135.98.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: uptrend",
@@ -819,7 +722,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "IV30 49.5 vs HV30 85.0 \u2192 spread -36 pts.",
+      "evidence": "IV30 48.9 vs HV30 84.6 \u2192 spread -36 pts.",
       "id": "PREMIUM_CHEAP",
       "long_read": "Do NOT write covered calls here \u2014 you'd be selling movement below what the stock actually does. Long-vol structures (calls, call spreads) are the cheap expression of a long view.",
       "name": "Options premium cheap vs realized",
@@ -829,7 +732,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "call wall 150.0 (OI 69,583). Close 149.74, ATR 7.92. Dealer gamma proxy 53.7 $M per 1%.",
+      "evidence": "call wall 150.0 (OI 72,837). Close 147.95, ATR 7.15. Dealer gamma proxy 25.6 $M per 1%.",
       "id": "OI_WALL_NEAR",
       "long_read": "Big OI strikes act as magnets into expiry and as pins on expiry day; a long wants to see price hold above a put wall, not sit under a call wall.",
       "name": "Price within 1 ATR of a large OI strike",
@@ -840,104 +743,104 @@
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 6.0,
-    "expected_move_usd": 8.93,
+    "expected_move_pct": 5.1,
+    "expected_move_usd": 7.55,
     "float_as_of": "2026-08-14",
-    "front_dte": 8.0,
+    "front_dte": 7.0,
     "front_expiry": "2026-09-11",
-    "gex_musd_per_1pct": 53.7,
-    "hv10": 35.5,
-    "hv30": 85.0,
-    "iv30": 49.5,
-    "iv30_chg_1d": 1.5,
-    "iv90": 54.2,
-    "iv_front": 47.9,
-    "iv_history_days": 6,
-    "iv_hv_spread": -35.5,
-    "iv_percentile": 33.3,
-    "iv_rank": 22.7,
+    "gex_musd_per_1pct": 25.6,
+    "hv10": 36.6,
+    "hv30": 84.6,
+    "iv30": 48.9,
+    "iv30_chg_1d": -0.6,
+    "iv90": 53.8,
+    "iv_front": 43.5,
+    "iv_history_days": 7,
+    "iv_hv_spread": -35.7,
+    "iv_percentile": 14.3,
+    "iv_rank": 13.6,
     "iv_rank_meaningful": false,
     "oi_walls": {
       "calls": [
         {
-          "oi": 69583,
+          "oi": 72837,
           "strike": 150.0
         },
         {
-          "oi": 48842,
+          "oi": 57507,
           "strike": 160.0
         },
         {
-          "oi": 40499,
-          "strike": 210.0
+          "oi": 41864,
+          "strike": 175.0
         }
       ],
       "puts": [
         {
-          "oi": 74409,
+          "oi": 74348,
           "strike": 100.0
         },
         {
-          "oi": 59756,
+          "oi": 59775,
           "strike": 70.0
         },
         {
-          "oi": 54634,
-          "strike": 150.0
+          "oi": 58970,
+          "strike": 140.0
         }
       ],
       "window_dte": 60
     },
-    "put_call_oi": 1.15,
+    "put_call_oi": 1.14,
     "short_as_of": "2026-08-14",
     "short_days_to_cover": 1.8,
     "short_pct_float": 2.9,
     "short_pct_outstanding": 2.9,
     "short_pct_public_float": 11.9,
     "short_shares_m": 184.4,
-    "skew25_30d": -1.7,
-    "skew25_front": -0.9,
-    "skew_chg_1d": -1.9,
-    "snapshot_date": "2026-09-03",
+    "skew25_30d": -1.6,
+    "skew25_front": -0.6,
+    "skew_chg_1d": 0.1,
+    "snapshot_date": "2026-09-04",
     "term": [
       {
-        "atm_iv": 47.9,
-        "dte": 8,
+        "atm_iv": 43.5,
+        "dte": 7,
         "expiry": "2026-09-11"
       },
       {
-        "atm_iv": 49.3,
-        "dte": 15,
+        "atm_iv": 47.1,
+        "dte": 14,
         "expiry": "2026-09-18"
       },
       {
-        "atm_iv": 49.3,
-        "dte": 22,
+        "atm_iv": 48.5,
+        "dte": 21,
         "expiry": "2026-09-25"
       },
       {
-        "atm_iv": 49.4,
-        "dte": 29,
+        "atm_iv": 48.6,
+        "dte": 28,
         "expiry": "2026-10-02"
       },
       {
-        "atm_iv": 49.9,
-        "dte": 36,
+        "atm_iv": 49.7,
+        "dte": 35,
         "expiry": "2026-10-09"
       },
       {
-        "atm_iv": 50.0,
-        "dte": 43,
+        "atm_iv": 49.4,
+        "dte": 42,
         "expiry": "2026-10-16"
       },
       {
-        "atm_iv": 54.2,
-        "dte": 78,
+        "atm_iv": 53.8,
+        "dte": 77,
         "expiry": "2026-11-20"
       }
     ],
-    "term_slope": 4.7,
-    "total_call_oi": 909366.0,
-    "total_put_oi": 1041948.0
+    "term_slope": 4.9,
+    "total_call_oi": 967194.0,
+    "total_put_oi": 1106699.0
   }
 }
