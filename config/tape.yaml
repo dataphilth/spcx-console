@@ -26,14 +26,14 @@ share_structure:
 # Catalyst calendar. `confidence` is about the DATE, not the event.
 # ---------------------------------------------------------------------------
 catalysts:
-  - {date: 2026-09-15, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: low, tests: [L8], note: "NET early-mid Sep per Space.com 8/21; nextspaceflight NET Sep; Sep 15 per reported FCC filing, corroborated 9/2; B21 static fire done 8/28; FAA license outstanding"}
-  - {date: 2026-09-10, event: "Lockup tranche 4 (~7%)", kind: lockup, confidence: medium}
-  - {date: 2026-09-25, event: "Lockup tranche 5 (~7%)", kind: lockup, confidence: medium}
-  - {date: 2026-10-12, event: "Lockup tranche 6 (~7%)", kind: lockup, confidence: low}
-  - {date: 2026-10-26, event: "Lockup tranche 7 (~7%)", kind: lockup, confidence: low}
+  - {date: 2026-09-28, event: "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)", kind: starship, confidence: medium, tests: [L8], note: "SpaceX on X 9/17: as early as Mon Sep 28, pending regulatory approval (slipped from Sep 22, no reason given; prior NET Sep 15 / Sep 18). FAA launch license STILL outstanding as of 9/18. ~26 Starlink V3, ~6 orbits/~10h, Raptor relight, Pacific splashdown, no catch. CFO: first revenue-generating Starship mission"}
+  - {date: 2026-09-09, event: "Lockup tranche 4 (~7%, ~319M sh)", kind: lockup, confidence: high, note: "day 90 from June 11 pricing; confirmed by press on the day (Benzinga 9/9)"}
+  - {date: 2026-09-24, event: "Lockup tranche 5 (~7%, ~328M sh)", kind: lockup, confidence: high, note: "day 105; 2 sources"}
+  - {date: 2026-10-09, event: "Lockup tranche 6 (~7%)", kind: lockup, confidence: high, note: "day 120"}
+  - {date: 2026-10-24, event: "Lockup tranche 7 (~7%)", kind: lockup, confidence: medium, note: "day 135 (Saturday - effective next session)"}
   - {date: 2026-11-03, event: "Q3 2026 earnings", kind: earnings, confidence: low, tests: [L1, L2, L3, L4, L12, L13, S1, S2, S3, S4, S9], note: "Wall Street Horizon estimate; not company-confirmed"}
-  - {date: 2026-11-05, event: "Lockup tranche 8 — 28% / ~1.28B sh (4x anything prior)", kind: lockup, confidence: medium, tests: [S7]}
-  - {date: 2026-12-09, event: "Day 180 — bucket (iii) remainder unlocks", kind: lockup, confidence: medium}
+  - {date: 2026-11-05, event: "Lockup tranche 8 — 28% / ~1.28B sh (4x anything prior)", kind: lockup, confidence: low, tests: [S7], note: "floats ~2 trading days after Q3 earnings; Q3 date not company-confirmed"}
+  - {date: 2026-12-08, event: "Day 180 — bucket (iii) remainder + rolled failed-trigger shares (~798M sh)", kind: lockup, confidence: medium, note: "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"}
   - {date: 2027-02-15, event: "Q4/FY26 earnings — insider bucket (ii) begins", kind: earnings, confidence: low}
   - {date: 2027-06-12, event: "12-month seasoning clears (S&P 500 profitability test still fails)", kind: index, confidence: high}
   - {date: 2027-06-13, event: "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)", kind: lockup, confidence: medium}

@@ -20,7 +20,7 @@ metrics:
   starlink_net_adds_qoq:           {value: 1.7,   period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
   starlink_arpu:                   {value: 66,    period: 2026Q2, as_of: "2026-08-04", source: "Press reporting of disclosed figures", confidence: medium}
   starship_orbital_flights:        {value: 0,     period: cumulative, as_of: "2026-07-24", source: "Flight 13, suborbital, July 24 2026", confidence: high}
-  amazon_leo_enterprise_losses:    {value: 2,     period: cumulative, as_of: "2026-08-14", source: "Delta (Apr 6 2026), JetBlue", confidence: high}
+  amazon_leo_enterprise_losses:    {value: 2,     period: cumulative, as_of: "2026-09-06", source: "Delta (Apr 6 2026), JetBlue. NOT counted: AT&T-Leo deal (Feb 4 2026, Amazon press primary) - carrier partnership, classification as account #3 pending ruling", confidence: high}
   short_interest_pct_float:        {value: 28,    period: 2026-08-14, as_of: "2026-08-14", source: "Fintel — range reported 25-32%, midpoint taken", confidence: low}
 
 states:
@@ -56,9 +56,9 @@ states:
     source: "Debt issuance reporting"
   starship_orbit_and_catch:
     state: nearing
-    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only; ship catch dropped Aug 20, so S5 cannot fire on this flight. Both stages static-fired (B21 33-engine, Aug 28). NET Sep 15 2026 per reported FCC filing, corroborated by a second secondary Sep 2. FAA environmental approval for the return-to-Starbase trajectory issued (FONSI/ROD Sep 2, Federal Register Sep 4) - clears the environmental blocker for a future catch attempt; launch-license modification still outstanding."
-    as_of: "2026-09-04"
-    source: "Musk via Space.com Aug 20 (catch dropped); Basenor/NSF Aug 28-29 (static fire); Tesla Oracle Sep 2 + spacelaunchschedule (Sep 15 NET); Federal Register Sep 4 (FAA FONSI/ROD)"
+    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only; ship catch dropped Aug 20, so S5 cannot fire on this flight. Slipped Sep 15 -> Sep 18 -> Sep 22 -> NET Mon Sep 28 2026 (SpaceX on X, Sep 17, pending regulatory approval; no reason given). FAA launch-license modification STILL outstanding as of Sep 18. ~26 Starlink V3, ~6 orbits over ~10h, in-space Raptor relight, Pacific splashdown. Flight 15 (Booster 22 / Ship 42) is the earliest realistic catch opportunity - Musk on camera Sep 15: Flight 15 will be caught; Ship 42 catch rehearsal at Pad 2 Sep 12."
+    as_of: "2026-09-18"
+    source: "SpaceX on X 9/17 (Sep 28); Space.com + TeslaNorth 9/17 (license outstanding); NSF 9/14 (Sep 22 slip, S42 rehearsal); Starlust 9/15 (Musk F15 catch); NSF 9/9 (Flight 15 pairing)"
   november_tranche:
     state: clear
     detail: "Pending. ~1.28B shares, ~28%, around Nov 5 2026."
@@ -68,14 +68,8 @@ states:
 # Questions that could not be resolved. Each pass should attempt one and record
 # the result, including failure to resolve.
 unresolved:
-  - id: q_shares
-    text: "Share count does not bridge. Earnings release uses 5,864M weighted-average shares for $(0.09) EPS; 10-Q cover shows 13.18B outstanding. Pull the share-class table before any per-share work."
-    opened: "2026-08-14"
   - id: q_lockup_text
     text: "424B4 truncates before 'Shares Eligible for Future Sale'. Tranche dates are reconstructed from the FWP summary plus press."
-    opened: "2026-08-14"
-  - id: q_failed_trigger
-    text: "455.8M shares whose price trigger failed (required >=$175.50 on 5 of 10 days pre-earnings) — do they roll into December or re-trigger later?"
     opened: "2026-08-14"
   - id: q_2027_bucket
     text: "The 2027 insider bucket. FWP implies ~1.58B shares by residual math; secondary coverage says day 366 unlocks everything. Least verified, most consequential item on the board."
@@ -85,6 +79,14 @@ unresolved:
     opened: "2026-08-14"
 
 resolved:
+  - id: q_failed_trigger
+    text: "455.8M shares whose price trigger failed (required >=$175.50 on 5 of 10 days pre-earnings) - do they roll into December or re-trigger later?"
+    resolution: "They roll into the day-180 release (Dec 8 2026), making that release ~798M shares instead of ~342M. Three aggregators converge (TOPONE, PurePowerPicks, RoWS); the covenant itself was not read verbatim so confidence is medium and q_lockup_text stays open. Same sources give the tranche rule: days 70/90/105/120/135/180 from June 11 pricing -> Sep 9 / Sep 24 / Oct 9 / Oct 24 / Dec 8; the November tranche floats ~2 trading days after Q3 earnings. Closed Sep 6."
+    closed: "2026-09-06"
+  - id: q_shares
+    text: "Share count does not bridge. Earnings release uses 5,864M weighted-average shares for $(0.09) EPS; 10-Q cover shows 13.18B outstanding."
+    resolution: "They bridge exactly. The IPO closed June 12 2026 with ~19 of 91 days left in Q2, and at IPO all 2,046M redeemable convertible preferred converted to common (Class A 1,952M -> 7,607M) plus 638.9M new Class A were sold - so most of today's 13.18B counted as common for only ~1/5 of the quarter. Arithmetic: ~3.93B pre-IPO common x 72/91 + 13.18B x 19/91 = ~5,864M, the reported figure; H1 weighted average 4,879M is internally consistent. Standard ASC 260, not an error. Gap closes mechanically at Q3. stockanalysis.com now shows 13.57B outstanding (Cursor stock consideration). Per-share work should use period-end counts, never the Q2 weighted average. Sources: Q2 earnings release PDF (Q4 CDN mirror), 10-Q via StockTitan mirror, read Sep 13."
+    closed: "2026-09-13"
   - id: q_cash_definition
     text: "$93.5B cash and equivalents vs ~$100B cash plus marketable securities."
     resolution: "Q2 release balance sheet: cash & equivalents $93,522M plus marketable securities $6,487M = the ~$100B. L4 keys off cash & equivalents only (the XBRL tag already collected). Source: Q2 2026 release PDF via StockTitan, Aug 4."

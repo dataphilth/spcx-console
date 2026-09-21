@@ -5,9 +5,8 @@ forecasts:
   criterion: L8
   probability: 0.6
   resolve_by: '2026-10-15'
-  basis: Flight 13 heat shield performed well enough for SpaceX to commit to an orbital
-    profile; two consecutive precision splashdowns satisfied the stated gate. Slip risk
-    is higher than failure risk.
+  basis: Flight 13 heat shield performed well enough for SpaceX to commit to an orbital profile; two consecutive
+    precision splashdowns satisfied the stated gate. Slip risk is higher than failure risk.
   outcome: null
   resolved_on: null
 - id: f0002
@@ -16,8 +15,8 @@ forecasts:
   criterion: S5
   probability: 0.3
   resolve_by: '2026-10-15'
-  basis: Categorically harder than a booster catch, never attempted, and contingent on
-    FAA approval that had not been granted as of Aug 20.
+  basis: Categorically harder than a booster catch, never attempted, and contingent on FAA approval that
+    had not been granted as of Aug 20.
   outcome: null
   resolved_on: null
 - id: f0003
@@ -26,7 +25,43 @@ forecasts:
   criterion: L13
   probability: 0.8
   resolve_by: '2026-12-15'
-  basis: AI capex went 7.7B to 15.8B in one step with $14.1B of contracted cloud services
-    to serve. Revenue would need to roughly double sequentially to clear it.
+  basis: AI capex went 7.7B to 15.8B in one step with $14.1B of contracted cloud services to serve. Revenue
+    would need to roughly double sequentially to clear it.
+  outcome: null
+  resolved_on: null
+- id: f0004
+  made_on: '2026-09-21'
+  statement: Starship Flight 14 lifts off (launch attempt leaves the pad) on or before 2026-09-30
+  criterion: L8
+  probability: 0.55
+  resolve_by: '2026-10-01'
+  basis: Sep 28 company-announced but license still outstanding 9/18; four slips in five weeks
+  outcome: null
+  resolved_on: null
+- id: f0005
+  made_on: '2026-09-21'
+  statement: Amazon Leo exceeds 450 satellites in the Celestrak kuiper group by 2026-11-30
+  criterion: S10
+  probability: 0.25
+  resolve_by: '2026-11-30'
+  basis: ''
+  outcome: null
+  resolved_on: null
+- id: f0006
+  made_on: '2026-09-21'
+  statement: SPCX announces a confirmed Q3 2026 earnings date falling between 2026-11-02 and 2026-11-06
+  criterion: L13
+  probability: 0.6
+  resolve_by: '2026-11-06'
+  basis: ''
+  outcome: null
+  resolved_on: null
+- id: f0007
+  made_on: '2026-09-21'
+  statement: Amazon Leo LV-01 (Vulcan return to flight) lifts off on or before 2026-10-31
+  criterion: S10
+  probability: 0.4
+  resolve_by: '2026-11-01'
+  basis: ''
   outcome: null
   resolved_on: null
