@@ -16,3 +16,4 @@ date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_b
 2026-09-17,154.81,2.6,4.16,67.5,48.8,-18.7,60.0,-31.39,uptrend,0,0,2,REGIME|PREMIUM_CHEAP,yfinance
 2026-09-18,152.71,-1.36,4.14,66.3,48.6,-17.7,57.8,-32.32,uptrend,1,0,2,VOLUME_CLIMAX_DOWN|REGIME|PREMIUM_CHEAP,yfinance
 2026-09-21,nan,nan,nan,nan,207.6,nan,nan,nan,transition,0,0,3,REGIME|IV_JUMP|CATALYST_WINDOW,yfinance
+2026-09-22,154.72,1.89,4.07,51.0,48.0,-3.0,59.2,-31.43,uptrend,0,0,3,REGIME|OI_WALL_NEAR|CATALYST_WINDOW,yfinance
