@@ -9,17 +9,9 @@
   "catalysts": {
     "horizon": [
       {
-        "confidence": "high",
-        "date": "2026-09-24",
-        "days": 0,
-        "event": "Lockup tranche 5 (~7%, ~328M sh)",
-        "kind": "lockup",
-        "note": "day 105; 2 sources"
-      },
-      {
         "confidence": "medium",
         "date": "2026-09-28",
-        "days": 4,
+        "days": 3,
         "event": "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
         "kind": "starship",
         "note": "SpaceX on X 9/17: as early as Mon Sep 28, pending regulatory approval (slipped from Sep 22, no reason given; prior NET Sep 15 / Sep 18). FAA launch license STILL outstanding as of 9/18. ~26 Starlink V3, ~6 orbits/~10h, Raptor relight, Pacific splashdown, no catch. CFO: first revenue-generating Starship mission",
@@ -30,7 +22,7 @@
       {
         "confidence": "high",
         "date": "2026-10-09",
-        "days": 15,
+        "days": 14,
         "event": "Lockup tranche 6 (~7%)",
         "kind": "lockup",
         "note": "day 120"
@@ -38,7 +30,7 @@
       {
         "confidence": "medium",
         "date": "2026-10-24",
-        "days": 30,
+        "days": 29,
         "event": "Lockup tranche 7 (~7%)",
         "kind": "lockup",
         "note": "day 135 (Saturday - effective next session)"
@@ -46,7 +38,7 @@
       {
         "confidence": "low",
         "date": "2026-11-03",
-        "days": 40,
+        "days": 39,
         "event": "Q3 2026 earnings",
         "kind": "earnings",
         "note": "Wall Street Horizon estimate; not company-confirmed",
@@ -67,7 +59,7 @@
       {
         "confidence": "low",
         "date": "2026-11-05",
-        "days": 42,
+        "days": 41,
         "event": "Lockup tranche 8 \u2014 28% / ~1.28B sh (4x anything prior)",
         "kind": "lockup",
         "note": "floats ~2 trading days after Q3 earnings; Q3 date not company-confirmed",
@@ -78,7 +70,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-08",
-        "days": 75,
+        "days": 74,
         "event": "Day 180 \u2014 bucket (iii) remainder + rolled failed-trigger shares (~798M sh)",
         "kind": "lockup",
         "note": "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"
@@ -86,26 +78,34 @@
       {
         "confidence": "low",
         "date": "2027-02-15",
-        "days": 144,
+        "days": 143,
         "event": "Q4/FY26 earnings \u2014 insider bucket (ii) begins",
         "kind": "earnings"
+      },
+      {
+        "confidence": "high",
+        "date": "2027-06-12",
+        "days": 260,
+        "event": "12-month seasoning clears (S&P 500 profitability test still fails)",
+        "kind": "index"
       }
     ],
     "lookahead_days": 10,
-    "recent": [],
-    "upcoming": [
+    "recent": [
       {
         "confidence": "high",
         "date": "2026-09-24",
-        "days": 0,
+        "days_ago": 1,
         "event": "Lockup tranche 5 (~7%, ~328M sh)",
         "kind": "lockup",
         "note": "day 105; 2 sources"
-      },
+      }
+    ],
+    "upcoming": [
       {
         "confidence": "medium",
         "date": "2026-09-28",
-        "days": 4,
+        "days": 3,
         "event": "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
         "kind": "starship",
         "note": "SpaceX on X 9/17: as early as Mon Sep 28, pending regulatory approval (slipped from Sep 22, no reason given; prior NET Sep 15 / Sep 18). FAA launch license STILL outstanding as of 9/18. ~26 Starlink V3, ~6 orbits/~10h, Raptor relight, Pacific splashdown, no catch. CFO: first revenue-generating Starship mission",
@@ -618,7 +618,14 @@
       "d": "2026-09-24",
       "h": 149.0,
       "l": 145.88,
-      "v": 72496135
+      "v": 72721400
+    },
+    {
+      "c": 148.68,
+      "d": "2026-09-25",
+      "h": 149.66,
+      "l": 146.0,
+      "v": 54270159
     }
   ],
   "history_tail": [
@@ -946,37 +953,54 @@
       "setups": "REGIME|CATALYST_WINDOW"
     },
     {
-      "atr_pct": 4.26,
-      "chg_1d_pct": -0.22,
-      "close": 148.03,
+      "atr_pct": "4.26",
+      "chg_1d_pct": "-0.22",
+      "close": "148.03",
       "date": "2026-09-24",
-      "from_ath_pct": -34.4,
-      "hv30": 43.8,
-      "iv30": 45.5,
-      "iv_hv_spread": 1.7,
+      "from_ath_pct": "-34.4",
+      "hv30": "43.8",
+      "iv30": "45.5",
+      "iv_hv_spread": "1.7",
+      "n_bearish": "0",
+      "n_bullish": "0",
+      "n_neutral": "3",
+      "price_source": "yfinance",
+      "regime": "uptrend",
+      "rsi": "52.2",
+      "setups": "COMPRESSION|REGIME|CATALYST_WINDOW"
+    },
+    {
+      "atr_pct": 4.25,
+      "chg_1d_pct": 0.44,
+      "close": 148.68,
+      "date": "2026-09-25",
+      "from_ath_pct": -34.11,
+      "hv30": 42.6,
+      "iv30": 44.8,
+      "iv_hv_spread": 2.2,
       "n_bearish": 0,
       "n_bullish": 0,
       "n_neutral": 3,
       "price_source": "yfinance",
       "regime": "uptrend",
-      "rsi": 52.2,
+      "rsi": 52.8,
       "setups": "COMPRESSION|REGIME|CATALYST_WINDOW"
     }
   ],
   "meta": {
-    "board_run_date": "2026-09-24",
+    "board_run_date": "2026-09-25",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
       "bar_age_days": 0,
       "errors": [],
-      "last_bar": "2026-09-24",
-      "rows": 72,
+      "last_bar": "2026-09-25",
+      "rows": 73,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-09-24T23:58:42",
+    "run_at": "2026-09-25T23:58:44",
     "ticker": "SPCX",
-    "today": "2026-09-24",
+    "today": "2026-09-25",
     "warnings": []
   },
   "noise": [
@@ -993,38 +1017,38 @@
     "ath_date": "2026-06-16",
     "atl": 104.83,
     "atl_date": "2026-08-03",
-    "atr": 6.3,
-    "atr_pct": 4.26,
-    "bars": 72,
-    "chg_1d_pct": -0.22,
-    "chg_20d_pct": 6.02,
-    "chg_5d_pct": -4.38,
-    "close": 148.03,
-    "close_loc": 0.69,
-    "date": "2026-09-24",
-    "dist_sma20_atr": 0.0,
-    "dist_sma20_pct": 0.02,
-    "dist_sma50_atr": 1.98,
-    "dist_sma50_pct": 9.19,
-    "from_ath_pct": -34.4,
-    "from_atl_pct": 41.21,
-    "from_ipo_pct": 9.65,
-    "gap_pct": -0.1,
-    "hv10": 45.4,
-    "hv30": 43.8,
+    "atr": 6.31,
+    "atr_pct": 4.25,
+    "bars": 73,
+    "chg_1d_pct": 0.44,
+    "chg_20d_pct": 5.54,
+    "chg_5d_pct": -2.64,
+    "close": 148.68,
+    "close_loc": 0.73,
+    "date": "2026-09-25",
+    "dist_sma20_atr": 0.05,
+    "dist_sma20_pct": 0.19,
+    "dist_sma50_atr": 2.02,
+    "dist_sma50_pct": 9.39,
+    "from_ath_pct": -34.11,
+    "from_atl_pct": 41.83,
+    "from_ipo_pct": 10.13,
+    "gap_pct": 0.24,
+    "hv10": 44.1,
+    "hv30": 42.6,
     "prior_range_high": 158.13,
-    "prior_range_low": 135.1,
+    "prior_range_low": 137.9,
     "range_compression": 0.45,
     "range_high": 158.13,
     "range_low": 137.9,
-    "range_pos": 0.5,
-    "rsi": 52.2,
-    "sma20": 148.01,
-    "sma50": 135.57,
-    "streak": -2,
-    "volume": 72496135,
-    "volume_vs_avg": 0.81,
-    "volume_z": -0.27
+    "range_pos": 0.53,
+    "rsi": 52.8,
+    "sma20": 148.4,
+    "sma50": 135.92,
+    "streak": 1,
+    "volume": 54270159,
+    "volume_vs_avg": 0.6,
+    "volume_z": -0.58
   },
   "setups": [
     {
@@ -1039,7 +1063,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "Close 148.03; SMA20 148.01; SMA50 135.57.",
+      "evidence": "Close 148.68; SMA20 148.4; SMA50 135.92.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: uptrend",
@@ -1049,10 +1073,10 @@
     },
     {
       "direction": "neutral",
-      "evidence": "2026-09-28 (medium date confidence). Front-expiry expected move \u00b15.5%.",
+      "evidence": "2026-09-28 (medium date confidence). Front-expiry expected move \u00b15.0%.",
       "id": "CATALYST_WINDOW",
       "long_read": "Binary event ahead. New directional entries are a bet on the event, not on the setup. Price moves into these are on the noise list.",
-      "name": "Catalyst within 4d: STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
+      "name": "Catalyst within 3d: STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
       "short_read": "Same. Note the pattern so far: the market sold into both the Aug 4 print and the Aug 6 unlock, then rallied once supply arrived.",
       "strength": 3,
       "tag": "catalyst"
@@ -1060,104 +1084,104 @@
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 5.5,
-    "expected_move_usd": 8.18,
+    "expected_move_pct": 5.0,
+    "expected_move_usd": 7.38,
     "float_as_of": "2026-08-14",
-    "front_dte": 8.0,
+    "front_dte": 7.0,
     "front_expiry": "2026-10-02",
-    "gex_musd_per_1pct": -5.2,
-    "hv10": 45.4,
-    "hv30": 43.8,
-    "iv30": 45.5,
-    "iv30_chg_1d": -3.3,
-    "iv90": 50.3,
-    "iv_front": 44.8,
-    "iv_history_days": 20,
-    "iv_hv_spread": 1.7,
+    "gex_musd_per_1pct": 11.1,
+    "hv10": 44.1,
+    "hv30": 42.6,
+    "iv30": 44.8,
+    "iv30_chg_1d": -0.7,
+    "iv90": 49.3,
+    "iv_front": 42.4,
+    "iv_history_days": 21,
+    "iv_hv_spread": 2.2,
     "iv_percentile": 0.0,
     "iv_rank": 0.0,
     "iv_rank_meaningful": false,
     "oi_walls": {
       "calls": [
         {
-          "oi": 56586,
+          "oi": 59631,
           "strike": 160.0
         },
         {
-          "oi": 41812,
-          "strike": 200.0
+          "oi": 48311,
+          "strike": 180.0
         },
         {
-          "oi": 40995,
+          "oi": 45916,
           "strike": 150.0
         }
       ],
       "puts": [
         {
-          "oi": 75761,
+          "oi": 75748,
           "strike": 100.0
         },
         {
-          "oi": 50237,
+          "oi": 53254,
           "strike": 135.0
         },
         {
-          "oi": 47540,
+          "oi": 44272,
           "strike": 110.0
         }
       ],
       "window_dte": 60
     },
-    "put_call_oi": 1.16,
-    "short_as_of": "2026-08-31",
-    "short_days_to_cover": 1.6,
-    "short_pct_float": 2.8,
-    "short_pct_outstanding": 2.8,
-    "short_pct_public_float": 11.2,
-    "short_shares_m": 173.6,
-    "skew25_30d": -2.1,
-    "skew25_front": -1.8,
-    "skew_chg_1d": -1.1,
-    "snapshot_date": "2026-09-24",
+    "put_call_oi": 1.11,
+    "short_as_of": "2026-09-15",
+    "short_days_to_cover": 2.1,
+    "short_pct_float": 2.6,
+    "short_pct_outstanding": 2.6,
+    "short_pct_public_float": 10.5,
+    "short_shares_m": 162.3,
+    "skew25_30d": -1.0,
+    "skew25_front": 0.1,
+    "skew_chg_1d": 1.1,
+    "snapshot_date": "2026-09-25",
     "term": [
       {
-        "atm_iv": 44.8,
-        "dte": 8,
+        "atm_iv": 42.4,
+        "dte": 7,
         "expiry": "2026-10-02"
       },
       {
-        "atm_iv": 45.1,
-        "dte": 15,
+        "atm_iv": 44.0,
+        "dte": 14,
         "expiry": "2026-10-09"
       },
       {
-        "atm_iv": 44.9,
-        "dte": 22,
+        "atm_iv": 43.9,
+        "dte": 21,
         "expiry": "2026-10-16"
       },
       {
-        "atm_iv": 45.4,
-        "dte": 29,
+        "atm_iv": 44.4,
+        "dte": 28,
         "expiry": "2026-10-23"
       },
       {
-        "atm_iv": 46.3,
-        "dte": 36,
+        "atm_iv": 45.7,
+        "dte": 35,
         "expiry": "2026-10-30"
       },
       {
-        "atm_iv": 51.4,
-        "dte": 57,
+        "atm_iv": 50.2,
+        "dte": 56,
         "expiry": "2026-11-20"
       },
       {
-        "atm_iv": 50.3,
-        "dte": 85,
+        "atm_iv": 49.3,
+        "dte": 84,
         "expiry": "2026-12-18"
       }
     ],
-    "term_slope": 4.8,
-    "total_call_oi": 833999.0,
-    "total_put_oi": 965589.0
+    "term_slope": 4.5,
+    "total_call_oi": 877533.0,
+    "total_put_oi": 974706.0
   }
 }
