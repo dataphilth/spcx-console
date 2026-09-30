@@ -2,7 +2,7 @@
   "bias_audit": {
     "bearish": 0,
     "bullish": 2,
-    "neutral": 63,
+    "neutral": 67,
     "skew": 1.0,
     "window_days": 30
   },
@@ -11,7 +11,7 @@
       {
         "confidence": "high",
         "date": "2026-10-09",
-        "days": 10,
+        "days": 9,
         "event": "Lockup tranche 6 (~7%)",
         "kind": "lockup",
         "note": "day 120"
@@ -19,7 +19,7 @@
       {
         "confidence": "medium",
         "date": "2026-10-24",
-        "days": 25,
+        "days": 24,
         "event": "Lockup tranche 7 (~7%)",
         "kind": "lockup",
         "note": "day 135 (Saturday - effective next session)"
@@ -27,7 +27,7 @@
       {
         "confidence": "low",
         "date": "2026-11-03",
-        "days": 35,
+        "days": 34,
         "event": "Q3 2026 earnings",
         "kind": "earnings",
         "note": "Wall Street Horizon estimate; not company-confirmed",
@@ -48,7 +48,7 @@
       {
         "confidence": "low",
         "date": "2026-11-05",
-        "days": 37,
+        "days": 36,
         "event": "Lockup tranche 8 \u2014 28% / ~1.28B sh (4x anything prior)",
         "kind": "lockup",
         "note": "floats ~2 trading days after Q3 earnings; Q3 date not company-confirmed",
@@ -59,7 +59,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-08",
-        "days": 70,
+        "days": 69,
         "event": "Day 180 \u2014 bucket (iii) remainder + rolled failed-trigger shares (~798M sh)",
         "kind": "lockup",
         "note": "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"
@@ -67,21 +67,21 @@
       {
         "confidence": "low",
         "date": "2027-02-15",
-        "days": 139,
+        "days": 138,
         "event": "Q4/FY26 earnings \u2014 insider bucket (ii) begins",
         "kind": "earnings"
       },
       {
         "confidence": "high",
         "date": "2027-06-12",
-        "days": 256,
+        "days": 255,
         "event": "12-month seasoning clears (S&P 500 profitability test still fails)",
         "kind": "index"
       },
       {
         "confidence": "medium",
         "date": "2027-06-13",
-        "days": 257,
+        "days": 256,
         "event": "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)",
         "kind": "lockup"
       }
@@ -91,7 +91,7 @@
       {
         "confidence": "high",
         "date": "2026-09-24",
-        "days_ago": 5,
+        "days_ago": 6,
         "event": "Lockup tranche 5 (~7%, ~328M sh)",
         "kind": "lockup",
         "note": "day 105; 2 sources"
@@ -99,7 +99,7 @@
       {
         "confidence": "medium",
         "date": "2026-09-28",
-        "days_ago": 1,
+        "days_ago": 2,
         "event": "STARSHIP FLIGHT 14 - first orbital attempt; no ship catch (dropped 8/20)",
         "kind": "starship",
         "note": "SpaceX on X 9/17: as early as Mon Sep 28, pending regulatory approval (slipped from Sep 22, no reason given; prior NET Sep 15 / Sep 18). FAA launch license STILL outstanding as of 9/18. ~26 Starlink V3, ~6 orbits/~10h, Raptor relight, Pacific splashdown, no catch. CFO: first revenue-generating Starship mission",
@@ -112,7 +112,7 @@
       {
         "confidence": "high",
         "date": "2026-10-09",
-        "days": 10,
+        "days": 9,
         "event": "Lockup tranche 6 (~7%)",
         "kind": "lockup",
         "note": "day 120"
@@ -629,14 +629,21 @@
       "d": "2026-09-25",
       "h": 149.67,
       "l": 146.0,
-      "v": 54421300
+      "v": 54595200
     },
     {
-      "c": NaN,
+      "c": 145.47,
       "d": "2026-09-28",
       "h": 150.8,
       "l": 145.36,
-      "v": 81663371
+      "v": 83516700
+    },
+    {
+      "c": NaN,
+      "d": "2026-09-29",
+      "h": 150.06,
+      "l": 145.47,
+      "v": 79711331
     }
   ],
   "history_tail": [
@@ -998,40 +1005,55 @@
       "setups": "COMPRESSION|REGIME|CATALYST_WINDOW"
     },
     {
+      "atr_pct": "nan",
+      "chg_1d_pct": "nan",
+      "close": "nan",
+      "date": "2026-09-28",
+      "from_ath_pct": "nan",
+      "hv30": "nan",
+      "iv30": "44.8",
+      "iv_hv_spread": "nan",
+      "n_bearish": "0",
+      "n_bullish": "0",
+      "n_neutral": "2",
+      "price_source": "yfinance",
+      "regime": "transition",
+      "rsi": "nan",
+      "setups": "COMPRESSION|REGIME"
+    },
+    {
       "atr_pct": NaN,
       "chg_1d_pct": NaN,
       "close": NaN,
-      "date": "2026-09-28",
+      "date": "2026-09-29",
       "from_ath_pct": NaN,
       "hv30": NaN,
-      "iv30": 44.8,
+      "iv30": 149.6,
       "iv_hv_spread": NaN,
       "n_bearish": 0,
       "n_bullish": 0,
-      "n_neutral": 2,
+      "n_neutral": 4,
       "price_source": "yfinance",
       "regime": "transition",
       "rsi": NaN,
-      "setups": "COMPRESSION|REGIME"
+      "setups": "COMPRESSION|REGIME|SKEW_CALL_RICH|IV_JUMP"
     }
   ],
   "meta": {
-    "board_run_date": "2026-09-29",
+    "board_run_date": "2026-09-30",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
       "bar_age_days": 1,
       "errors": [],
-      "last_bar": "2026-09-28",
-      "rows": 74,
+      "last_bar": "2026-09-29",
+      "rows": 75,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-09-29T01:04:52",
+    "run_at": "2026-09-30T00:35:42",
     "ticker": "SPCX",
-    "today": "2026-09-29",
-    "warnings": [
-      "OPTIONS CHAIN UNAVAILABLE \u2014 no listed expiries. IV carried from the last snapshot if one exists."
-    ]
+    "today": "2026-09-30",
+    "warnings": []
   },
   "noise": [
     "Any single-day or single-week price move, in either direction",
@@ -1047,15 +1069,15 @@
     "ath_date": "2026-06-16",
     "atl": 104.83,
     "atl_date": "2026-08-03",
-    "atr": 6.31,
+    "atr": 6.33,
     "atr_pct": NaN,
-    "bars": 74,
+    "bars": 75,
     "chg_1d_pct": NaN,
     "chg_20d_pct": NaN,
     "chg_5d_pct": NaN,
     "close": NaN,
     "close_loc": NaN,
-    "date": "2026-09-28",
+    "date": "2026-09-29",
     "dist_sma20_atr": NaN,
     "dist_sma20_pct": NaN,
     "dist_sma50_atr": NaN,
@@ -1063,12 +1085,12 @@
     "from_ath_pct": NaN,
     "from_atl_pct": NaN,
     "from_ipo_pct": NaN,
-    "gap_pct": -0.12,
+    "gap_pct": 0.84,
     "hv10": NaN,
     "hv30": NaN,
     "prior_range_high": 158.13,
-    "prior_range_low": 137.9,
-    "range_compression": 0.44,
+    "prior_range_low": 138.17,
+    "range_compression": 0.45,
     "range_high": 158.13,
     "range_low": 138.17,
     "range_pos": NaN,
@@ -1076,14 +1098,14 @@
     "sma20": NaN,
     "sma50": NaN,
     "streak": 0,
-    "volume": 81663371,
-    "volume_vs_avg": 0.91,
-    "volume_z": -0.13
+    "volume": 79711331,
+    "volume_vs_avg": 0.87,
+    "volume_z": -0.19
   },
   "setups": [
     {
       "direction": "neutral",
-      "evidence": "Last 20-day range is 44% of the prior window's.",
+      "evidence": "Last 20-day range is 45% of the prior window's.",
       "id": "COMPRESSION",
       "long_read": "Squeeze setup: direction unknown; the expansion tends to be large. A long waits for the upside break, not the squeeze itself.",
       "name": "Range compression",
@@ -1100,28 +1122,78 @@
       "short_read": "Trend-following shorts want downtrend + rally-to-SMA20 entries.",
       "strength": 1,
       "tag": "regime"
+    },
+    {
+      "direction": "neutral",
+      "evidence": "30-day 25\u0394 skew -21 pts \u2014 calls bid above puts, unusual for a single stock. \u03941d -20.1.",
+      "id": "SKEW_CALL_RICH",
+      "long_read": "Upside is what's being chased. Buying calls here pays a premium; the cheap long expression is stock or call spreads that sell the rich wing.",
+      "name": "25\u0394 calls rich vs puts",
+      "short_read": "Puts are relatively cheap while the crowd chases upside \u2014 the classic setup for a cheap hedge or a cheap short expression. Inverted skew also shows up in squeezes; it says crowded, not wrong.",
+      "strength": 2,
+      "tag": "vol"
+    },
+    {
+      "direction": "neutral",
+      "evidence": "IV30 149.6 vs prior session; HV30 nan.",
+      "id": "IV_JUMP",
+      "long_read": "IV up: the market just re-priced the event risk \u2014 long-vol positions gained, new ones cost more. IV down: the event passed or the crowd relaxed; long-vol entries got cheaper.",
+      "name": "IV30 moved +105 pts in a day",
+      "short_read": "Same read, mirrored. A vol crush after a catalyst is the moment short-premium structures earn; a spike into one is the moment they lose.",
+      "strength": 2,
+      "tag": "technical"
     }
   ],
   "vol": {
-    "carried": true,
-    "expected_move_pct": 5.0,
-    "expected_move_usd": 7.38,
+    "carried": false,
+    "expected_move_pct": NaN,
+    "expected_move_usd": 74.38,
     "float_as_of": "2026-08-14",
-    "front_dte": 7.0,
-    "front_expiry": "2026-10-02",
-    "gex_musd_per_1pct": 11.1,
+    "front_dte": 9.0,
+    "front_expiry": "2026-10-09",
+    "gex_musd_per_1pct": NaN,
     "hv10": NaN,
     "hv30": NaN,
-    "iv30": 44.8,
-    "iv30_chg_1d": null,
-    "iv90": 49.3,
-    "iv_front": 42.4,
-    "iv_history_days": 21,
+    "iv30": 149.6,
+    "iv30_chg_1d": 104.8,
+    "iv90": 169.5,
+    "iv_front": 179.7,
+    "iv_history_days": 22,
     "iv_hv_spread": NaN,
-    "iv_percentile": 0.0,
-    "iv_rank": 0.0,
+    "iv_percentile": 95.5,
+    "iv_rank": 100.0,
     "iv_rank_meaningful": false,
-    "oi_walls": {},
+    "oi_walls": {
+      "calls": [
+        {
+          "oi": 23365,
+          "strike": 180.0
+        },
+        {
+          "oi": 19205,
+          "strike": 160.0
+        },
+        {
+          "oi": 15717,
+          "strike": 150.0
+        }
+      ],
+      "puts": [
+        {
+          "oi": 23934,
+          "strike": 100.0
+        },
+        {
+          "oi": 22437,
+          "strike": 135.0
+        },
+        {
+          "oi": 22215,
+          "strike": 110.0
+        }
+      ],
+      "window_dte": 60
+    },
     "put_call_oi": 1.11,
     "short_as_of": "2026-09-15",
     "short_days_to_cover": 2.1,
@@ -1129,13 +1201,44 @@
     "short_pct_outstanding": 2.6,
     "short_pct_public_float": 10.5,
     "short_shares_m": 162.3,
-    "skew25_30d": -1.0,
-    "skew25_front": 0.1,
-    "skew_chg_1d": null,
-    "snapshot_date": "2026-09-25",
-    "term": [],
-    "term_slope": 4.5,
-    "total_call_oi": 877533.0,
-    "total_put_oi": 974706.0
+    "skew25_30d": -21.1,
+    "skew25_front": 151.6,
+    "skew_chg_1d": -20.1,
+    "snapshot_date": "2026-09-30",
+    "term": [
+      {
+        "atm_iv": 179.7,
+        "dte": 9,
+        "expiry": "2026-10-09"
+      },
+      {
+        "atm_iv": 131.3,
+        "dte": 23,
+        "expiry": "2026-10-23"
+      },
+      {
+        "atm_iv": 149.6,
+        "dte": 30,
+        "expiry": "2026-10-30"
+      },
+      {
+        "atm_iv": 69.6,
+        "dte": 37,
+        "expiry": "2026-11-06"
+      },
+      {
+        "atm_iv": 50.0,
+        "dte": 51,
+        "expiry": "2026-11-20"
+      },
+      {
+        "atm_iv": 169.5,
+        "dte": 79,
+        "expiry": "2026-12-18"
+      }
+    ],
+    "term_slope": 19.9,
+    "total_call_oi": 811204.0,
+    "total_put_oi": 904305.0
   }
 }
