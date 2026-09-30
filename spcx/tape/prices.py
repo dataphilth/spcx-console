@@ -8,6 +8,7 @@ A run with no fresh source still runs, but flags the bars as stale.
 from __future__ import annotations
 
 import csv
+import math
 import io
 import logging
 from datetime import date
@@ -24,37 +25,43 @@ def _row(d: str, o, h, lo, c, v) -> dict | None:
     try:
         r = {"date": d[:10], "open": float(o), "high": float(h), "low": float(lo), "close": float(c),
              "volume": int(float(v or 0))}
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
+    if not all(math.isfinite(r[k]) for k in ("open", "high", "low", "close")):
+        return None  # a half-built bar (source returned NaN) - never let it into the cache
     date.fromisoformat(r["date"])
     return r
 
 
-def fetch_yfinance(ticker: str) -> list[dict]:
+def _clean(raw, dropped: list | None = None) -> list[dict]:
+    """(date, o, h, l, c, v) tuples -> bars; records the date of any row that fails _row."""
+    out = []
+    for t in raw:
+        row = _row(*t)
+        if row:
+            out.append(row)
+        elif dropped is not None and t[0]:
+            dropped.append(str(t[0])[:10])
+    return out
+
+
+def fetch_yfinance(ticker: str, dropped: list | None = None) -> list[dict]:
     import yfinance as yf  # optional; absent in the test environment
 
     hist = yf.Ticker(ticker).history(period="1y", auto_adjust=False)
     if hist is None or hist.empty:
         raise RuntimeError("yfinance returned no rows")
-    out = []
-    for idx, r in hist.iterrows():
-        row = _row(str(idx)[:10], r["Open"], r["High"], r["Low"], r["Close"], r.get("Volume", 0))
-        if row:
-            out.append(row)
-    return out
+    return _clean(((str(idx)[:10], r["Open"], r["High"], r["Low"], r["Close"], r.get("Volume", 0))
+                   for idx, r in hist.iterrows()), dropped)
 
 
-def fetch_stooq(ticker: str) -> list[dict]:
+def fetch_stooq(ticker: str, dropped: list | None = None) -> list[dict]:
     url = STOOQ.format(sym=ticker.lower())
     text = get(url).decode()
     if "No data" in text[:200] or "Date" not in text[:100]:
         raise RuntimeError("stooq returned no usable CSV")
-    out = []
-    for r in csv.DictReader(io.StringIO(text)):
-        row = _row(r.get("Date", ""), r.get("Open"), r.get("High"), r.get("Low"), r.get("Close"), r.get("Volume"))
-        if row:
-            out.append(row)
-    return out
+    return _clean(((r.get("Date", ""), r.get("Open"), r.get("High"), r.get("Low"), r.get("Close"), r.get("Volume"))
+                   for r in csv.DictReader(io.StringIO(text))), dropped)
 
 
 def load_cache(path: Path) -> list[dict]:
@@ -87,7 +94,9 @@ def get_bars(ticker: str, cache_path: Path, offline: bool = False, today: date |
     if not offline:
         for name, fn in (("yfinance", fetch_yfinance), ("stooq", fetch_stooq)):
             try:
-                fresh = fn(ticker)
+                dropped: list[str] = []
+                fresh = fn(ticker, dropped=dropped)
+                meta["dropped_bars"] = dropped
                 meta["source"] = name
                 break
             except Exception as exc:  # noqa: BLE001 — keep going on any failure

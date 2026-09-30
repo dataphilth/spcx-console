@@ -17,7 +17,7 @@ import yaml
 
 from ..store import ROOT
 from . import catalysts as cat
-from . import options, prices, setups, technical
+from . import options, prices, setups, technical, volume
 
 log = logging.getLogger(__name__)
 TAPE_CONFIG = ROOT / "config" / "tape.yaml"
@@ -67,6 +67,11 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     if px_meta["stale"]:
         warnings.append(f"PRICE BARS STALE — last bar {px_meta['last_bar']} via {px_meta['source']}; errors: {px_meta['errors']}")
     tech = technical.compute(bars, p, ipo_price)
+    if px_meta.get("dropped_bars"):
+        warnings.append(f"INCOMPLETE BAR DROPPED - {', '.join(px_meta['dropped_bars'])} came back from "
+                        f"{px_meta['source']} with missing prices; the tape reflects the last complete session "
+                        f"({px_meta['last_bar']}) and fills in on the next run")
+    vprof = volume.profile(bars, tech.get("atr"), cfg["catalysts"], p)
     chart = technical.chart_series(bars, p.get("history_bars_for_chart", 90))
 
     # ---- options ---------------------------------------------------------
@@ -143,7 +148,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         "meta": {"run_at": datetime.now().isoformat(timespec="seconds"), "today": today.isoformat(), "ticker": ticker,
                  "price_source": px_meta, "warnings": warnings, "board_run_date": board.get("run_date"),
                  "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades."},
-        "price": tech, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
+        "price": tech, "volume": vprof, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
         "noise": cfg.get("noise", []), "history_tail": history[-30:],
     }
     (data_dir / "tape.json").write_text(json.dumps(tape, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")
@@ -170,6 +175,12 @@ def brief(tape: dict) -> str:
         term = v.get("term") or []
         if term:
             L.append("  term: " + " · ".join(f"{t_['expiry'][5:]} {t_['atm_iv']}" for t_ in term))
+    vp = tape.get("volume") or {}
+    if vp.get("rvol20") is not None:
+        cal = "; ".join(c["event"] for c in vp.get("calendar") or []) or "nothing scheduled"
+        L.append(f"  volume {vp['shares']:,} = {vp['rvol20']}x 20d avg ({vp['label']}) | 60d {vp.get('rvol60')}x | "
+                 f"3d {vp.get('rvol_3d')}x | 5d {vp.get('rvol_5d')}x | heaviest since {vp.get('heaviest_since')} | "
+                 f"calendar: {cal}" + (" | NEEDS EXPLAINING" if vp.get("needs_explaining") else ""))
     for c in tape["catalysts"]["upcoming"]:
         L.append(f"  T-{c['days']}d {c['date']} {c['event']} ({c['confidence']})")
     for s in tape["setups"]:
