@@ -7,8 +7,9 @@ forecasts:
   resolve_by: '2026-10-15'
   basis: Flight 13 heat shield performed well enough for SpaceX to commit to an orbital profile; two consecutive
     precision splashdowns satisfied the stated gate. Slip risk is higher than failure risk.
-  outcome: null
-  resolved_on: null
+  outcome: true
+  resolved_on: '2026-10-02'
+  resolution_note: Orbital insertion achieved on the first attempt, Sep 28 2026
 - id: f0002
   made_on: '2026-08-20'
   statement: Starship Flight 14 achieves a successful ship tower catch on the same flight.
@@ -17,8 +18,9 @@ forecasts:
   resolve_by: '2026-10-15'
   basis: Categorically harder than a booster catch, never attempted, and contingent on FAA approval that
     had not been granted as of Aug 20.
-  outcome: null
-  resolved_on: null
+  outcome: false
+  resolved_on: '2026-10-02'
+  resolution_note: No ship catch attempted on Flight 14 (dropped Aug 20)
 - id: f0003
   made_on: '2026-08-20'
   statement: Q3 2026 capex exceeds Q3 2026 revenue, firing L13 at three consecutive quarters.
@@ -36,8 +38,9 @@ forecasts:
   probability: 0.55
   resolve_by: '2026-10-01'
   basis: Sep 28 company-announced but license still outstanding 9/18; four slips in five weeks
-  outcome: null
-  resolved_on: null
+  outcome: true
+  resolved_on: '2026-10-02'
+  resolution_note: Flight 14 lifted off Sep 28 2026 (Space.com live coverage)
 - id: f0005
   made_on: '2026-09-21'
   statement: Amazon Leo exceeds 450 satellites in the Celestrak kuiper group by 2026-11-30
