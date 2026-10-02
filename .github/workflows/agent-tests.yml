@@ -1,0 +1,25 @@
+name: agent-tests
+
+# Runs the test suite on every pull request into main.
+# Read-only: this job runs pull-request code, so it gets no write access.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements-dev.txt
+
+      - run: python -m pytest -q
