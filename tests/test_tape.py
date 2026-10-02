@@ -182,6 +182,8 @@ def test_short_interest_uses_public_float(tmp_path):
     options.append_history({"date": "2026-08-25", "spot": 138.0, "iv30": 54.0, "short_shares_m": 435.0, "short_pct_float": 3.3,
                             "short_days_to_cover": 2.9, "short_as_of": "2026-07-30"}, tmp_path / "iv_history.csv")
     board = json.loads((ROOT / "data" / "latest.json").read_text(encoding="utf-8"))
-    tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=tape_run.load_tape_config(), data_dir=tmp_path, board=board)
+    cfg = tape_run.load_tape_config()
+    cfg["share_structure"]["public_float_b"] = 1.55  # pinned here so this test never depends on the live float in config/tape.yaml
+    tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
     assert tape["vol"]["short_pct_public_float"] == pytest.approx(28.1, abs=0.1)
     assert tape["vol"]["short_pct_outstanding"] == 3.3
