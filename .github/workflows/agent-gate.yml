@@ -1,0 +1,77 @@
+name: agent-gate
+
+# Decides what happens to an agent pull request after agent-tests passes.
+#   Routine change  -> merged automatically.
+#   Anything else   -> left open with a comment, for the owner to approve.
+#
+# "Routine" means the pull request only MODIFIES files on the allowlist below.
+# Those files are tape context and the forecast log. Neither can move a
+# criterion's status. Everything else (manual_state, criteria, code, workflows)
+# always waits for a human.
+#
+# This workflow never checks out or runs pull-request code, and GitHub always
+# takes its definition from main, so a pull request cannot rewrite its own gate.
+on:
+  workflow_run:
+    workflows: ["agent-tests"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gate:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'claude/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge routine changes, flag the rest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ALLOWLIST: "config/tape.yaml data/forecasts.yaml"
+        run: |
+          set -euo pipefail
+
+          PR=$(gh api "repos/$REPO/pulls?state=open&head=$OWNER:$HEAD_BRANCH" --jq '.[0].number // empty')
+          if [ -z "$PR" ]; then
+            echo "No open pull request for $HEAD_BRANCH. Nothing to do."
+            exit 0
+          fi
+
+          PR_SHA=$(gh api "repos/$REPO/pulls/$PR" --jq '.head.sha')
+          PR_AUTHOR=$(gh api "repos/$REPO/pulls/$PR" --jq '.user.login')
+          PR_BASE=$(gh api "repos/$REPO/pulls/$PR" --jq '.base.ref')
+
+          if [ "$PR_SHA" != "$HEAD_SHA" ]; then
+            echo "Pull request moved on since these tests ran. Waiting for the newer run."
+            exit 0
+          fi
+          if [ "$PR_AUTHOR" != "$OWNER" ] || [ "$PR_BASE" != "main" ]; then
+            echo "Not an owner pull request into main. Leaving it alone."
+            exit 0
+          fi
+
+          BLOCKERS=""
+          while IFS=$'\t' read -r STATUS FILE; do
+            [ -z "$FILE" ] && continue
+            OK=no
+            for ALLOWED in $ALLOWLIST; do
+              if [ "$FILE" = "$ALLOWED" ] && [ "$STATUS" = "modified" ]; then OK=yes; fi
+            done
+            if [ "$OK" = "no" ]; then BLOCKERS="$BLOCKERS"$'\n'"- $FILE ($STATUS)"; fi
+          done < <(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[] | [.status, .filename] | @tsv')
+
+          if [ -z "$BLOCKERS" ]; then
+            gh pr merge "$PR" --repo "$REPO" --squash --match-head-commit "$HEAD_SHA"
+            gh pr comment "$PR" --repo "$REPO" --body "Merged by the gate: tests passed and this only touches routine files ($ALLOWLIST)."
+          else
+            gh pr comment "$PR" --repo "$REPO" --body "Tests passed. Waiting for your approval because this changes files outside the routine list:$BLOCKERS"
+          fi
