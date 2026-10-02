@@ -19,7 +19,7 @@ metrics:
   starlink_subscribers:            {value: 12.0,  period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
   starlink_net_adds_qoq:           {value: 1.7,   period: 2026Q2, as_of: "2026-08-04", source: "SEC Q2 2026 earnings release", confidence: high}
   starlink_arpu:                   {value: 66,    period: 2026Q2, as_of: "2026-08-04", source: "Press reporting of disclosed figures", confidence: medium}
-  starship_orbital_flights:        {value: 0,     period: cumulative, as_of: "2026-07-24", source: "Flight 13, suborbital, July 24 2026", confidence: high}
+  starship_orbital_flights:        {value: 1,     period: cumulative, as_of: "2026-09-28", source: "Flight 14, first orbital insertion, Sep 28 2026 (Space.com live coverage 9/28; NASASpaceflight wrap 9/28)", confidence: high}
   amazon_leo_enterprise_losses:    {value: 2,     period: cumulative, as_of: "2026-09-06", source: "Delta (Apr 6 2026), JetBlue. NOT counted: AT&T-Leo deal (Feb 4 2026, Amazon press primary) - carrier partnership, classification as account #3 pending ruling", confidence: high}
   short_interest_pct_float:        {value: 28,    period: 2026-08-14, as_of: "2026-08-14", source: "Fintel — range reported 25-32%, midpoint taken", confidence: low}
 
@@ -56,9 +56,9 @@ states:
     source: "Debt issuance reporting"
   starship_orbit_and_catch:
     state: nearing
-    detail: "Flight 14 (Ship 41 / Booster 21): orbit attempt only; ship catch dropped Aug 20, so S5 cannot fire on this flight. Slipped Sep 15 -> Sep 18 -> Sep 22 -> NET Mon Sep 28 2026 (SpaceX on X, Sep 17, pending regulatory approval; no reason given). FAA launch-license modification STILL outstanding as of Sep 18. ~26 Starlink V3, ~6 orbits over ~10h, in-space Raptor relight, Pacific splashdown. Flight 15 (Booster 22 / Ship 42) is the earliest realistic catch opportunity - Musk on camera Sep 15: Flight 15 will be caught; Ship 42 catch rehearsal at Pad 2 Sep 12."
-    as_of: "2026-09-18"
-    source: "SpaceX on X 9/17 (Sep 28); Space.com + TeslaNorth 9/17 (license outstanding); NSF 9/14 (Sep 22 slip, S42 rehearsal); Starlust 9/15 (Musk F15 catch); NSF 9/9 (Flight 15 pairing)"
+    detail: "ORBIT ACHIEVED on Flight 14 (Ship 41 / Booster 21), Mon Sep 28 2026 - the first orbital insertion in 14 flights. One Raptor shut down early on ascent; the insertion burn completed on a single engine at about 275 km. All 26 Starlink V3 satellites deployed - the first revenue-generating Starship flight. The ship came back after one orbit (about 3 hours), by design. Ship 41 was LOST at splashdown: it hit the Pacific, tipped and was destroyed. Booster 21 made a soft Gulf splashdown. No catch was attempted, so the catch half of this condition is still open. Flight 15 (Booster 22 / Ship 42) is the first catch attempt; NASASpaceflight estimates it could fly by end of October, no date set."
+    as_of: "2026-09-30"
+    source: "Space.com live coverage 9/28 (liftoff, insertion, deploy); NASASpaceflight wrap 9/28 (one orbit, about 3h, booster); Starlust 9/28 (ship lost at splashdown); NASASpaceflight 9/30 (Flight 15 timing)"
   november_tranche:
     state: clear
     detail: "Pending. ~1.28B shares, ~28%, around Nov 5 2026."
