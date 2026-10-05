@@ -123,6 +123,14 @@ def _eval_threshold(c: dict, history: list[Snapshot]) -> tuple[str, Any, float |
             status = "clear"  # deadline passed without the condition being met
     if required > 1:
         detail += f" · {streak}/{required} periods"
+
+    # A cumulative count only ever goes up. Once it has reached the threshold
+    # of a "fewer than N" condition, that condition can never hold again, so
+    # it is settled rather than close. Without this, a count sitting exactly
+    # on the threshold scores as maximally near and tops the watch list.
+    if pairs[-1][0] == "cumulative" and op in ("lt", "lte") and not test(latest):
+        status, prox = "clear", 0.0
+        detail += " · settled: a cumulative count cannot fall back"
     return status, latest, prox, streak, detail
 
 

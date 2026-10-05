@@ -181,6 +181,26 @@ def test_deadline_criterion_clears_if_the_condition_resolved_in_time():
     assert evaluate_one(past, hist, {}).status == "clear"
 
 
+def test_cumulative_count_at_the_threshold_is_settled_not_nearing():
+    """One orbital flight against "fewer than 1" is over, not close.
+
+    A cumulative count cannot fall back, so the condition can never hold
+    again. It must not sit on the watch list as the closest to firing.
+    """
+    hist = [snap("2026-08-01", "orbital", 0, period="cumulative"),
+            snap("2026-09-28", "orbital", 1, period="cumulative")]
+    e = evaluate_one(DEADLINE, hist, {})
+    assert e.status == "clear"
+    assert e.proximity == 0.0
+    assert "settled" in e.detail
+
+
+def test_non_cumulative_reading_near_the_threshold_still_nears():
+    """The settled rule is only for counts that cannot fall. Others keep the band."""
+    hist = [snap("2026-09-28", "orbital", 1, period="2026Q3")]
+    assert evaluate_one(DEADLINE, hist, {}).status == "nearing"
+
+
 # ---------------------------------------------------------------------------
 # A gap that cannot close must not be reported like one that is merely waiting.
 
