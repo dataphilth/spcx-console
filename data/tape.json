@@ -1,9 +1,9 @@
 {
   "bias_audit": {
-    "bearish": 2,
-    "bullish": 3,
-    "neutral": 48,
-    "skew": 0.2,
+    "bearish": 3,
+    "bullish": 2,
+    "neutral": 45,
+    "skew": -0.2,
     "window_days": 30
   },
   "catalysts": {
@@ -11,7 +11,7 @@
       {
         "confidence": "high",
         "date": "2026-10-09",
-        "days": 1,
+        "days": 0,
         "event": "Lockup tranche 6 (~7%, ~328M sh)",
         "kind": "lockup",
         "note": "day 120"
@@ -19,7 +19,7 @@
       {
         "confidence": "medium",
         "date": "2026-10-24",
-        "days": 16,
+        "days": 15,
         "event": "Lockup tranche 7 (~7%, ~328M sh)",
         "kind": "lockup",
         "note": "day 135 (Saturday - effective next session)"
@@ -27,7 +27,7 @@
       {
         "confidence": "low",
         "date": "2026-11-03",
-        "days": 26,
+        "days": 25,
         "event": "Q3 2026 earnings",
         "kind": "earnings",
         "note": "Wall Street Horizon estimate; not company-confirmed",
@@ -48,7 +48,7 @@
       {
         "confidence": "low",
         "date": "2026-11-05",
-        "days": 28,
+        "days": 27,
         "event": "Lockup tranche 8 \u2014 28% / ~1.28B sh (4x anything prior)",
         "kind": "lockup",
         "note": "floats ~2 trading days after Q3 earnings; Q3 date not company-confirmed",
@@ -59,7 +59,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-08",
-        "days": 61,
+        "days": 60,
         "event": "Day 180 \u2014 bucket (iii) remainder + rolled failed-trigger shares (~798M sh)",
         "kind": "lockup",
         "note": "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"
@@ -67,21 +67,21 @@
       {
         "confidence": "low",
         "date": "2027-02-15",
-        "days": 130,
+        "days": 129,
         "event": "Q4/FY26 earnings \u2014 insider bucket (ii) begins",
         "kind": "earnings"
       },
       {
         "confidence": "high",
         "date": "2027-06-12",
-        "days": 247,
+        "days": 246,
         "event": "12-month seasoning clears (S&P 500 profitability test still fails)",
         "kind": "index"
       },
       {
         "confidence": "medium",
         "date": "2027-06-13",
-        "days": 248,
+        "days": 247,
         "event": "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)",
         "kind": "lockup"
       }
@@ -92,7 +92,7 @@
       {
         "confidence": "high",
         "date": "2026-10-09",
-        "days": 1,
+        "days": 0,
         "event": "Lockup tranche 6 (~7%, ~328M sh)",
         "kind": "lockup",
         "note": "day 120"
@@ -659,6 +659,13 @@
       "h": 176.42,
       "l": 171.39,
       "v": 106952400
+    },
+    {
+      "c": 167.6,
+      "d": "2026-10-07",
+      "h": 171.31,
+      "l": 165.65,
+      "v": 77473000
     }
   ],
   "history_tail": [
@@ -1071,42 +1078,59 @@
       "setups": "STRETCH_UP|BREAKOUT_20D|REGIME"
     },
     {
-      "atr_pct": 3.96,
-      "chg_1d_pct": 0.49,
-      "close": 171.92,
+      "atr_pct": "3.96",
+      "chg_1d_pct": "0.49",
+      "close": "171.92",
       "date": "2026-10-06",
-      "from_ath_pct": -23.81,
-      "hv30": 47.2,
-      "iv30": 49.7,
-      "iv_hv_spread": 2.5,
+      "from_ath_pct": "-23.81",
+      "hv30": "47.2",
+      "iv30": "49.7",
+      "iv_hv_spread": "2.5",
+      "n_bearish": "1",
+      "n_bullish": "0",
+      "n_neutral": "1",
+      "price_source": "yfinance",
+      "regime": "uptrend",
+      "rsi": "69.2",
+      "setups": "STRETCH_UP|REGIME"
+    },
+    {
+      "atr_pct": 4.01,
+      "chg_1d_pct": -2.51,
+      "close": 167.6,
+      "date": "2026-10-07",
+      "from_ath_pct": -25.72,
+      "hv30": 47.9,
+      "iv30": 49.9,
+      "iv_hv_spread": 2.0,
       "n_bearish": 1,
       "n_bullish": 0,
       "n_neutral": 1,
       "price_source": "yfinance",
       "regime": "uptrend",
-      "rsi": 69.2,
+      "rsi": 64.1,
       "setups": "STRETCH_UP|REGIME"
     }
   ],
   "meta": {
-    "board_run_date": "2026-10-08",
+    "board_run_date": "2026-10-09",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
       "bar_age_days": 2,
       "dropped_bars": [
-        "2026-10-07"
+        "2026-10-08"
       ],
       "errors": [],
-      "last_bar": "2026-10-06",
-      "rows": 80,
+      "last_bar": "2026-10-07",
+      "rows": 81,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-10-08T01:06:28",
+    "run_at": "2026-10-09T01:17:41",
     "ticker": "SPCX",
-    "today": "2026-10-08",
+    "today": "2026-10-09",
     "warnings": [
-      "INCOMPLETE BAR DROPPED - 2026-10-07 came back from yfinance with missing prices; the tape reflects the last complete session (2026-10-06) and fills in on the next run"
+      "INCOMPLETE BAR DROPPED - 2026-10-08 came back from yfinance with missing prices; the tape reflects the last complete session (2026-10-07) and fills in on the next run"
     ]
   },
   "noise": [
@@ -1123,43 +1147,43 @@
     "ath_date": "2026-06-16",
     "atl": 104.83,
     "atl_date": "2026-08-03",
-    "atr": 6.81,
-    "atr_pct": 3.96,
-    "bars": 80,
-    "chg_1d_pct": 0.49,
-    "chg_20d_pct": 12.02,
-    "chg_5d_pct": 15.2,
-    "close": 171.92,
-    "close_loc": 0.11,
-    "date": "2026-10-06",
-    "dist_sma20_atr": 2.89,
-    "dist_sma20_pct": 12.95,
-    "dist_sma50_atr": 4.5,
-    "dist_sma50_pct": 21.72,
-    "from_ath_pct": -23.81,
-    "from_atl_pct": 64.0,
-    "from_ipo_pct": 27.35,
-    "gap_pct": 0.54,
-    "hv10": 59.7,
-    "hv30": 47.2,
-    "prior_range_high": 172.47,
+    "atr": 6.73,
+    "atr_pct": 4.01,
+    "bars": 81,
+    "chg_1d_pct": -2.51,
+    "chg_20d_pct": 13.59,
+    "chg_5d_pct": 11.1,
+    "close": 167.6,
+    "close_loc": 0.34,
+    "date": "2026-10-07",
+    "dist_sma20_atr": 2.14,
+    "dist_sma20_pct": 9.39,
+    "dist_sma50_atr": 3.77,
+    "dist_sma50_pct": 17.8,
+    "from_ath_pct": -25.72,
+    "from_atl_pct": 59.88,
+    "from_ipo_pct": 24.15,
+    "gap_pct": -2.2,
+    "hv10": 56.1,
+    "hv30": 47.9,
+    "prior_range_high": 176.42,
     "prior_range_low": 142.87,
     "range_compression": 1.36,
     "range_high": 176.42,
     "range_low": 142.87,
-    "range_pos": 0.87,
-    "rsi": 69.2,
-    "sma20": 152.21,
-    "sma50": 141.25,
-    "streak": 3,
-    "volume": 106952400,
-    "volume_vs_avg": 1.09,
-    "volume_z": 0.14
+    "range_pos": 0.74,
+    "rsi": 64.1,
+    "sma20": 153.21,
+    "sma50": 142.27,
+    "streak": -1,
+    "volume": 77473000,
+    "volume_vs_avg": 0.78,
+    "volume_z": -0.38
   },
   "setups": [
     {
       "direction": "bearish",
-      "evidence": "Close is 2.9 ATR above SMA20 (152.21).",
+      "evidence": "Close is 2.1 ATR above SMA20 (153.21).",
       "id": "STRETCH_UP",
       "long_read": "Momentum is with the long, but adding here is buying a stretched tape; a pullback to the mean is the higher-probability entry.",
       "name": "Stretched above 20-day mean",
@@ -1169,7 +1193,7 @@
     },
     {
       "direction": "neutral",
-      "evidence": "Close 171.92; SMA20 152.21; SMA50 141.25.",
+      "evidence": "Close 167.6; SMA20 153.21; SMA50 142.27.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: uptrend",
@@ -1180,128 +1204,118 @@
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 6.0,
-    "expected_move_usd": 10.32,
+    "expected_move_pct": 6.2,
+    "expected_move_usd": 10.38,
     "float_as_of": "2026-09-24",
-    "front_dte": 8.0,
+    "front_dte": 7.0,
     "front_expiry": "2026-10-16",
-    "gex_musd_per_1pct": 170.8,
-    "hv10": 59.7,
-    "hv30": 47.2,
-    "iv30": 49.7,
-    "iv30_chg_1d": -0.8,
-    "iv90": 48.8,
-    "iv_front": 45.4,
-    "iv_history_days": 27,
-    "iv_hv_spread": 2.5,
-    "iv_percentile": 55.6,
-    "iv_rank": 52.9,
+    "gex_musd_per_1pct": 108.7,
+    "hv10": 56.1,
+    "hv30": 47.9,
+    "iv30": 49.9,
+    "iv30_chg_1d": 0.2,
+    "iv90": 50.9,
+    "iv_front": 45.2,
+    "iv_history_days": 28,
+    "iv_hv_spread": 2.0,
+    "iv_percentile": 60.7,
+    "iv_rank": 54.8,
     "iv_rank_meaningful": false,
     "oi_walls": {
       "calls": [
         {
-          "oi": 51306,
+          "oi": 42757,
+          "strike": 190.0
+        },
+        {
+          "oi": 38363,
           "strike": 200.0
         },
         {
-          "oi": 50988,
-          "strike": 160.0
-        },
-        {
-          "oi": 50443,
-          "strike": 190.0
+          "oi": 35358,
+          "strike": 180.0
         }
       ],
       "puts": [
         {
-          "oi": 72296,
+          "oi": 54198,
           "strike": 100.0
         },
         {
-          "oi": 53691,
+          "oi": 38237,
           "strike": 135.0
         },
         {
-          "oi": 52232,
+          "oi": 31931,
           "strike": 150.0
         }
       ],
       "window_dte": 60
     },
-    "put_call_oi": 1.09,
+    "put_call_oi": 1.0,
     "short_as_of": "2026-09-15",
     "short_days_to_cover": 2.1,
     "short_pct_float": 2.4,
     "short_pct_outstanding": 2.4,
     "short_pct_public_float": 6.4,
     "short_shares_m": 162.3,
-    "skew25_30d": -1.6,
-    "skew25_front": -3.2,
-    "skew_chg_1d": 0.1,
-    "snapshot_date": "2026-10-08",
+    "skew25_30d": -0.9,
+    "skew25_front": -3.6,
+    "skew_chg_1d": 0.7,
+    "snapshot_date": "2026-10-09",
     "term": [
       {
-        "atm_iv": 45.4,
-        "dte": 8,
+        "atm_iv": 45.2,
+        "dte": 7,
         "expiry": "2026-10-16"
       },
       {
-        "atm_iv": 47.1,
-        "dte": 15,
+        "atm_iv": 44.8,
+        "dte": 14,
         "expiry": "2026-10-23"
       },
       {
-        "atm_iv": 48.0,
-        "dte": 22,
+        "atm_iv": 47.0,
+        "dte": 21,
         "expiry": "2026-10-30"
       },
       {
-        "atm_iv": 49.3,
-        "dte": 29,
+        "atm_iv": 49.4,
+        "dte": 28,
         "expiry": "2026-11-06"
       },
       {
-        "atm_iv": 51.4,
-        "dte": 36,
-        "expiry": "2026-11-13"
-      },
-      {
         "atm_iv": 50.9,
-        "dte": 43,
-        "expiry": "2026-11-20"
-      },
-      {
-        "atm_iv": 48.8,
-        "dte": 71,
-        "expiry": "2026-12-18"
+        "dte": 35,
+        "expiry": "2026-11-13"
       }
     ],
-    "term_slope": -0.9,
-    "total_call_oi": 950439.0,
-    "total_put_oi": 1040159.0
+    "term_slope": 1.0,
+    "total_call_oi": 508516.0,
+    "total_put_oi": 510645.0
   },
   "volume": {
-    "avg20": 98530440,
-    "avg60": 94135241,
+    "avg20": 99586025,
+    "avg60": 94726840,
     "baseline_thin": false,
     "calendar": [],
-    "chg_1d_pct": 0.49,
-    "date": "2026-10-06",
+    "chg_1d_pct": -2.51,
+    "date": "2026-10-07",
     "heaviest_on_record": false,
-    "heaviest_since": "2026-10-05",
+    "heaviest_since": "2026-10-06",
     "label": "ordinary",
-    "move_atr": 0.12,
+    "move_atr": -0.64,
     "needs_explaining": false,
-    "rank_in_window": 18,
+    "rank_in_window": 33,
     "rank_window": 60,
-    "rvol20": 1.09,
-    "rvol60": 1.14,
-    "rvol_3d": 1.28,
-    "rvol_5d": 1.11,
-    "sessions": 80,
-    "shares": 106952400,
-    "shares_3d": 362500400,
-    "shares_5d": 511207100,
-    "z20": 0.14
+    "rvol20": 0.78,
+    "rvol60": 0.82,
+    "rvol_3d": 1.13,
+    "rvol_5d": 1.09,
+    "sessions": 81,
+    "shares": 77473000,
+    "shares_3d": 320114300,
+    "shares_5d": 509065900,
+    "z20": -0.38
   }
 }
