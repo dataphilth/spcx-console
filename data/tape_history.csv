@@ -25,3 +25,4 @@ date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_b
 2026-10-05,171.09,7.63,4.11,47.6,50.5,2.9,68.8,-24.18,uptrend,1,1,1,STRETCH_UP|BREAKOUT_20D|REGIME,yfinance
 2026-10-06,171.92,0.49,3.96,47.2,49.7,2.5,69.2,-23.81,uptrend,0,1,1,STRETCH_UP|REGIME,yfinance
 2026-10-07,167.6,-2.51,4.01,47.9,49.9,2.0,64.1,-25.72,uptrend,0,1,1,STRETCH_UP|REGIME,yfinance
+2026-10-08,160.57,-4.19,4.12,50.0,50.1,0.1,56.9,-28.84,uptrend,0,0,1,REGIME,yfinance
