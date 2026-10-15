@@ -17,7 +17,7 @@ import yaml
 
 from ..store import ROOT
 from . import catalysts as cat
-from . import options, prices, setups, technical, volume
+from . import levels, options, prices, setups, technical, volume
 
 log = logging.getLogger(__name__)
 TAPE_CONFIG = ROOT / "config" / "tape.yaml"
@@ -62,6 +62,8 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     p = cfg["signals"]
     data_dir.mkdir(parents=True, exist_ok=True)
     warnings: list[str] = []
+    notice_path = data_dir / "notice.md"
+    notice_path.unlink(missing_ok=True)   # first thing: a failed run must never leave yesterday's notice behind
 
     bars, px_meta = prices.get_bars(ticker, data_dir / "prices.csv", offline=offline, today=today)
     if px_meta["stale"]:
@@ -71,6 +73,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         warnings.append(f"INCOMPLETE BAR DROPPED - {', '.join(px_meta['dropped_bars'])} came back from "
                         f"{px_meta['source']} with missing prices; the tape reflects the last complete session "
                         f"({px_meta['last_bar']}) and fills in on the next run")
+    lv = levels.analyze(bars, cfg.get("ma_events"), timeframe="1D")
     vprof = volume.profile(bars, tech.get("atr"), cfg["catalysts"], p)
     chart = technical.chart_series(bars, p.get("history_bars_for_chart", 90))
 
@@ -126,6 +129,14 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     cats = {"upcoming": cat.upcoming(cfg["catalysts"], today, la), "recent": cat.recent(cfg["catalysts"], today),
             "horizon": cat.horizon(cfg["catalysts"], today), "lookahead_days": la}
     st = setups.detect(tech, vol, p, cats["upcoming"])
+    lv_setups = levels.to_setups(lv)
+    if tech.get("bars", 0) < 40:
+        for s_ in lv_setups:
+            s_.setdefault("caveat", f"Only {tech.get('bars')} sessions of history — every window here is under-sampled.")
+    st.extend(lv_setups)
+    notice = levels.notice_markdown([lv], ticker)
+    if notice:
+        notice_path.write_text(notice, encoding="utf-8")
     n_bull = sum(1 for s in st if s["direction"] == "bullish")
     n_bear = sum(1 for s in st if s["direction"] == "bearish")
     n_neut = sum(1 for s in st if s["direction"] == "neutral")
@@ -148,7 +159,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         "meta": {"run_at": datetime.now().isoformat(timespec="seconds"), "today": today.isoformat(), "ticker": ticker,
                  "price_source": px_meta, "warnings": warnings, "board_run_date": board.get("run_date"),
                  "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades."},
-        "price": tech, "volume": vprof, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
+        "price": tech, "levels": [lv], "volume": vprof, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
         "noise": cfg.get("noise", []), "history_tail": history[-30:],
     }
     (data_dir / "tape.json").write_text(json.dumps(tape, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")
@@ -181,6 +192,8 @@ def brief(tape: dict) -> str:
         L.append(f"  volume {vp['shares']:,} = {vp['rvol20']}x 20d avg ({vp['label']}) | 60d {vp.get('rvol60')}x | "
                  f"3d {vp.get('rvol_3d')}x | 5d {vp.get('rvol_5d')}x | heaviest since {vp.get('heaviest_since')} | "
                  f"calendar: {cal}" + (" | NEEDS EXPLAINING" if vp.get("needs_explaining") else ""))
+    for lv in tape.get("levels") or []:
+        L.append("  " + levels.state_line(lv))
     for c in tape["catalysts"]["upcoming"]:
         L.append(f"  T-{c['days']}d {c['date']} {c['event']} ({c['confidence']})")
     for s in tape["setups"]:

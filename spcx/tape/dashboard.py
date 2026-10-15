@@ -149,6 +149,27 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
     ]
     B.append('<div class="sec"><h2>Tape</h2><p>Context only. Volatility is explicitly not a criterion.</p></div><div class="tiles">'
              + "".join(f'<div class="tile"><div class="k">{_e(k)}</div><div class="v">{_e(val)}</div><div class="d">{_e(d)}</div></div>' for k, val, d in tiles) + "</div>")
+    # moving-average levels
+    for lv in tape.get("levels") or []:
+        rows = []
+        for ln in lv.get("lines", []):
+            window = "full" if ln["full"] else f'PARTIAL {ln["have"]}/{ln["need"]} · fills ~{ln["fills_on"]}'
+            x = ln.get("last_cross")
+            cross = f'{x["dir"]} {x["date"]} · {"held" if x["held"] else "failed"}' if x else "—"
+            rows.append(f'<tr><td class="m">SMA{ln["window"]}</td><td class="m">{_n(ln["value"])}</td><td>{_e(window)}</td>'
+                        f'<td>{_e(ln["side"])} {_p(ln["dist_pct"])}</td><td>{_e(cross)}</td></tr>')
+        pr = lv.get("pair") or {}
+        if not pr:
+            pair = ""
+        elif pr.get("callable"):
+            pair = f'{pr["fast"]}/{pr["slow"]}: {_e(pr["state"])} since {_e(pr["since"] or "start of full window")}'
+        else:
+            pair = f'Golden / death cross not callable until the {pr["slow"]} fills (~{_e(pr["fills_on"])}).'
+        B.append(f'<div class="sec"><h2>Moving averages · {_e(lv["timeframe"])}</h2><p>The lines traders watch. A PARTIAL line averages fewer '
+                 'sessions than its name says — it is what charting platforms draw, not the real thing.</p></div>'
+                 '<div class="panel"><div class="tw"><table><thead><tr><th>Line</th><th>Value</th><th>Window</th><th>Close vs line</th>'
+                 '<th>Last cross (lookback)</th></tr></thead><tbody>' + "".join(rows)
+                 + f'</tbody></table></div><div class="small" style="margin-top:8px">{pair}</div></div>')
     B.append('<div class="sec"><h2>Daily close</h2></div><div class="panel chartbox"><div id="chart"></div></div>')
 
     # options structure

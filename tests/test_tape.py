@@ -187,3 +187,98 @@ def test_short_interest_uses_public_float(tmp_path):
     tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
     assert tape["vol"]["short_pct_public_float"] == pytest.approx(28.1, abs=0.1)
     assert tape["vol"]["short_pct_outstanding"] == 3.3
+
+
+# ---- moving-average levels -------------------------------------------------------
+
+def _bars_from_closes(closes, start=date(2026, 1, 5)):
+    out, d = [], start
+    for c in closes:
+        while d.weekday() >= 5:
+            d += timedelta(days=1)
+        out.append({"date": d.isoformat(), "open": c, "high": c + 1, "low": c - 1, "close": c, "volume": 1_000_000})
+        d += timedelta(days=1)
+    return out
+
+
+def test_ma_series_is_a_true_sma_once_the_window_fills():
+    from spcx.tape.levels import ma_series
+    closes = [float(i) for i in range(1, 11)]
+    ma = ma_series(closes, 3)
+    assert ma[0] == 1.0 and ma[1] == 1.5          # partial: averages what exists
+    assert ma[-1] == pytest.approx(9.0)           # full: mean of 8, 9, 10
+
+
+def test_short_history_marks_the_200_partial_and_refuses_the_golden_cross():
+    from spcx.tape import levels
+    lv = levels.analyze(_bars_from_closes([100.0] * 86), {"windows": [50, 200]})
+    l50, l200 = lv["lines"]
+    assert l50["full"] and not l200["full"] and l200["have"] == 86 and l200["fills_on"]
+    assert lv["pair"]["callable"] is False and lv["pair"]["state"] is None
+    assert not any(e["kind"] in ("golden_cross", "death_cross") for e in lv["events"])
+    assert "not callable" in levels.state_line(lv)
+
+
+def test_fresh_cross_up_and_down_fire_symmetric_setups():
+    from spcx.tape import levels
+    base = [100.0] * 60
+    up = levels.analyze(_bars_from_closes(base[:-1] + [90.0] * 5 + [110.0]), {"windows": [50]})
+    down = levels.analyze(_bars_from_closes(base[:-1] + [110.0] * 5 + [90.0]), {"windows": [50]})
+    (eu,), (ed,) = up["events"], down["events"]
+    assert eu["dir"] == "up" and ed["dir"] == "down" and eu["full"] and ed["full"]
+    su, sd = levels.to_setups(up), levels.to_setups(down)
+    assert [s["id"] for s in su] == ["CROSS_UP_SMA50"] and [s["id"] for s in sd] == ["CROSS_DOWN_SMA50"]
+    assert su[0]["direction"] == "bullish" and sd[0]["direction"] == "bearish"
+    assert su[0]["strength"] == sd[0]["strength"]
+    for s in su + sd:
+        assert s["long_read"] and s["short_read"] and s["tag"] == "levels"
+    assert levels.notice_markdown([up], "SPCX").startswith("## SPCX")
+
+
+def test_cross_on_a_partial_window_is_labelled_partial():
+    from spcx.tape import levels
+    lv = levels.analyze(_bars_from_closes([100.0] * 80 + [90.0] * 5 + [120.0]), {"windows": [200]})
+    (e,) = lv["events"]
+    assert not e["full"] and e["have"] == 86
+    (s,) = levels.to_setups(lv)
+    assert s["strength"] == 1 and "PARTIAL WINDOW" in s["evidence"]
+    assert "Partial window" in levels.notice_markdown([lv], "SPCX")
+
+
+def test_failed_cross_is_reported_as_failed():
+    from spcx.tape import levels
+    lv = levels.analyze(_bars_from_closes([100.0] * 59 + [90.0, 110.0, 90.0, 90.0]), {"windows": [50], "cross_lookback": 5})
+    x = lv["lines"][0]["last_cross"]
+    assert x["dir"] == "down" and x["held"] is True     # the latest cross is the slip back under
+    assert not lv["events"]                              # nothing fresh on the last bar
+    lv2 = levels.analyze(_bars_from_closes([100.0] * 59 + [90.0, 110.0, 90.0]), {"windows": [50]})
+    assert lv2["events"][0]["reverses_cross_on"]       # the slip back under names the reclaim it undid
+
+
+def test_golden_and_death_cross_fire_only_with_full_windows():
+    from spcx.tape import levels
+    closes = [60.0 + 0.2 * i for i in range(200)] + [100.0 - i for i in range(1, 40)] + [70.0 + 3 * i for i in range(1, 60)]
+    bars = _bars_from_closes(closes)
+    kinds = []
+    for k in range(201, len(bars) + 1):
+        kinds += [e["kind"] for e in levels.analyze(bars[:k], {"windows": [50, 200]})["events"]
+                  if e["kind"] in ("golden_cross", "death_cross")]
+    assert kinds == ["death_cross", "golden_cross"]
+    s = levels.to_setups({"timeframe": "1D", "events": [{"kind": "golden_cross", "fast": 50, "slow": 200, "fast_ma": 1,
+                                                          "slow_ma": 1, "close": 1, "full": True}]})
+    assert s[0]["id"] == "GOLDEN_CROSS" and "tops" in s[0]["short_read"]
+
+
+def test_tape_run_writes_levels_and_clears_stale_notice(tmp_path):
+    from spcx.tape import prices
+    prices.save_cache(synthetic_bars(), tmp_path / "prices.csv")
+    (tmp_path / "notice.md").write_text("stale from yesterday")
+    board = json.loads((ROOT / "data" / "latest.json").read_text(encoding="utf-8"))
+    cfg = tape_run.load_tape_config()
+    cfg["ma_events"] = {"windows": [50, 200], "golden_pair": [50, 200], "cross_lookback": 5}  # pinned, not read from live config
+    tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
+    (lv,) = tape["levels"]
+    assert lv["timeframe"] == "1D" and [ln["window"] for ln in lv["lines"]] == [50, 200]
+    assert lv["pair"]["callable"] is False
+    assert (tmp_path / "notice.md").exists() == bool(lv["events"])
+    assert "levels 1D" in tape_run.brief(tape)

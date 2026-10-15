@@ -73,3 +73,16 @@ signals:
   min_history_for_ivrank: 60
   catalyst_lookahead_days: 10
   history_bars_for_chart: 90
+
+# ---------------------------------------------------------------------------
+# Moving-average events (spcx/tape/levels.py). Context: traders act on these
+# lines because other traders watch them. A cross is reported, with whether it
+# held; it is never a criterion. A line whose window isn't full yet is computed
+# anyway (charting platforms draw it) but stamped PARTIAL, and golden / death
+# crosses are never called until both windows are full. Daily only for now;
+# 4H waits on an intraday bar source.
+# ---------------------------------------------------------------------------
+ma_events:
+  windows: [50, 200]
+  golden_pair: [50, 200]
+  cross_lookback: 5          # bars back the held / failed check looks for the last cross

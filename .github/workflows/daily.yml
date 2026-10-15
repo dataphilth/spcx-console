@@ -47,6 +47,23 @@ jobs:
         run: python -m spcx.cli tape
         continue-on-error: true
 
+      - name: Open an issue on a moving-average event
+        # data/notice.md exists only when an MA cross printed on the latest bar.
+        # The title carries the bar date, so a re-run on the same bar never opens a duplicate.
+        if: hashFiles('data/notice.md') != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BAR=$(python -c "import json;print(json.load(open('data/tape.json'))['price']['date'])")
+          TITLE="Tape notice — MA event $BAR"
+          gh label create tape-notice --color BFD4F2 --description "Moving-average events; context, not criteria" 2>/dev/null || true
+          if gh issue list --label tape-notice --state all --search "\"$TITLE\" in:title" --json number --jq '.[0].number' | grep -q .; then
+            echo "already opened for $BAR"
+          else
+            gh issue create --title "$TITLE" --body-file data/notice.md --label tape-notice
+          fi
+
       - name: Render site/tape.html
         run: python -m spcx.cli dashboard
         continue-on-error: true
