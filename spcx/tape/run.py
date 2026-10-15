@@ -12,6 +12,7 @@ import json
 import logging
 from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -73,7 +74,26 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         warnings.append(f"INCOMPLETE BAR DROPPED - {', '.join(px_meta['dropped_bars'])} came back from "
                         f"{px_meta['source']} with missing prices; the tape reflects the last complete session "
                         f"({px_meta['last_bar']}) and fills in on the next run")
-    lv = levels.analyze(bars, cfg.get("ma_events"), timeframe="1D")
+    ma_cfg = cfg.get("ma_events") or {}
+    lv = levels.analyze(bars, ma_cfg, timeframe="1D")
+    all_levels = [lv]
+    i4 = ma_cfg.get("intraday_4h") or {}
+    if i4.get("enabled"):
+        hourly, h_meta = prices.get_hourly(ticker, data_dir / "prices_1h.csv", offline=offline)
+        now_et = None if offline else datetime.now(ZoneInfo("America/New_York")).replace(tzinfo=None)
+        if not i4.get("extended_hours", True):
+            hourly = [r for r in hourly if "09:30" <= r["ts"][11:16] < "16:00"]
+        bars4 = levels.aggregate_4h(hourly, now=now_et)
+        lv4 = levels.analyze(bars4, ma_cfg, timeframe="4H", fresh_bars=int(i4.get("fresh_bars", 4)), bars_per_day=4)
+        lv4["extended_hours"] = bool(i4.get("extended_hours", True))
+        lv4["source"] = h_meta
+        if not bars4:
+            warnings.append(f"4H LEVELS UNAVAILABLE - no hourly bars ({'; '.join(h_meta['errors']) or 'empty cache'})")
+        elif not offline and not h_meta["fresh"]:
+            warnings.append(f"4H LEVELS STALE - hourly fetch failed, showing cached bars to {h_meta['last_ts']}; "
+                            f"4H cross events suppressed so stale bars can't re-fire ({'; '.join(h_meta['errors'])})")
+            lv4["events"] = []
+        all_levels.append(lv4)
     vprof = volume.profile(bars, tech.get("atr"), cfg["catalysts"], p)
     chart = technical.chart_series(bars, p.get("history_bars_for_chart", 90))
 
@@ -129,12 +149,12 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
     cats = {"upcoming": cat.upcoming(cfg["catalysts"], today, la), "recent": cat.recent(cfg["catalysts"], today),
             "horizon": cat.horizon(cfg["catalysts"], today), "lookahead_days": la}
     st = setups.detect(tech, vol, p, cats["upcoming"])
-    lv_setups = levels.to_setups(lv)
+    lv_setups = [x for lv_ in all_levels for x in levels.to_setups(lv_)]
     if tech.get("bars", 0) < 40:
         for s_ in lv_setups:
             s_.setdefault("caveat", f"Only {tech.get('bars')} sessions of history — every window here is under-sampled.")
     st.extend(lv_setups)
-    notice = levels.notice_markdown([lv], ticker)
+    notice = levels.notice_markdown(all_levels, ticker)
     if notice:
         notice_path.write_text(notice, encoding="utf-8")
     n_bull = sum(1 for s in st if s["direction"] == "bullish")
@@ -159,7 +179,7 @@ def run(ticker: str, ipo_price: float | None, offline: bool = False, today: date
         "meta": {"run_at": datetime.now().isoformat(timespec="seconds"), "today": today.isoformat(), "ticker": ticker,
                  "price_source": px_meta, "warnings": warnings, "board_run_date": board.get("run_date"),
                  "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades."},
-        "price": tech, "levels": [lv], "volume": vprof, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
+        "price": tech, "levels": all_levels, "volume": vprof, "chart": chart, "vol": vol, "catalysts": cats, "setups": st, "bias_audit": audit,
         "noise": cfg.get("noise", []), "history_tail": history[-30:],
     }
     (data_dir / "tape.json").write_text(json.dumps(tape, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")

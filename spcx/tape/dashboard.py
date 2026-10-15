@@ -165,7 +165,7 @@ def render(board: dict, tape: dict, full_document: bool = True) -> str:
             pair = f'{pr["fast"]}/{pr["slow"]}: {_e(pr["state"])} since {_e(pr["since"] or "start of full window")}'
         else:
             pair = f'Golden / death cross not callable until the {pr["slow"]} fills (~{_e(pr["fills_on"])}).'
-        B.append(f'<div class="sec"><h2>Moving averages · {_e(lv["timeframe"])}</h2><p>The lines traders watch. A PARTIAL line averages fewer '
+        B.append(f'<div class="sec"><h2>Moving averages · {_e(lv["timeframe"])}{" · extended hours" if lv.get("extended_hours") else ""}</h2><p>The lines traders watch. A PARTIAL line averages fewer '
                  'sessions than its name says — it is what charting platforms draw, not the real thing.</p></div>'
                  '<div class="panel"><div class="tw"><table><thead><tr><th>Line</th><th>Value</th><th>Window</th><th>Close vs line</th>'
                  '<th>Last cross (lookback)</th></tr></thead><tbody>' + "".join(rows)
