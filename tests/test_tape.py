@@ -282,3 +282,88 @@ def test_tape_run_writes_levels_and_clears_stale_notice(tmp_path):
     assert lv["pair"]["callable"] is False
     assert (tmp_path / "notice.md").exists() == bool(lv["events"])
     assert "levels 1D" in tape_run.brief(tape)
+
+
+# ---- 4H, extended hours -----------------------------------------------------------
+
+def _hourly(days: int, start=date(2026, 9, 1), base=100.0, drift=0.0):
+    """Hourly extended-hours bars stamped the way yfinance stamps them in US/Eastern:
+    04:00-09:00 pre-market on the hour, 09:30-15:30 regular, 16:00-19:00 post-market."""
+    stamps = ["04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "09:30", "10:30", "11:30", "12:30",
+              "13:30", "14:30", "15:30", "16:00", "17:00", "18:00", "19:00"]
+    out, d, px = [], start, base
+    while len([1 for _ in out]) < days * len(stamps):
+        if d.weekday() < 5:
+            for hhmm in stamps:
+                px += drift
+                out.append({"ts": f"{d.isoformat()}T{hhmm}", "open": px, "high": px + 0.5, "low": px - 0.5,
+                            "close": px, "volume": 1000})
+        d += timedelta(days=1)
+    return out
+
+
+def test_aggregate_4h_tiles_the_extended_session_into_four_bars():
+    from datetime import datetime
+
+    from spcx.tape.levels import aggregate_4h
+    h = _hourly(1, drift=1.0)
+    bars = aggregate_4h(h)
+    assert [b["date"][11:] for b in bars] == ["04:00", "08:00", "12:00", "16:00"]
+    am = bars[1]                                   # 08:00, 09:00, 09:30, 10:30, 11:30
+    assert am["open"] == h[4]["open"] and am["close"] == h[8]["close"] and am["volume"] == 5000
+    assert am["high"] == max(r["high"] for r in h[4:9])
+    # the post-market bucket is still building at 17:30 ET -> dropped
+    live = aggregate_4h(h, now=datetime.fromisoformat(h[0]["ts"][:10] + "T17:30"))
+    assert [b["date"][11:] for b in live] == ["04:00", "08:00", "12:00"]
+
+
+def test_4h_reports_the_latest_cross_among_a_days_new_bars():
+    from spcx.tape import levels
+    closes = [95.0 + 0.1 * i for i in range(60)] + [90.0, 110.0, 111.0, 112.0]   # down then back up, 3 bars before the end
+    bars = [{"date": f"2026-09-{1 + i // 4:02d}T{4 + 4 * (i % 4):02d}:00", "close": c} for i, c in enumerate(closes)]
+    lv = levels.analyze(bars, {"windows": [50]}, timeframe="4H", fresh_bars=4, bars_per_day=4)
+    (e,) = lv["events"]
+    assert e["dir"] == "up" and e["date"] == bars[-3]["date"] and e["held_since"] is True
+    assert e["crosses_in_window"] == 2                     # down at 90, back up at 110
+    (s,) = levels.to_setups(lv)
+    assert s["id"] == "CROSS_UP_SMA50_4H" and "50-bar" in s["name"] and "chop" in s["evidence"]
+    # the daily keeps a one-bar fresh window, so the same shape a few bars back fires nothing
+    assert not levels.analyze(bars, {"windows": [50]}, timeframe="1D")["events"]
+
+
+def test_4h_fill_date_counts_four_bars_a_day():
+    from spcx.tape.levels import _sessions_until_full
+    assert _sessions_until_full(192, 200, "2026-10-14T16:00", bars_per_day=4) == "2026-10-16"
+    assert _sessions_until_full(200, 200, "2026-10-14T16:00", bars_per_day=4) is None
+
+
+def test_tape_run_adds_extended_hours_4h_levels(tmp_path):
+    from spcx.tape import prices
+    prices.save_cache(synthetic_bars(), tmp_path / "prices.csv")
+    import csv
+    with open(tmp_path / "prices_1h.csv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=prices.H_COLUMNS)
+        w.writeheader()
+        w.writerows(_hourly(60, start=date(2026, 6, 15), base=140.0, drift=0.01))
+    board = json.loads((ROOT / "data" / "latest.json").read_text(encoding="utf-8"))
+    cfg = tape_run.load_tape_config()
+    cfg["ma_events"] = {"windows": [50, 200], "golden_pair": [50, 200], "cross_lookback": 5,
+                        "intraday_4h": {"enabled": True, "extended_hours": True, "fresh_bars": 4}}
+    tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
+    d1, h4 = tape["levels"]
+    assert d1["timeframe"] == "1D" and h4["timeframe"] == "4H" and h4["extended_hours"]
+    assert h4["bars"] == 240 and all(ln["full"] for ln in h4["lines"]) and h4["pair"]["callable"]
+    assert "levels 4H (ext hours)" in tape_run.brief(tape)
+    assert not any(w.startswith("4H LEVELS") for w in tape["meta"]["warnings"])
+    # regular-hours-only switch drops pre/post bars
+    cfg["ma_events"]["intraday_4h"]["extended_hours"] = False
+    tape = tape_run.run("SPCX", 135.0, offline=True, today=date(2026, 8, 25), cfg=cfg, data_dir=tmp_path, board=board)
+    assert tape["levels"][1]["bars"] == 120 and not tape["levels"][1]["lines"][1]["full"]
+
+
+def test_hourly_cache_rejects_incomplete_rows(tmp_path):
+    from spcx.tape import prices
+    p = tmp_path / "h.csv"
+    p.write_text("ts,open,high,low,close,volume\n2026-10-14T04:00,1,2,0.5,1.5,10\n2026-10-14T05:00,1,2,0.5,nan,10\n")
+    rows, meta = prices.get_hourly("SPCX", p, offline=True)
+    assert [r["ts"] for r in rows] == ["2026-10-14T04:00"] and meta["source"] == "cache (offline)"

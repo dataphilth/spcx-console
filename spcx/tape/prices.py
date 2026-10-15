@@ -113,3 +113,75 @@ def get_bars(ticker: str, cache_path: Path, offline: bool = False, today: date |
     if offline:
         meta["source"] = "cache (offline)"
     return bars, meta
+
+
+# ---------------------------------------------------------------------------
+# Intraday: hourly bars INCLUDING pre- and post-market, for the 4H moving-average
+# lines. yfinance serves ~730 days of 1h history; stamps are kept in US/Eastern
+# wall-clock time ("2026-10-14T04:00") so 4H buckets line up with the 4:00-20:00
+# extended session the way charting platforms draw them.
+# ---------------------------------------------------------------------------
+H_COLUMNS = ["ts", "open", "high", "low", "close", "volume"]
+
+
+def _hrow(ts: str, o, h, lo, c, v) -> dict | None:
+    try:
+        r = {"ts": ts[:16], "open": float(o), "high": float(h), "low": float(lo), "close": float(c),
+             "volume": int(float(v)) if v not in (None, "") and math.isfinite(float(v)) else 0}
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if not all(math.isfinite(r[k]) for k in ("open", "high", "low", "close")):
+        return None
+    return r
+
+
+def fetch_yfinance_hourly(ticker: str) -> list[dict]:
+    import yfinance as yf  # optional; absent in the test environment
+
+    hist = yf.Ticker(ticker).history(period="730d", interval="1h", prepost=True, auto_adjust=False)
+    if hist is None or hist.empty:
+        raise RuntimeError("yfinance returned no hourly rows")
+    idx = hist.index
+    if getattr(idx, "tz", None) is not None:
+        idx = idx.tz_convert("America/New_York")
+    out = []
+    for ts, (_, r) in zip(idx, hist.iterrows()):
+        row = _hrow(ts.strftime("%Y-%m-%dT%H:%M"), r["Open"], r["High"], r["Low"], r["Close"], r.get("Volume", 0))
+        if row:
+            out.append(row)
+    if not out:
+        raise RuntimeError("yfinance hourly rows all incomplete")
+    return out
+
+
+def load_hourly(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    with open(path, newline="", encoding="utf-8") as fh:
+        rows = [_hrow(r["ts"], r["open"], r["high"], r["low"], r["close"], r["volume"]) for r in csv.DictReader(fh)]
+    return [r for r in rows if r]
+
+
+def get_hourly(ticker: str, cache_path: Path, offline: bool = False) -> tuple[list[dict], dict]:
+    """Hourly extended-hours bars, merged into data/prices_1h.csv. Never raises: an empty list means no data."""
+    by = {r["ts"]: r for r in load_hourly(cache_path)}
+    meta = {"source": "cache", "fresh": False, "errors": []}
+    if not offline:
+        try:
+            fresh = fetch_yfinance_hourly(ticker)
+            by.update({r["ts"]: r for r in fresh})
+            meta.update(source="yfinance", fresh=True)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("hourly source failed: %s", exc)
+            meta["errors"].append(f"yfinance hourly: {exc}")
+    rows = [by[k] for k in sorted(by)]
+    if rows:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(cache_path, "w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=H_COLUMNS)
+            w.writeheader()
+            w.writerows(rows)
+    meta.update(rows=len(rows), last_ts=rows[-1]["ts"] if rows else None)
+    if offline:
+        meta["source"] = "cache (offline)"
+    return rows, meta
