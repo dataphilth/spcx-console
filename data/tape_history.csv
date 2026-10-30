@@ -35,3 +35,4 @@ date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_b
 2026-10-23,147.49,1.89,5.42,59.4,51.4,-8.0,46.4,-34.63,transition,1,0,2,REGIME|CATALYST_WINDOW|CROSS_UP_SMA200,yfinance
 2026-10-26,146.9,-0.4,5.45,59.1,50.0,-9.1,45.9,-34.9,transition,0,1,2,REGIME|CATALYST_WINDOW|CROSS_DOWN_SMA200_4H,yfinance
 2026-10-27,148.58,1.14,5.4,58.4,49.5,-8.9,47.5,-34.15,transition,0,0,2,REGIME|CATALYST_WINDOW,yfinance
+2026-10-28,145.23,-2.25,5.58,56.9,49.2,-7.7,44.8,-35.64,transition,0,2,2,REGIME|CATALYST_WINDOW|CROSS_DOWN_SMA200|DEATH_CROSS_4H,yfinance
