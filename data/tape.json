@@ -1,9 +1,9 @@
 {
   "bias_audit": {
     "bearish": 9,
-    "bullish": 7,
-    "neutral": 32,
-    "skew": -0.12,
+    "bullish": 5,
+    "neutral": 31,
+    "skew": -0.29,
     "window_days": 30
   },
   "catalysts": {
@@ -11,7 +11,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-08",
-        "days": 24,
+        "days": 21,
         "event": "Day 180 \u2014 bucket (iii) remainder + rolled failed-trigger shares (~798M sh)",
         "kind": "lockup",
         "note": "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"
@@ -19,21 +19,21 @@
       {
         "confidence": "low",
         "date": "2027-02-15",
-        "days": 93,
+        "days": 90,
         "event": "Q4/FY26 earnings \u2014 insider bucket (ii) begins",
         "kind": "earnings"
       },
       {
         "confidence": "high",
         "date": "2027-06-12",
-        "days": 210,
+        "days": 207,
         "event": "12-month seasoning clears (S&P 500 profitability test still fails)",
         "kind": "index"
       },
       {
         "confidence": "medium",
         "date": "2027-06-13",
-        "days": 211,
+        "days": 208,
         "event": "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)",
         "kind": "lockup"
       }
@@ -43,20 +43,6 @@
     "upcoming": []
   },
   "chart": [
-    {
-      "c": 152.16,
-      "d": "2026-07-09",
-      "h": 153.5,
-      "l": 147.59,
-      "v": 46468600
-    },
-    {
-      "c": 145.3,
-      "d": "2026-07-10",
-      "h": 150.57,
-      "l": 145.07,
-      "v": 46826000
-    },
     {
       "c": 139.14,
       "d": "2026-07-13",
@@ -672,26 +658,23 @@
       "h": 147.6,
       "l": 137.75,
       "v": 95961800
+    },
+    {
+      "c": 139.11,
+      "d": "2026-11-13",
+      "h": 142.24,
+      "l": 136.64,
+      "v": 78515500
+    },
+    {
+      "c": 137.36,
+      "d": "2026-11-16",
+      "h": 139.98,
+      "l": 135.0,
+      "v": 101122200
     }
   ],
   "history_tail": [
-    {
-      "atr_pct": "4.07",
-      "chg_1d_pct": "1.89",
-      "close": "154.72",
-      "date": "2026-09-22",
-      "from_ath_pct": "-31.43",
-      "hv30": "51.0",
-      "iv30": "48.0",
-      "iv_hv_spread": "-3.0",
-      "n_bearish": "0",
-      "n_bullish": "0",
-      "n_neutral": "3",
-      "price_source": "yfinance",
-      "regime": "uptrend",
-      "rsi": "59.2",
-      "setups": "REGIME|OI_WALL_NEAR|CATALYST_WINDOW"
-    },
     {
       "atr_pct": "4.31",
       "chg_1d_pct": "-4.11",
@@ -1169,49 +1152,66 @@
       "setups": "REGIME|OI_WALL_NEAR|CROSS_UP_SMA50_4H"
     },
     {
-      "atr_pct": 6.01,
-      "chg_1d_pct": 0.14,
-      "close": 139.94,
+      "atr_pct": "6.01",
+      "chg_1d_pct": "0.14",
+      "close": "139.94",
       "date": "2026-11-12",
-      "from_ath_pct": -37.98,
-      "hv30": 71.9,
-      "iv30": 58.4,
-      "iv_hv_spread": -13.5,
-      "n_bearish": 1,
-      "n_bullish": 0,
-      "n_neutral": 1,
+      "from_ath_pct": "-37.98",
+      "hv30": "71.9",
+      "iv30": "58.4",
+      "iv_hv_spread": "-13.5",
+      "n_bearish": "1",
+      "n_bullish": "0",
+      "n_neutral": "1",
       "price_source": "yfinance",
       "regime": "downtrend",
-      "rsi": 46.9,
+      "rsi": "46.9",
       "setups": "REGIME|CROSS_DOWN_SMA50_4H"
+    },
+    {
+      "atr_pct": 6.12,
+      "chg_1d_pct": -1.26,
+      "close": 137.36,
+      "date": "2026-11-16",
+      "from_ath_pct": -39.12,
+      "hv30": 64.4,
+      "iv30": 58.9,
+      "iv_hv_spread": -5.5,
+      "n_bearish": 1,
+      "n_bullish": 0,
+      "n_neutral": 2,
+      "price_source": "yfinance",
+      "regime": "downtrend",
+      "rsi": 44.9,
+      "setups": "REGIME|OI_WALL_NEAR|CROSS_DOWN_SMA50_4H"
     }
   ],
   "levels": [
     {
-      "bars": 107,
+      "bars": 109,
       "events": [],
-      "last_bar": "2026-11-12",
+      "last_bar": "2026-11-16",
       "lines": [
         {
-          "dist_pct": -6.15,
+          "dist_pct": -7.62,
           "fills_on": null,
           "full": true,
           "have": 50,
           "last_cross": null,
           "need": 50,
           "side": "below",
-          "value": 149.12,
+          "value": 148.69,
           "window": 50
         },
         {
-          "dist_pct": -3.5,
+          "dist_pct": -5.2,
           "fills_on": "2027-03-23",
           "full": false,
-          "have": 107,
+          "have": 109,
           "last_cross": null,
           "need": 200,
           "side": "below",
-          "value": 145.02,
+          "value": 144.9,
           "window": 200
         }
       ],
@@ -1226,55 +1226,55 @@
       "timeframe": "1D"
     },
     {
-      "bars": 431,
+      "bars": 435,
       "events": [
         {
-          "close": 136.25,
-          "crosses_in_window": 3,
-          "date": "2026-11-13T16:00",
+          "close": 136.13,
+          "crosses_in_window": 2,
+          "date": "2026-11-16T08:00",
           "dir": "down",
-          "dist_pct": -1.49,
+          "dist_pct": -1.38,
           "full": true,
           "have": 50,
           "held_since": true,
           "kind": "price_cross",
-          "ma": 138.31,
-          "prev_close": 139.1,
-          "prev_ma": 138.48,
-          "reverses_cross_on": "2026-11-13T12:00",
+          "ma": 138.03,
+          "prev_close": 138.62,
+          "prev_ma": 138.18,
+          "reverses_cross_on": "2026-11-16T04:00",
           "timeframe": "4H",
           "window": 50
         }
       ],
       "extended_hours": true,
-      "last_bar": "2026-11-13T16:00",
+      "last_bar": "2026-11-16T16:00",
       "lines": [
         {
-          "dist_pct": -1.49,
+          "dist_pct": -0.22,
           "fills_on": null,
           "full": true,
           "have": 50,
           "last_cross": {
-            "bars_ago": 0,
-            "date": "2026-11-13T16:00",
+            "bars_ago": 2,
+            "date": "2026-11-16T08:00",
             "dir": "down",
             "full_at_cross": true,
             "held": true
           },
           "need": 50,
           "side": "below",
-          "value": 138.31,
+          "value": 137.79,
           "window": 50
         },
         {
-          "dist_pct": -8.73,
+          "dist_pct": -7.77,
           "fills_on": null,
           "full": true,
           "have": 200,
           "last_cross": null,
           "need": 200,
           "side": "below",
-          "value": 149.28,
+          "value": 149.06,
           "window": 200
         }
       ],
@@ -1289,33 +1289,29 @@
       "source": {
         "errors": [],
         "fresh": true,
-        "last_ts": "2026-11-13T19:00",
-        "rows": 1811,
+        "last_ts": "2026-11-16T19:00",
+        "rows": 1828,
         "source": "yfinance"
       },
       "timeframe": "4H"
     }
   ],
   "meta": {
-    "board_run_date": "2026-11-14",
+    "board_run_date": "2026-11-17",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
-      "bar_age_days": 2,
-      "dropped_bars": [
-        "2026-11-13"
-      ],
+      "bar_age_days": 1,
+      "dropped_bars": [],
       "errors": [],
-      "last_bar": "2026-11-12",
-      "rows": 107,
+      "last_bar": "2026-11-16",
+      "rows": 109,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-11-14T01:30:59",
+    "run_at": "2026-11-17T04:02:25",
     "ticker": "SPCX",
-    "today": "2026-11-14",
-    "warnings": [
-      "INCOMPLETE BAR DROPPED - 2026-11-13 came back from yfinance with missing prices; the tape reflects the last complete session (2026-11-12) and fills in on the next run"
-    ]
+    "today": "2026-11-17",
+    "warnings": []
   },
   "noise": [
     "Any single-day or single-week price move, in either direction",
@@ -1331,43 +1327,43 @@
     "ath_date": "2026-06-16",
     "atl": 104.83,
     "atl_date": "2026-08-03",
-    "atr": 8.42,
-    "atr_pct": 6.01,
-    "bars": 107,
-    "chg_1d_pct": 0.14,
-    "chg_20d_pct": -5.84,
-    "chg_5d_pct": 13.2,
-    "close": 139.94,
-    "close_loc": 0.22,
-    "date": "2026-11-12",
-    "dist_sma20_atr": -0.3,
-    "dist_sma20_pct": -1.76,
-    "dist_sma50_atr": -1.09,
-    "dist_sma50_pct": -6.15,
-    "from_ath_pct": -37.98,
-    "from_atl_pct": 33.49,
-    "from_ipo_pct": 3.66,
-    "gap_pct": -1.36,
-    "hv10": 86.6,
-    "hv30": 71.9,
+    "atr": 8.41,
+    "atr_pct": 6.12,
+    "bars": 109,
+    "chg_1d_pct": -1.26,
+    "chg_20d_pct": -7.16,
+    "chg_5d_pct": -3.32,
+    "close": 137.36,
+    "close_loc": 0.47,
+    "date": "2026-11-16",
+    "dist_sma20_atr": -0.5,
+    "dist_sma20_pct": -2.98,
+    "dist_sma50_atr": -1.35,
+    "dist_sma50_pct": -7.62,
+    "from_ath_pct": -39.12,
+    "from_atl_pct": 31.03,
+    "from_ipo_pct": 1.75,
+    "gap_pct": -0.44,
+    "hv10": 79.5,
+    "hv30": 64.4,
     "prior_range_high": 166.18,
     "prior_range_low": 120.39,
     "range_compression": 1.28,
     "range_high": 166.18,
     "range_low": 120.39,
-    "range_pos": 0.43,
-    "rsi": 46.9,
-    "sma20": 142.45,
-    "sma50": 149.12,
-    "streak": 1,
-    "volume": 95961800,
-    "volume_vs_avg": 0.84,
-    "volume_z": -0.47
+    "range_pos": 0.37,
+    "rsi": 44.9,
+    "sma20": 141.57,
+    "sma50": 148.69,
+    "streak": -2,
+    "volume": 101122200,
+    "volume_vs_avg": 0.89,
+    "volume_z": -0.31
   },
   "setups": [
     {
       "direction": "neutral",
-      "evidence": "Close 139.94; SMA20 142.45; SMA50 149.12.",
+      "evidence": "Close 137.36; SMA20 141.57; SMA50 148.69.",
       "id": "REGIME",
       "long_read": "Trend-following longs want uptrend + pullback-to-SMA20 entries.",
       "name": "Trend regime: downtrend",
@@ -1376,8 +1372,18 @@
       "tag": "regime"
     },
     {
+      "direction": "neutral",
+      "evidence": "put wall 140.0 (OI 71,412). Close 137.36, ATR 8.41. Dealer gamma proxy -45.1 $M per 1%.",
+      "id": "OI_WALL_NEAR",
+      "long_read": "Big OI strikes act as magnets into expiry and as pins on expiry day; a long wants to see price hold above a put wall, not sit under a call wall.",
+      "name": "Price within 1 ATR of a large OI strike",
+      "short_read": "Mirror image: a call wall overhead is resistance until it isn't; a break through it forces dealer hedging that accelerates the move.",
+      "strength": 1,
+      "tag": "vol"
+    },
+    {
       "direction": "bearish",
-      "evidence": "4H bar 2026-11-13T16:00 closed 136.25 vs SMA50 138.31 (-1.5%); prior bar 139.1 vs 138.48. Reverses the cross up on 2026-11-13T12:00. 3 crosses in the window \u2014 a chop, not a clean break.",
+      "evidence": "4H bar 2026-11-16T08:00 closed 136.13 vs SMA50 138.03 (-1.4%); prior bar 138.62 vs 138.18. Reverses the cross up on 2026-11-16T04:00. 2 crosses in the window \u2014 a chop, not a clean break. Has held since.",
       "id": "CROSS_DOWN_SMA50_4H",
       "long_read": "Losing the line is only damage if it sticks. A reclaim within a few bars is the failed-breakdown setup, and those squeeze hard on a crowded short.",
       "name": "Closed below the 50-bar SMA (4H)",
@@ -1388,128 +1394,128 @@
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 6.9,
-    "expected_move_usd": 9.62,
+    "expected_move_pct": 6.6,
+    "expected_move_usd": 9.05,
     "float_as_of": "2026-09-24",
-    "front_dte": 4.0,
-    "front_expiry": "2026-11-18",
-    "gex_musd_per_1pct": -0.5,
-    "hv10": 86.6,
-    "hv30": 71.9,
-    "iv30": 58.4,
-    "iv30_chg_1d": -0.2,
-    "iv90": 56.1,
-    "iv_front": 73.7,
-    "iv_history_days": 51,
-    "iv_hv_spread": -13.5,
-    "iv_percentile": 90.2,
-    "iv_rank": 73.2,
+    "front_dte": 3.0,
+    "front_expiry": "2026-11-20",
+    "gex_musd_per_1pct": -45.1,
+    "hv10": 79.5,
+    "hv30": 64.4,
+    "iv30": 58.9,
+    "iv30_chg_1d": 0.5,
+    "iv90": 58.8,
+    "iv_front": 79.0,
+    "iv_history_days": 52,
+    "iv_hv_spread": -5.5,
+    "iv_percentile": 92.3,
+    "iv_rank": 75.8,
     "iv_rank_meaningful": false,
     "oi_walls": {
       "calls": [
         {
-          "oi": 113682,
+          "oi": 113115,
           "strike": 170.0
         },
         {
-          "oi": 96114,
+          "oi": 98544,
           "strike": 160.0
         },
         {
-          "oi": 81523,
-          "strike": 180.0
+          "oi": 81997,
+          "strike": 150.0
         }
       ],
       "puts": [
         {
-          "oi": 75529,
+          "oi": 71412,
+          "strike": 140.0
+        },
+        {
+          "oi": 70990,
           "strike": 130.0
         },
         {
-          "oi": 73807,
+          "oi": 66087,
           "strike": 135.0
-        },
-        {
-          "oi": 64715,
-          "strike": 140.0
         }
       ],
       "window_dte": 60
     },
-    "put_call_oi": 0.8,
+    "put_call_oi": 0.82,
     "short_as_of": "2026-10-30",
     "short_days_to_cover": 1.4,
     "short_pct_float": 2.1,
     "short_pct_outstanding": 2.1,
     "short_pct_public_float": 5.6,
     "short_shares_m": 141.1,
-    "skew25_30d": 1.2,
-    "skew25_front": 1.4,
-    "skew_chg_1d": 0.7,
-    "snapshot_date": "2026-11-14",
+    "skew25_30d": 2.9,
+    "skew25_front": 7.2,
+    "skew_chg_1d": 1.7,
+    "snapshot_date": "2026-11-17",
     "term": [
       {
-        "atm_iv": 73.7,
-        "dte": 4,
-        "expiry": "2026-11-18"
-      },
-      {
-        "atm_iv": 75.1,
-        "dte": 6,
+        "atm_iv": 79.0,
+        "dte": 3,
         "expiry": "2026-11-20"
       },
       {
-        "atm_iv": 63.5,
-        "dte": 13,
+        "atm_iv": 66.6,
+        "dte": 6,
+        "expiry": "2026-11-23"
+      },
+      {
+        "atm_iv": 65.2,
+        "dte": 8,
+        "expiry": "2026-11-25"
+      },
+      {
+        "atm_iv": 62.0,
+        "dte": 10,
         "expiry": "2026-11-27"
       },
       {
-        "atm_iv": 60.6,
-        "dte": 20,
+        "atm_iv": 61.7,
+        "dte": 17,
         "expiry": "2026-12-04"
       },
       {
-        "atm_iv": 58.8,
-        "dte": 27,
+        "atm_iv": 60.3,
+        "dte": 24,
         "expiry": "2026-12-11"
       },
       {
-        "atm_iv": 57.9,
-        "dte": 34,
+        "atm_iv": 58.8,
+        "dte": 31,
         "expiry": "2026-12-18"
-      },
-      {
-        "atm_iv": 56.1,
-        "dte": 40,
-        "expiry": "2026-12-24"
       }
     ],
-    "term_slope": -2.3,
-    "total_call_oi": 1057719.0,
-    "total_put_oi": 842423.0
+    "term_slope": -0.1,
+    "total_call_oi": 1091241.0,
+    "total_put_oi": 899137.0
   },
   "volume": {
-    "avg20": 114226240,
-    "avg60": 95121798,
+    "avg20": 113463605,
+    "avg60": 94755995,
     "baseline_thin": false,
     "calendar": [],
-    "chg_1d_pct": 0.14,
-    "date": "2026-11-12",
+    "chg_1d_pct": -1.26,
+    "date": "2026-11-16",
     "heaviest_on_record": false,
     "heaviest_since": "2026-11-11",
     "label": "ordinary",
-    "move_atr": 0.02,
+    "move_atr": -0.21,
     "needs_explaining": false,
-    "rank_in_window": 23,
+    "rank_in_window": 21,
     "rank_window": 60,
-    "rvol20": 0.84,
-    "rvol60": 1.01,
-    "rvol_3d": 0.88,
-    "rvol_5d": 0.94,
-    "sessions": 107,
-    "shares": 95961800,
-    "shares_3d": 292305400,
-    "shares_5d": 511273600,
-    "z20": -0.47
+    "rvol20": 0.89,
+    "rvol60": 1.07,
+    "rvol_3d": 0.8,
+    "rvol_5d": 0.85,
+    "sessions": 109,
+    "shares": 101122200,
+    "shares_3d": 275599500,
+    "shares_5d": 471943100,
+    "z20": -0.31
   }
 }
