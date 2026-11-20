@@ -2,7 +2,7 @@
   "bias_audit": {
     "bearish": 9,
     "bullish": 6,
-    "neutral": 34,
+    "neutral": 33,
     "skew": -0.2,
     "window_days": 30
   },
@@ -11,7 +11,7 @@
       {
         "confidence": "medium",
         "date": "2026-12-08",
-        "days": 19,
+        "days": 18,
         "event": "Day 180 \u2014 bucket (iii) remainder + rolled failed-trigger shares (~798M sh)",
         "kind": "lockup",
         "note": "455.8M failed-trigger shares roll into day 180 per 3 aggregators; covenant not read verbatim"
@@ -19,21 +19,21 @@
       {
         "confidence": "low",
         "date": "2027-02-15",
-        "days": 88,
+        "days": 87,
         "event": "Q4/FY26 earnings \u2014 insider bucket (ii) begins",
         "kind": "earnings"
       },
       {
         "confidence": "high",
         "date": "2027-06-12",
-        "days": 205,
+        "days": 204,
         "event": "12-month seasoning clears (S&P 500 profitability test still fails)",
         "kind": "index"
       },
       {
         "confidence": "medium",
         "date": "2027-06-13",
-        "days": 206,
+        "days": 205,
         "event": "MUSK'S ~6.4B SHARES UNLOCK (~4x current float)",
         "kind": "lockup"
       }
@@ -671,7 +671,7 @@
       "d": "2026-11-18",
       "h": 146.31,
       "l": 141.22,
-      "v": 85510600
+      "v": 86453900
     }
   ],
   "history_tail": [
@@ -1175,15 +1175,15 @@
       "date": "2026-11-18",
       "from_ath_pct": -36.4,
       "hv30": 65.3,
-      "iv30": 53.5,
-      "iv_hv_spread": -11.8,
-      "n_bearish": 0,
+      "iv30": 55.2,
+      "iv_hv_spread": -10.1,
+      "n_bearish": 1,
       "n_bullish": 0,
       "n_neutral": 2,
       "price_source": "yfinance",
       "regime": "transition",
       "rsi": 50.6,
-      "setups": "REGIME|OI_WALL_NEAR"
+      "setups": "REGIME|OI_WALL_NEAR|CROSS_DOWN_SMA50_4H"
     }
   ],
   "levels": [
@@ -1226,31 +1226,55 @@
       "timeframe": "1D"
     },
     {
-      "bars": 443,
-      "events": [],
+      "bars": 447,
+      "events": [
+        {
+          "close": 137.87,
+          "crosses_in_window": 1,
+          "date": "2026-11-19T08:00",
+          "dir": "down",
+          "dist_pct": -0.58,
+          "full": true,
+          "have": 50,
+          "held_since": true,
+          "kind": "price_cross",
+          "ma": 138.67,
+          "prev_close": 146.78,
+          "prev_ma": 138.66,
+          "reverses_cross_on": null,
+          "timeframe": "4H",
+          "window": 50
+        }
+      ],
       "extended_hours": true,
-      "last_bar": "2026-11-18T16:00",
+      "last_bar": "2026-11-19T16:00",
       "lines": [
         {
-          "dist_pct": 4.76,
+          "dist_pct": -1.59,
           "fills_on": null,
           "full": true,
           "have": 50,
-          "last_cross": null,
+          "last_cross": {
+            "bars_ago": 2,
+            "date": "2026-11-19T08:00",
+            "dir": "down",
+            "full_at_cross": true,
+            "held": true
+          },
           "need": 50,
-          "side": "above",
-          "value": 138.45,
+          "side": "below",
+          "value": 138.58,
           "window": 50
         },
         {
-          "dist_pct": -2.5,
+          "dist_pct": -8.21,
           "fills_on": null,
           "full": true,
           "have": 200,
           "last_cross": null,
           "need": 200,
           "side": "below",
-          "value": 148.76,
+          "value": 148.58,
           "window": 200
         }
       ],
@@ -1265,29 +1289,33 @@
       "source": {
         "errors": [],
         "fresh": true,
-        "last_ts": "2026-11-18T19:00",
-        "rows": 1862,
+        "last_ts": "2026-11-19T19:00",
+        "rows": 1879,
         "source": "yfinance"
       },
       "timeframe": "4H"
     }
   ],
   "meta": {
-    "board_run_date": "2026-11-19",
+    "board_run_date": "2026-11-20",
     "disclaimer": "Context only. Not a criterion, not a signal, not investment advice. Nothing here trades.",
     "price_source": {
-      "bar_age_days": 1,
-      "dropped_bars": [],
+      "bar_age_days": 2,
+      "dropped_bars": [
+        "2026-11-19"
+      ],
       "errors": [],
       "last_bar": "2026-11-18",
       "rows": 111,
       "source": "yfinance",
       "stale": false
     },
-    "run_at": "2026-11-19T02:41:08",
+    "run_at": "2026-11-20T02:26:08",
     "ticker": "SPCX",
-    "today": "2026-11-19",
-    "warnings": []
+    "today": "2026-11-20",
+    "warnings": [
+      "INCOMPLETE BAR DROPPED - 2026-11-19 came back from yfinance with missing prices; the tape reflects the last complete session (2026-11-18) and fills in on the next run"
+    ]
   },
   "noise": [
     "Any single-day or single-week price move, in either direction",
@@ -1332,9 +1360,9 @@
     "sma20": 140.48,
     "sma50": 148.38,
     "streak": 2,
-    "volume": 85510600,
-    "volume_vs_avg": 0.75,
-    "volume_z": -0.71
+    "volume": 86453900,
+    "volume_vs_avg": 0.76,
+    "volume_z": -0.69
   },
   "setups": [
     {
@@ -1349,33 +1377,43 @@
     },
     {
       "direction": "neutral",
-      "evidence": "put wall 140.0 (OI 41,670). Close 143.5, ATR 7.72. Dealer gamma proxy 24.2 $M per 1%.",
+      "evidence": "put wall 140.0 (OI 42,307). Close 143.5, ATR 7.72. Dealer gamma proxy 28.1 $M per 1%.",
       "id": "OI_WALL_NEAR",
       "long_read": "Big OI strikes act as magnets into expiry and as pins on expiry day; a long wants to see price hold above a put wall, not sit under a call wall.",
       "name": "Price within 1 ATR of a large OI strike",
       "short_read": "Mirror image: a call wall overhead is resistance until it isn't; a break through it forces dealer hedging that accelerates the move.",
       "strength": 1,
       "tag": "vol"
+    },
+    {
+      "direction": "bearish",
+      "evidence": "4H bar 2026-11-19T08:00 closed 137.87 vs SMA50 138.67 (-0.6%); prior bar 146.78 vs 138.66. Has held since.",
+      "id": "CROSS_DOWN_SMA50_4H",
+      "long_read": "Losing the line is only damage if it sticks. A reclaim within a few bars is the failed-breakdown setup, and those squeeze hard on a crowded short.",
+      "name": "Closed below the 50-bar SMA (4H)",
+      "short_read": "Losing a widely watched average invites trend-followers and systematic sellers; the confirmation is the next one or two closes holding below it.",
+      "strength": 2,
+      "tag": "levels"
     }
   ],
   "vol": {
     "carried": false,
-    "expected_move_pct": 5.4,
-    "expected_move_usd": 7.7,
+    "expected_move_pct": 5.1,
+    "expected_move_usd": 7.38,
     "float_as_of": "2026-09-24",
-    "front_dte": 4.0,
+    "front_dte": 3.0,
     "front_expiry": "2026-11-23",
-    "gex_musd_per_1pct": 24.2,
+    "gex_musd_per_1pct": 28.1,
     "hv10": 76.0,
     "hv30": 65.3,
-    "iv30": 53.5,
-    "iv30_chg_1d": -4.5,
-    "iv90": 52.3,
-    "iv_front": 57.5,
-    "iv_history_days": 54,
-    "iv_hv_spread": -11.8,
-    "iv_percentile": 72.2,
-    "iv_rank": 47.9,
+    "iv30": 55.2,
+    "iv30_chg_1d": 1.7,
+    "iv90": 54.0,
+    "iv_front": 54.1,
+    "iv_history_days": 55,
+    "iv_hv_spread": -10.1,
+    "iv_percentile": 74.5,
+    "iv_rank": 56.7,
     "iv_rank_meaningful": false,
     "oi_walls": {
       "calls": [
@@ -1384,25 +1422,25 @@
           "strike": 170.0
         },
         {
-          "oi": 54836,
+          "oi": 55492,
           "strike": 200.0
         },
         {
-          "oi": 48776,
+          "oi": 52358,
           "strike": 150.0
         }
       ],
       "puts": [
         {
-          "oi": 41670,
+          "oi": 42307,
           "strike": 140.0
         },
         {
-          "oi": 40748,
+          "oi": 41396,
           "strike": 115.0
         },
         {
-          "oi": 40292,
+          "oi": 40770,
           "strike": 110.0
         }
       ],
@@ -1415,50 +1453,50 @@
     "short_pct_outstanding": 2.1,
     "short_pct_public_float": 5.6,
     "short_shares_m": 141.1,
-    "skew25_30d": 4.7,
-    "skew25_front": 5.5,
-    "skew_chg_1d": -0.2,
-    "snapshot_date": "2026-11-19",
+    "skew25_30d": 5.3,
+    "skew25_front": 3.0,
+    "skew_chg_1d": 0.6,
+    "snapshot_date": "2026-11-20",
     "term": [
       {
-        "atm_iv": 57.5,
-        "dte": 4,
+        "atm_iv": 54.1,
+        "dte": 3,
         "expiry": "2026-11-23"
       },
       {
-        "atm_iv": 58.1,
-        "dte": 6,
+        "atm_iv": 60.4,
+        "dte": 5,
         "expiry": "2026-11-25"
       },
       {
-        "atm_iv": 54.4,
-        "dte": 8,
+        "atm_iv": 55.4,
+        "dte": 7,
         "expiry": "2026-11-27"
       },
       {
-        "atm_iv": 54.3,
-        "dte": 15,
+        "atm_iv": 55.8,
+        "dte": 14,
         "expiry": "2026-12-04"
       },
       {
-        "atm_iv": 54.7,
-        "dte": 22,
+        "atm_iv": 55.4,
+        "dte": 21,
         "expiry": "2026-12-11"
       },
       {
-        "atm_iv": 53.7,
-        "dte": 29,
+        "atm_iv": 55.9,
+        "dte": 28,
         "expiry": "2026-12-18"
       },
       {
-        "atm_iv": 52.3,
-        "dte": 35,
+        "atm_iv": 54.0,
+        "dte": 34,
         "expiry": "2026-12-24"
       }
     ],
     "term_slope": -1.2,
-    "total_call_oi": 632356.0,
-    "total_put_oi": 501211.0
+    "total_call_oi": 649646.0,
+    "total_put_oi": 513591.0
   },
   "volume": {
     "avg20": 113448210,
@@ -1472,16 +1510,16 @@
     "label": "ordinary",
     "move_atr": 0.23,
     "needs_explaining": false,
-    "rank_in_window": 30,
+    "rank_in_window": 29,
     "rank_window": 60,
-    "rvol20": 0.75,
-    "rvol60": 0.89,
+    "rvol20": 0.76,
+    "rvol60": 0.9,
     "rvol_3d": 0.81,
     "rvol_5d": 0.79,
     "sessions": 111,
-    "shares": 85510600,
-    "shares_3d": 276445400,
-    "shares_5d": 450922700,
-    "z20": -0.71
+    "shares": 86453900,
+    "shares_3d": 277388700,
+    "shares_5d": 451866000,
+    "z20": -0.69
   }
 }
