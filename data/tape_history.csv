@@ -48,3 +48,4 @@ date,close,chg_1d_pct,atr_pct,hv30,iv30,iv_hv_spread,rsi,from_ath_pct,regime,n_b
 2026-11-16,137.36,-1.26,6.12,64.4,58.9,-5.5,44.9,-39.12,downtrend,0,1,2,REGIME|OI_WALL_NEAR|CROSS_DOWN_SMA50_4H,yfinance
 2026-11-17,141.7,3.16,5.91,65.3,58.0,-7.3,49.0,-37.2,transition,1,0,1,REGIME|CROSS_UP_SMA50_4H,yfinance
 2026-11-18,143.5,1.27,5.38,65.3,55.2,-10.1,50.6,-36.4,transition,0,1,2,REGIME|OI_WALL_NEAR|CROSS_DOWN_SMA50_4H,yfinance
+2026-11-20,127.79,-7.69,6.12,68.3,68.5,0.2,38.5,-43.37,downtrend,0,0,3,REGIME|SKEW_PUT_RICH|IV_JUMP,yfinance
